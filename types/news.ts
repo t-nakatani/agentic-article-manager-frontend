@@ -5,7 +5,7 @@ export interface NewsItem {
   title: string
   date: string
   tags: NewsTag[]
-  description?: string
+  descriptions?: string[]
   link?: {
     text: string
     url: string

@@ -34,9 +34,13 @@ export function NewsItemCard({ item }: NewsItemProps) {
           </div>
         </div>
       </CardHeader>
-      {item.description && (
+      {item.descriptions && item.descriptions.length > 0 && (
         <CardContent>
-          <p className="text-sm text-muted-foreground">{item.description}</p>
+          <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
+            {item.descriptions.map((desc, index) => (
+              <li key={index}>{desc}</li>
+            ))}
+          </ul>
         </CardContent>
       )}
       {item.link && (
