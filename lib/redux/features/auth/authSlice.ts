@@ -3,8 +3,16 @@ import { signInWithPopup, signOut, type User } from "firebase/auth"
 import { auth, googleProvider } from "@/lib/firebase"
 import { toast } from "@/components/ui/use-toast"
 
+// シリアライズ可能なユーザー情報の型を定義
+interface SerializableUser {
+  uid: string
+  email: string | null
+  displayName: string | null
+  photoURL: string | null
+}
+
 interface AuthState {
-  user: User | null
+  user: SerializableUser | null
   loading: boolean
   error: string | null
 }
@@ -15,6 +23,14 @@ const initialState: AuthState = {
   error: null,
 }
 
+// Firebaseユーザーオブジェクトからシリアライズ可能なオブジェクトに変換する関数
+const serializeUser = (user: User): SerializableUser => ({
+  uid: user.uid,
+  email: user.email,
+  displayName: user.displayName,
+  photoURL: user.photoURL,
+})
+
 export const signInWithGoogle = createAsyncThunk("auth/signInWithGoogle", async (_, { rejectWithValue }) => {
   try {
     const result = await signInWithPopup(auth, googleProvider)
@@ -22,7 +38,7 @@ export const signInWithGoogle = createAsyncThunk("auth/signInWithGoogle", async 
       title: "ログインしました",
       description: `${result.user.displayName}さん、ようこそ！`,
     })
-    return result.user
+    return serializeUser(result.user)
   } catch (error) {
     toast({
       title: "ログインに失敗しました",
@@ -55,7 +71,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<User | null>) => {
-      state.user = action.payload
+      state.user = action.payload ? serializeUser(action.payload) : null
       state.loading = false
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
