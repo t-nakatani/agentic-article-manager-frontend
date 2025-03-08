@@ -205,6 +205,16 @@ export const themesSlice = createSlice({
           title: "テーマを削除しました",
         })
       })
+      .addCase(saveThemes.fulfilled, (state, action) => {
+        const { nodes, edges } = action.payload
+        state.nodes = nodes
+        state.edges = edges
+        
+        toast({
+          title: "テーマを保存しました",
+          description: "テーマの変更を保存しました。",
+        })
+      })
   },
 })
 

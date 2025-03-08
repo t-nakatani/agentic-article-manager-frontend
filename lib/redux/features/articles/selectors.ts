@@ -1,6 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit"
 import type { RootState } from "@/lib/redux/store"
 import type { Article } from "@/lib/api/articles"
+import { selectThemeNameById } from "@/lib/redux/features/themes/selectors"
 
 // 基本セレクター
 const selectArticles = (state: RootState) => state.articles.items
@@ -17,13 +18,21 @@ const selectPageSize = (state: RootState) => state.articleFilters.pageSize
 
 // メモ化されたセレクター: テーマでフィルタリングされた記事
 export const selectFilteredArticlesByTheme = createSelector(
-  [selectArticles, selectSelectedTheme],
-  (articles, selectedTheme): Article[] => {
+  [selectArticles, selectSelectedTheme, (state) => state],
+  (articles, selectedTheme, state): Article[] => {
     if (selectedTheme === "all") {
       return articles
     }
+    
+    // テーマIDからテーマ名を取得
+    const themeName = selectThemeNameById(state, selectedTheme)
+    
+    if (!themeName || themeName === "all") {
+      return articles
+    }
+    
     return articles.filter((article) =>
-      article.themes.some((theme) => theme.toLowerCase() === selectedTheme.toLowerCase()),
+      article.themes.some((theme) => theme.toLowerCase() === themeName.toLowerCase()),
     )
   },
 )
