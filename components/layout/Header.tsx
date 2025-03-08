@@ -14,9 +14,12 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { UserIdDisplay } from "@/components/dev/user-id-display"
 import { useReduxAuth } from "@/hooks/useReduxAuth"
+import { usePathname } from "next/navigation"
 
 export function Header() {
   const { user, logout } = useReduxAuth()
+  const pathname = usePathname()
+  const isLoginPage = pathname === "/login"
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -87,9 +90,11 @@ export function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/login">ログイン</Link>
-            </Button>
+            !isLoginPage && (
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/login">ログイン</Link>
+              </Button>
+            )
           )}
         </nav>
       </div>
