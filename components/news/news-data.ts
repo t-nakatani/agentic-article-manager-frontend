@@ -27,7 +27,7 @@ export const newsItems: NewsItem[] = [
     ],
     link: {
       text: "アルファ版を試す",
-      url: "/dev",
+      url: "/extension",
     },
   },
 ]
