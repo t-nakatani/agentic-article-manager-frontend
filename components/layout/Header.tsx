@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { BookOpen, LogOut, PlayCircle, HelpCircle } from "lucide-react"
+import { BookOpen, LogOut, PlayCircle, HelpCircle, Download } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,6 +35,13 @@ export function Header() {
             className="text-sm font-medium transition-colors hover:text-theme-600 dark:hover:text-theme-400"
           >
             Home
+          </Link>
+          <Link
+            href="/extension"
+            className="text-sm font-medium transition-colors hover:text-theme-600 dark:hover:text-theme-400 flex items-center gap-1"
+          >
+            <Download className="h-4 w-4" />
+            拡張機能
           </Link>
           <Link
             href="/help"

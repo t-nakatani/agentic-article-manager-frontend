@@ -63,7 +63,7 @@ const Section = ({ title, description, children, className = "" }) => (
     {(title || description) && (
       <div>
         {title && <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>}
-        {description && <p className="text-sm text-muted-foreground mt-1">{description}</p>}
+        {description && <div className="text-sm text-muted-foreground mt-1">{description}</div>}
       </div>
     )}
     {children}
@@ -126,14 +126,14 @@ export default function ExtensionPage() {
           title="インストール手順" 
           description={
             <div className="space-y-2">
-              <p>Chrome拡張機能をインストールして、すぐに使い始めることができます。</p>
-              <p>
+              <div>Chrome拡張機能をインストールして、すぐに使い始めることができます。</div>
+              <div>
                 インストール後は
                 <Link href="/help#extension" className="text-theme-600 dark:text-theme-400 hover:underline mx-1">
                   User IDの設定
                 </Link>
                 が必要です。
-              </p>
+              </div>
             </div>
           }
         >
