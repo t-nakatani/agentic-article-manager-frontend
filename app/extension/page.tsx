@@ -1,12 +1,15 @@
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Download, CheckCircle2 } from "lucide-react"
-import { Steps } from "./components/steps"
-import Link from "next/link"
+import { Download, CheckCircle2, Apple, Chrome } from "lucide-react"
 import { Header } from "@/components/layout/Header"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Section } from "./components/section"
+import { FeatureCard } from "./components/feature-card"
+import { ChromeTab } from "./components/chrome-tab"
+import { IOSTab } from "./components/ios-tab"
 
 // 環境変数からURLを取得、未設定の場合はデフォルト値を使用
 const EXTENSION_URL = process.env.NEXT_PUBLIC_EXTENSION_URL || "https://example.com/extension-not-found.zip"
+const IOS_SHORTCUT_URL = "https://vhxqoytfgyfunjxzoqvi.supabase.co/storage/v1/object/public/extension//soi-save-shortcut.shortcut"
 
 // インストール手順のデータ
 const installSteps = [
@@ -21,6 +24,38 @@ const installSteps = [
   {
     title: "フォルダを選択",
     description: "ダウンロードした拡張機能のフォルダを選択します。",
+  },
+]
+
+// iOSショートカットのインストール手順
+const iosShortcutSteps = [
+  {
+    title: "ショートカットをダウンロード",
+    description: "上部のボタンからiOSショートカットをダウンロードします。",
+  },
+  {
+    title: "「ショートカット」アプリで開く",
+    description: "ダウンロードしたファイルを「ショートカット」アプリで開きます。",
+  },
+  {
+    title: "「ショートカットを追加」をタップ",
+    description: "確認画面で「ショートカットを追加」をタップして完了します。",
+  },
+]
+
+// iOSショートカットの使い方
+const iosUsageSteps = [
+  {
+    title: "記事を開く",
+    description: "Safariで任意の記事ページを開きます。",
+  },
+  {
+    title: "共有メニューを開く",
+    description: "画面下部の共有ボタンをタップします。",
+  },
+  {
+    title: "「Save to Soi」を選択",
+    description: "共有メニューから「Save to Soi」を選択して記事を保存できます。",
   },
 ]
 
@@ -58,37 +93,6 @@ const features = [
   },
 ]
 
-// セクションコンポーネント
-const Section = ({ title, description, children, className = "" }) => (
-  <section className={`space-y-6 ${className}`}>
-    {(title || description) && (
-      <div>
-        {title && <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>}
-        {description && <div className="text-sm text-muted-foreground mt-1">{description}</div>}
-      </div>
-    )}
-    {children}
-  </section>
-)
-
-// 機能カードコンポーネント
-const FeatureCard = ({ title, description, icon: Icon }) => (
-  <Card>
-    <CardContent className="pt-6">
-      <Icon className="h-8 w-8 mb-3 text-theme-600" />
-      <h3 className="font-semibold mb-2">{title}</h3>
-      <p className="text-sm text-muted-foreground">{description}</p>
-    </CardContent>
-  </Card>
-)
-
-// ステップガイドコンポーネント - ステップを囲むコンテナ
-const StepGuide = ({ children }) => (
-  <div className="border border-border rounded-lg p-6 bg-card/50">
-    {children}
-  </div>
-)
-
 export default function ExtensionPage() {
   return (
     <>
@@ -97,9 +101,9 @@ export default function ExtensionPage() {
         <div className="container max-w-4xl py-8 space-y-8">
           {/* ヒーローセクション */}
           <Section className="text-center space-y-4">
-            <h1 className="text-4xl font-bold tracking-tight">Chrome拡張機能 α版</h1>
+            <h1 className="text-4xl font-bold tracking-tight">拡張機能 α版</h1>
             <p className="text-xl text-muted-foreground">ブラウザで読んだ記事を簡単に保存・管理できます</p>
-            <div className="pt-4">
+            <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center">
               {EXTENSION_URL === "https://example.com/extension-not-found.zip" ? (
                 <div className="text-sm text-destructive">
                   Extension URL is not configured. Please set NEXT_PUBLIC_EXTENSION_URL environment variable.
@@ -112,6 +116,12 @@ export default function ExtensionPage() {
                   </a>
                 </Button>
               )}
+              <Button asChild size="lg" className="gap-2 bg-black hover:bg-gray-800 text-white">
+                <a href={IOS_SHORTCUT_URL} download="soi-save-shortcut.shortcut">
+                  <Apple className="h-5 w-5" />
+                  iOSショートカットをダウンロード
+                </a>
+              </Button>
             </div>
           </Section>
 
@@ -124,35 +134,30 @@ export default function ExtensionPage() {
             </div>
           </Section>
 
-          {/* インストール手順 */}
-          <Section 
-            title="インストール手順" 
-            description={
-              <div className="space-y-2">
-                <div>Chrome拡張機能をインストールして、すぐに使い始めることができます。</div>
-                <div>
-                  インストール後は
-                  <Link href="/help#extension" className="text-theme-600 dark:text-theme-400 hover:underline mx-1">
-                    User IDの設定
-                  </Link>
-                  が必要です。
-                </div>
-              </div>
-            }
-          >
-            <StepGuide>
-              <Steps steps={installSteps} />
-            </StepGuide>
-          </Section>
-
-          {/* 使い方 */}
-          <Section 
-            title="基本的な使い方" 
-            description="シンプルな3ステップで記事を保存できます。"
-          >
-            <StepGuide>
-              <Steps steps={usageSteps} />
-            </StepGuide>
+          {/* タブ切り替え */}
+          <Section title="インストールと使い方" description="お使いの環境に合わせて手順をご確認ください。">
+            <Tabs defaultValue="chrome" className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mb-6">
+                <TabsTrigger value="chrome" className="flex items-center gap-2">
+                  <Chrome className="h-4 w-4" />
+                  <span>Chrome拡張機能</span>
+                </TabsTrigger>
+                <TabsTrigger value="ios" className="flex items-center gap-2">
+                  <Apple className="h-4 w-4" />
+                  <span>iOSショートカット</span>
+                </TabsTrigger>
+              </TabsList>
+              
+              {/* Chrome拡張機能のコンテンツ */}
+              <TabsContent value="chrome">
+                <ChromeTab installSteps={installSteps} usageSteps={usageSteps} />
+              </TabsContent>
+              
+              {/* iOSショートカットのコンテンツ */}
+              <TabsContent value="ios">
+                <IOSTab installSteps={iosShortcutSteps} usageSteps={iosUsageSteps} />
+              </TabsContent>
+            </Tabs>
           </Section>
         </div>
       </div>

@@ -2,14 +2,19 @@ import type { NewsItem } from "@/types/news"
 
 export const newsItems: NewsItem[] = [
   {
-    id: "extension-update",
-    title: "アルファ版Chrome拡張機能のアップデート",
+    id: "ios-shortcut&extension-update",
+    title: "iOSショートカットの公開&拡張機能Update",
     date: "2024-03-08",
     tags: ["new", "alpha"],
     descriptions: [
-      "アイコンが追加されました",
-      "右クリックから記事を保存できるようになりました"
+      "iPhoneの共有機能から記事を保存できるショートカットを公開しました",
+      "拡張機能にアイコンが追加されました",
+      "右クリックから拡張機能で記事を保存できるようになりました"
     ],
+    link: {
+      text: "ショートカットをダウンロード",
+      url: "/extension#ios-shortcut",
+    },
   },
   {
     id: "alpha-release",
