@@ -17,7 +17,20 @@ export function AuthStateListener({ children }: { children: React.ReactNode }) {
     const unsubscribe = onAuthStateChanged(
       auth,
       (user) => {
-        dispatch(setUser(user))
+        if (!user) {
+          dispatch(setUser(null))
+          dispatch(setLoading(false))
+          return
+        }
+        
+        const serializedUser = {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL
+        }
+        dispatch(setUser(serializedUser))
+        dispatch(setLoading(false))
       },
       (error) => {
         dispatch(setError(error.message))

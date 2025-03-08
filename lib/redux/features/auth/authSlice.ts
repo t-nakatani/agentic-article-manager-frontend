@@ -70,8 +70,8 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<User | null>) => {
-      state.user = action.payload ? serializeUser(action.payload) : null
+    setUser: (state, action: PayloadAction<SerializableUser | null>) => {
+      state.user = action.payload
       state.loading = false
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
