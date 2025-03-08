@@ -62,13 +62,15 @@ export const createTheme = createAsyncThunk(
 
 export const updateTheme = createAsyncThunk(
   "themes/updateTheme",
-  async ({ userId, themeId, name }: { userId: string; themeId: string; name: string }, { rejectWithValue }) => {
+  async (
+    { userId, themeId, name }: { userId: string; themeId: string; name: string },
+    { rejectWithValue },
+  ) => {
     try {
-      await themesAPI.updateTheme(Number(themeId), {
+      await themesAPI.updateThemeName(Number(themeId), {
         user_id: userId,
         theme_name: name,
       })
-
       return { themeId, name }
     } catch (error) {
       await handleAPIError(error)

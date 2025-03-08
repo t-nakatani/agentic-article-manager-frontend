@@ -109,8 +109,8 @@ class ThemesAPI extends BaseAPIClient {
   }
 
   // theme idの型をnumberに修正
-  async updateTheme(themeId: number, data: { user_id: string; theme_name: string }): Promise<void> {
-    return this.fetch(`/themes/${themeId}`, {
+  async updateThemeName(themeId: number, data: { user_id: string; theme_name: string }): Promise<void> {
+    return this.fetch(`/themes/${themeId}/name`, {
       method: "PATCH",
       body: JSON.stringify(data),
     })
