@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { MoreHorizontal, Plus, Pencil, Trash2 } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { ThemeRenameDialog } from "./theme-rename-dialog"
+import { ThemeEditDialog } from "./theme-rename-dialog"
 import { ThemeDeleteDialog } from "./theme-delete-dialog"
 
 interface ThemeNodeActionsProps {
@@ -33,24 +33,35 @@ export function ThemeNodeActions({
   onDelete,
   className,
 }: ThemeNodeActionsProps) {
-  const [showRename, setShowRename] = useState(false)
+  const [showEdit, setShowEdit] = useState(false)
+  const [showAddChild, setShowAddChild] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
 
   // ルートノードの場合は追加ボタンのみ表示
   if (isRootNode) {
     return (
-      <Button
-        variant="ghost"
-        size="icon"
-        className={cn("h-6 w-6 shrink-0", className)}
-        onClick={(e) => {
-          e.stopPropagation()
-          onAddChild()
-        }}
-      >
-        <Plus className="h-4 w-4" />
-        <span className="sr-only">Add theme</span>
-      </Button>
+      <>
+        <Button
+          variant="ghost"
+          size="icon"
+          className={cn("h-6 w-6 shrink-0", className)}
+          onClick={(e) => {
+            e.stopPropagation()
+            setShowAddChild(true)
+          }}
+        >
+          <Plus className="h-4 w-4" />
+          <span className="sr-only">Add theme</span>
+        </Button>
+
+        <ThemeEditDialog 
+          open={showAddChild} 
+          onOpenChange={setShowAddChild} 
+          onConfirm={(name) => onAddChild(name)} 
+          currentName="新しいテーマ" 
+          isNew={true} 
+        />
+      </>
     )
   }
 
@@ -72,7 +83,7 @@ export function ThemeNodeActions({
           <DropdownMenuItem
             onClick={(e) => {
               e.stopPropagation()
-              onAddChild()
+              setShowAddChild(true)
             }}
           >
             <Plus className="mr-2 h-4 w-4" />
@@ -81,7 +92,7 @@ export function ThemeNodeActions({
           <DropdownMenuItem
             onClick={(e) => {
               e.stopPropagation()
-              setShowRename(true)
+              setShowEdit(true)
             }}
           >
             <Pencil className="mr-2 h-4 w-4" />
@@ -101,9 +112,29 @@ export function ThemeNodeActions({
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <ThemeRenameDialog open={showRename} onOpenChange={setShowRename} onConfirm={onRename} currentName={nodeName} />
+      <ThemeEditDialog 
+        open={showEdit} 
+        onOpenChange={setShowEdit} 
+        onConfirm={onRename} 
+        currentName={nodeName} 
+      />
 
-      <ThemeDeleteDialog open={showDelete} onOpenChange={setShowDelete} onConfirm={onDelete} themeName={nodeName} />
+      <ThemeEditDialog 
+        open={showAddChild} 
+        onOpenChange={setShowAddChild} 
+        onConfirm={(name) => {
+          onAddChild(name)
+        }} 
+        currentName="新しいテーマ" 
+        isNew={true} 
+      />
+
+      <ThemeDeleteDialog 
+        open={showDelete} 
+        onOpenChange={setShowDelete} 
+        onConfirm={onDelete} 
+        themeName={nodeName} 
+      />
     </>
   )
 }

@@ -29,14 +29,14 @@ export function ThemeTree({ onSelectTheme, selectedTheme, isDemoMode = false, de
     return themeTree
   }, [themeTree, isDemoMode, demoThemes])
 
-  const handleAddChild = async (parentId: string | null) => {
+  const handleAddChild = async (parentId: string | null, name: string) => {
     if (isDemoMode) {
       console.log("Demo mode: Cannot add themes")
       return
     }
 
     try {
-      await addTheme(parentId, "新しいテーマ")
+      await addTheme(parentId, name)
     } catch (error) {
       console.error("Failed to add theme:", error)
     }

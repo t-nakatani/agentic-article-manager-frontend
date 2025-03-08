@@ -12,7 +12,7 @@ interface TreeNodeProps {
   onSelect: (id: string) => void
   selectedNodeId: string | null
   isRootLevel?: boolean
-  onAddChild: (parentId: string | null) => void
+  onAddChild: (parentId: string | null, name: string) => void
   onUpdateTheme: (id: string, name: string) => void
   onDeleteTheme?: (id: string) => void
   isNewNode?: boolean
@@ -27,34 +27,49 @@ export function TreeNodeComponent({
   isRootLevel = false,
   onAddChild,
   onUpdateTheme,
-  onDeleteTheme,
+  onDeleteTheme = () => {},
   isNewNode = false,
   isReadOnly = false,
 }: TreeNodeProps) {
-  const shouldExpandInitially = isRootLevel || node.id === "all" || isNewNode
-  const [isExpanded, setIsExpanded] = React.useState(shouldExpandInitially)
-  const hasChildren = node.children && node.children.length > 0
   const isRootNode = node.id === "all"
+  const hasChildren = Boolean(node.children?.length)
+  
+  // 展開状態の初期値を決定
+  const shouldExpandInitially = React.useMemo(() => (
+    isRootNode || isRootLevel || isNewNode
+  ), [isRootNode, isRootLevel, isNewNode])
+  
+  const [isExpanded, setIsExpanded] = React.useState(shouldExpandInitially)
+  const isSelected = selectedNodeId === node.id
 
+  // 子ノードに新規ノードが追加された場合は自動的に展開
   React.useEffect(() => {
-    if (node.children?.some((child) => child.isNewNode)) {
+    const hasNewChild = node.children?.some(child => child.isNewNode)
+    if (hasNewChild) {
       setIsExpanded(true)
     }
   }, [node.children])
 
-  const handleAddChild = () => {
-    onAddChild(node.id)
-  }
-
-  const handleRename = (newName: string) => {
+  // イベントハンドラー
+  const handleToggleExpand = React.useCallback(() => {
+    setIsExpanded(prev => !prev)
+  }, [])
+  
+  const handleSelect = React.useCallback(() => {
+    onSelect(isRootNode ? "all" : node.id)
+  }, [onSelect, isRootNode, node.id])
+  
+  const handleAddChild = React.useCallback((name: string) => {
+    onAddChild(node.id, name)
+  }, [onAddChild, node.id])
+  
+  const handleRename = React.useCallback((newName: string) => {
     onUpdateTheme(node.id, newName)
-  }
-
-  const handleDelete = () => {
-    if (onDeleteTheme) {
-      onDeleteTheme(node.id)
-    }
-  }
+  }, [onUpdateTheme, node.id])
+  
+  const handleDelete = React.useCallback(() => {
+    onDeleteTheme(node.id)
+  }, [onDeleteTheme, node.id])
 
   return (
     <div className="relative">
@@ -65,7 +80,11 @@ export function TreeNodeComponent({
           "group",
         )}
       >
-        <CollapseButton isExpanded={isExpanded} onToggle={() => setIsExpanded(!isExpanded)} disabled={!hasChildren} />
+        <CollapseButton 
+          isExpanded={isExpanded} 
+          onToggle={handleToggleExpand} 
+          disabled={!hasChildren} 
+        />
 
         <div
           className={cn(
@@ -73,13 +92,13 @@ export function TreeNodeComponent({
             "shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] dark:shadow-[0_1px_2px_0_rgba(0,0,0,0.25)]",
             "transition-all duration-200",
             "hover:shadow-[0_2px_4px_0_rgba(0,0,0,0.1)] dark:hover:shadow-[0_2px_4px_0_rgba(0,0,0,0.3)]",
-            selectedNodeId === node.id && "bg-theme-100 dark:bg-theme-800",
+            isSelected && "bg-theme-100 dark:bg-theme-800",
             isRootNode && "bg-theme-100 dark:bg-theme-800",
             !isRootNode && "bg-white dark:bg-gray-950",
           )}
         >
           <div
-            onClick={() => onSelect(node.id === "all" ? "all" : node.label.toLowerCase())}
+            onClick={handleSelect}
             className="flex-1 cursor-pointer"
           >
             <span className={cn("text-sm", isRootNode && "font-medium")}>{node.label}</span>
