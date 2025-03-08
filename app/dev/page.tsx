@@ -11,7 +11,7 @@ const EXTENSION_URL = process.env.NEXT_PUBLIC_EXTENSION_URL || "https://example.
 const installSteps = [
   {
     title: "拡張機能をダウンロード",
-    description: "下のボタンから最新版の拡張機能をダウンロードします。",
+    description: "上部のボタンから最新版の拡張機能をダウンロードします。",
   },
   {
     title: "Chromeに追加",
@@ -38,12 +38,62 @@ const usageSteps = [
   },
 ]
 
+// 機能紹介データ
+const features = [
+  {
+    title: "簡単保存",
+    description: "ワンクリックで記事を保存できます。URLと概要が自動で取得されます。",
+    icon: CheckCircle2,
+  },
+  {
+    title: "自動タグ付け",
+    description: "AIが記事の内容を解析し、適切なテーマタグを自動で付与します。",
+    icon: CheckCircle2,
+  },
+  {
+    title: "要約生成",
+    description: "記事の要点を自動で抽出し、簡潔な要約を生成します。",
+    icon: CheckCircle2,
+  },
+]
+
+// セクションコンポーネント
+const Section = ({ title, description, children, className = "" }) => (
+  <section className={`space-y-6 ${className}`}>
+    {(title || description) && (
+      <div>
+        {title && <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>}
+        {description && <p className="text-sm text-muted-foreground mt-1">{description}</p>}
+      </div>
+    )}
+    {children}
+  </section>
+)
+
+// 機能カードコンポーネント
+const FeatureCard = ({ title, description, icon: Icon }) => (
+  <Card>
+    <CardContent className="pt-6">
+      <Icon className="h-8 w-8 mb-3 text-theme-600" />
+      <h3 className="font-semibold mb-2">{title}</h3>
+      <p className="text-sm text-muted-foreground">{description}</p>
+    </CardContent>
+  </Card>
+)
+
+// ステップガイドコンポーネント - ステップを囲むコンテナ
+const StepGuide = ({ children }) => (
+  <div className="border border-border rounded-lg p-6 bg-card/50">
+    {children}
+  </div>
+)
+
 export default function DevTools() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-theme-50/50 to-white dark:from-theme-950/50 dark:to-theme-900/50">
       <div className="container max-w-4xl py-8 space-y-8">
         {/* ヒーローセクション */}
-        <section className="text-center space-y-4">
+        <Section className="text-center space-y-4">
           <h1 className="text-4xl font-bold tracking-tight">Chrome拡張機能 α版</h1>
           <p className="text-xl text-muted-foreground">ブラウザで読んだ記事を簡単に保存・管理できます</p>
           <div className="pt-4">
@@ -60,42 +110,22 @@ export default function DevTools() {
               </Button>
             )}
           </div>
-        </section>
+        </Section>
 
         {/* 機能紹介 */}
-        <section className="grid gap-4 sm:grid-cols-3">
-          {[
-            {
-              title: "簡単保存",
-              description: "ワンクリックで記事を保存できます。URLと概要が自動で取得されます。",
-              icon: CheckCircle2,
-            },
-            {
-              title: "自動タグ付け",
-              description: "AIが記事の内容を解析し、適切なテーマタグを自動で付与します。",
-              icon: CheckCircle2,
-            },
-            {
-              title: "要約生成",
-              description: "記事の要点を自動で抽出し、簡潔な要約を生成します。",
-              icon: CheckCircle2,
-            },
-          ].map((feature, i) => (
-            <Card key={i}>
-              <CardContent className="pt-6">
-                <feature.icon className="h-8 w-8 mb-3 text-theme-600" />
-                <h3 className="font-semibold mb-2">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground">{feature.description}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </section>
+        <Section>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {features.map((feature, i) => (
+              <FeatureCard key={i} {...feature} />
+            ))}
+          </div>
+        </Section>
 
         {/* インストール手順 */}
-        <section className="space-y-6">
-          <div>
-            <h2 className="text-2xl font-semibold tracking-tight">インストール手順</h2>
-            <div className="text-sm text-muted-foreground mt-1 space-y-2">
+        <Section 
+          title="インストール手順" 
+          description={
+            <div className="space-y-2">
               <p>Chrome拡張機能をインストールして、すぐに使い始めることができます。</p>
               <p>
                 インストール後は
@@ -105,18 +135,22 @@ export default function DevTools() {
                 が必要です。
               </p>
             </div>
-          </div>
-          <Steps steps={installSteps} />
-        </section>
+          }
+        >
+          <StepGuide>
+            <Steps steps={installSteps} />
+          </StepGuide>
+        </Section>
 
         {/* 使い方 */}
-        <section className="space-y-6">
-          <div>
-            <h2 className="text-2xl font-semibold tracking-tight">基本的な使い方</h2>
-            <p className="text-sm text-muted-foreground mt-1">シンプルな3ステップで記事を保存できます。</p>
-          </div>
-          <Steps steps={usageSteps} />
-        </section>
+        <Section 
+          title="基本的な使い方" 
+          description="シンプルな3ステップで記事を保存できます。"
+        >
+          <StepGuide>
+            <Steps steps={usageSteps} />
+          </StepGuide>
+        </Section>
       </div>
     </div>
   )
