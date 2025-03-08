@@ -55,45 +55,54 @@ export function ArticleList({
   onPageChange = () => {},
   onPageSizeChange = () => {},
 }: ArticleListProps) {
+  // 共通のStickySearchコンポーネント
+  const searchComponent = (
+    <StickySearch
+      searchQuery={searchQuery}
+      onSearchChange={onSearchChange}
+      sortField={sortField}
+      sortDirection={sortDirection}
+      onSortFieldChange={onSortFieldChange}
+      onSortDirectionChange={onSortDirectionChange}
+      onRefresh={onRefresh}
+      isSticky={stickySearch}
+    />
+  );
+  
+  // 記事がない場合のメッセージ
+  const noArticlesMessage = (
+    <>
+      記事がありません。
+      <Link href="/dev" className="text-theme-600 dark:text-theme-400 hover:underline mx-1">
+        Chrome拡張機能
+      </Link>
+      をインストールして記事を追加してください。
+    </>
+  );
+  
+  // 検索結果がない場合のメッセージ
+  const noSearchResultsMessage = <>検索条件に一致する記事がありません。検索条件を変更してください。</>;
+
   if (isLoading) {
     return (
       <div className="space-y-4">
-        <StickySearch
-          searchQuery={searchQuery}
-          onSearchChange={onSearchChange}
-          sortField={sortField}
-          sortDirection={sortDirection}
-          onSortFieldChange={onSortFieldChange}
-          onSortDirectionChange={onSortDirectionChange}
-          onRefresh={onRefresh}
-          isSticky={stickySearch}
-        />
+        {searchComponent}
         <ArticleListSkeleton />
       </div>
     )
   }
 
   if (articles.length === 0) {
-    if (totalItems === 0) {
-      return (
+    return (
+      <div className="space-y-4">
+        {searchComponent}
         <Alert>
           <AlertDescription>
-            記事がありません。
-            <Link href="/dev" className="text-theme-600 dark:text-theme-400 hover:underline mx-1">
-              Chrome拡張機能
-            </Link>
-            をインストールして記事を追加してください。
+            {totalItems === 0 ? noArticlesMessage : noSearchResultsMessage}
           </AlertDescription>
         </Alert>
-      )
-    } else {
-      // フィルタリング結果が0件の場合
-      return (
-        <Alert>
-          <AlertDescription>検索条件に一致する記事がありません。検索条件を変更してください。</AlertDescription>
-        </Alert>
-      )
-    }
+      </div>
+    )
   }
 
   // 総ページ数を計算
@@ -104,16 +113,7 @@ export function ArticleList({
 
   return (
     <div className="space-y-4">
-      <StickySearch
-        searchQuery={searchQuery}
-        onSearchChange={onSearchChange}
-        sortField={sortField}
-        sortDirection={sortDirection}
-        onSortFieldChange={onSortFieldChange}
-        onSortDirectionChange={onSortDirectionChange}
-        onRefresh={onRefresh}
-        isSticky={stickySearch}
-      />
+      {searchComponent}
       <div className="grid gap-4">
         {articles.map((article) => (
           <ArticleCard key={article.article_id} article={article} onDelete={onDeleteArticle} />
