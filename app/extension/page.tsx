@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Download, CheckCircle2 } from "lucide-react"
 import { Steps } from "./components/steps"
 import Link from "next/link"
+import { Header } from "@/components/layout/Header"
 
 // 環境変数からURLを取得、未設定の場合はデフォルト値を使用
 const EXTENSION_URL = process.env.NEXT_PUBLIC_EXTENSION_URL || "https://example.com/extension-not-found.zip"
@@ -90,68 +91,71 @@ const StepGuide = ({ children }) => (
 
 export default function ExtensionPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-theme-50/50 to-white dark:from-theme-950/50 dark:to-theme-900/50">
-      <div className="container max-w-4xl py-8 space-y-8">
-        {/* ヒーローセクション */}
-        <Section className="text-center space-y-4">
-          <h1 className="text-4xl font-bold tracking-tight">Chrome拡張機能 α版</h1>
-          <p className="text-xl text-muted-foreground">ブラウザで読んだ記事を簡単に保存・管理できます</p>
-          <div className="pt-4">
-            {EXTENSION_URL === "https://example.com/extension-not-found.zip" ? (
-              <div className="text-sm text-destructive">
-                Extension URL is not configured. Please set NEXT_PUBLIC_EXTENSION_URL environment variable.
-              </div>
-            ) : (
-              <Button asChild size="lg" className="gap-2">
-                <a href={EXTENSION_URL} download="extension.zip">
-                  <Download className="h-5 w-5" />
-                  拡張機能をダウンロード
-                </a>
-              </Button>
-            )}
-          </div>
-        </Section>
-
-        {/* 機能紹介 */}
-        <Section>
-          <div className="grid gap-4 sm:grid-cols-3">
-            {features.map((feature, i) => (
-              <FeatureCard key={i} {...feature} />
-            ))}
-          </div>
-        </Section>
-
-        {/* インストール手順 */}
-        <Section 
-          title="インストール手順" 
-          description={
-            <div className="space-y-2">
-              <div>Chrome拡張機能をインストールして、すぐに使い始めることができます。</div>
-              <div>
-                インストール後は
-                <Link href="/help#extension" className="text-theme-600 dark:text-theme-400 hover:underline mx-1">
-                  User IDの設定
-                </Link>
-                が必要です。
-              </div>
+    <>
+      <Header />
+      <div className="min-h-screen bg-gradient-to-b from-theme-50/50 to-white dark:from-theme-950/50 dark:to-theme-900/50">
+        <div className="container max-w-4xl py-8 space-y-8">
+          {/* ヒーローセクション */}
+          <Section className="text-center space-y-4">
+            <h1 className="text-4xl font-bold tracking-tight">Chrome拡張機能 α版</h1>
+            <p className="text-xl text-muted-foreground">ブラウザで読んだ記事を簡単に保存・管理できます</p>
+            <div className="pt-4">
+              {EXTENSION_URL === "https://example.com/extension-not-found.zip" ? (
+                <div className="text-sm text-destructive">
+                  Extension URL is not configured. Please set NEXT_PUBLIC_EXTENSION_URL environment variable.
+                </div>
+              ) : (
+                <Button asChild size="lg" className="gap-2">
+                  <a href={EXTENSION_URL} download="extension.zip">
+                    <Download className="h-5 w-5" />
+                    拡張機能をダウンロード
+                  </a>
+                </Button>
+              )}
             </div>
-          }
-        >
-          <StepGuide>
-            <Steps steps={installSteps} />
-          </StepGuide>
-        </Section>
+          </Section>
 
-        {/* 使い方 */}
-        <Section 
-          title="基本的な使い方" 
-          description="シンプルな3ステップで記事を保存できます。"
-        >
-          <StepGuide>
-            <Steps steps={usageSteps} />
-          </StepGuide>
-        </Section>
+          {/* 機能紹介 */}
+          <Section>
+            <div className="grid gap-4 sm:grid-cols-3">
+              {features.map((feature, i) => (
+                <FeatureCard key={i} {...feature} />
+              ))}
+            </div>
+          </Section>
+
+          {/* インストール手順 */}
+          <Section 
+            title="インストール手順" 
+            description={
+              <div className="space-y-2">
+                <div>Chrome拡張機能をインストールして、すぐに使い始めることができます。</div>
+                <div>
+                  インストール後は
+                  <Link href="/help#extension" className="text-theme-600 dark:text-theme-400 hover:underline mx-1">
+                    User IDの設定
+                  </Link>
+                  が必要です。
+                </div>
+              </div>
+            }
+          >
+            <StepGuide>
+              <Steps steps={installSteps} />
+            </StepGuide>
+          </Section>
+
+          {/* 使い方 */}
+          <Section 
+            title="基本的な使い方" 
+            description="シンプルな3ステップで記事を保存できます。"
+          >
+            <StepGuide>
+              <Steps steps={usageSteps} />
+            </StepGuide>
+          </Section>
+        </div>
       </div>
-    </div>
+    </>
   )
 } 
