@@ -1,4 +1,4 @@
-name: テスト実行
+name: Test Execution
 
 on:
   push:
@@ -13,28 +13,28 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Node.jsのセットアップ
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
         cache: 'npm'
     
-    - name: 依存関係のインストール
+    - name: Install Dependencies
       run: npm ci --force
     
-    - name: 単体テストと統合テストの実行
+    - name: Execute Unit and Integration Tests
       run: npm test
     
-    - name: テストカバレッジの収集
-      run: npm run test:coverage
+    # - name: Collect Test Coverage
+    #   run: npm run test:coverage
     
-    - name: カバレッジレポートのアップロード
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-report
-        path: coverage/
+    # - name: Upload Coverage Report
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: coverage-report
+    #     path: coverage/
     
-    - name: Cypressテストの実行
+    - name: Execute Cypress Tests
       uses: cypress-io/github-action@v5
       with:
         build: npm run build
