@@ -5,7 +5,7 @@ import { ArticleMenu } from "./article-menu"
 import { useState } from "react"
 import { ArticleTagsDialog } from "../dialogs/article-tags-dialog"
 import { ArticleDeleteDialog } from "../dialogs/article-delete-dialog"
-import { useReduxAuth } from "@/hooks/useReduxAuth" // useAuthをuseReduxAuthに変更
+import { useReduxAuth } from "@/hooks/useReduxAuth"
 import articlesAPI from "@/lib/api/articles"
 import { useToast } from "@/components/ui/use-toast"
 import { FavoriteButton } from "./components/favorite-button"
@@ -13,11 +13,12 @@ import { FavoriteButton } from "./components/favorite-button"
 interface ArticleHeaderProps {
   article: Article
   onDelete: () => void
+  onFavoriteToggle?: (isFavorited: boolean) => void
 }
 
-export function ArticleHeader({ article, onDelete }: ArticleHeaderProps) {
+export function ArticleHeader({ article, onDelete, onFavoriteToggle }: ArticleHeaderProps) {
   const { toast } = useToast()
-  const { user } = useReduxAuth() // useAuthをuseReduxAuthに変更
+  const { user } = useReduxAuth()
   const [showTags, setShowTags] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [isRegenerating, setIsRegenerating] = useState(false)
@@ -53,7 +54,11 @@ export function ArticleHeader({ article, onDelete }: ArticleHeaderProps) {
           {article.title}
         </h2>
         <div className="flex items-center">
-          <FavoriteButton articleId={article.article_id} />
+          <FavoriteButton 
+            articleId={article.article_id} 
+            initialFavorited={article.is_favorite} 
+            onToggle={onFavoriteToggle}
+          />
           <ArticleMenu
             articleId={article.article_id}
             onShowTags={() => setShowTags(true)}

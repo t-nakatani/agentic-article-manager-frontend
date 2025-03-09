@@ -11,11 +11,18 @@ import { ArticleFooter } from "./article-footer"
 interface ArticleCardProps {
   article: Article
   onDelete: (articleId: string) => Promise<void>
+  onFavoriteToggle?: (articleId: string, isFavorited: boolean) => void
 }
 
-export function ArticleCard({ article, onDelete }: ArticleCardProps) {
+export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCardProps) {
   const handleDelete = async () => {
     await onDelete(article.article_id)
+  }
+
+  const handleFavoriteToggle = (isFavorited: boolean) => {
+    if (onFavoriteToggle) {
+      onFavoriteToggle(article.article_id, isFavorited)
+    }
   }
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -31,7 +38,11 @@ export function ArticleCard({ article, onDelete }: ArticleCardProps) {
       onClick={handleCardClick}
     >
       <div className="space-y-0.5">
-        <ArticleHeader article={article} onDelete={handleDelete} />
+        <ArticleHeader 
+          article={article} 
+          onDelete={handleDelete} 
+          onFavoriteToggle={handleFavoriteToggle}
+        />
         <ArticleContent article={article} />
         <ArticleFooter article={article} />
       </div>

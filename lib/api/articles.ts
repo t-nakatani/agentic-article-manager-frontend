@@ -33,6 +33,13 @@ class ArticlesAPI extends BaseAPIClient {
       body: JSON.stringify(data),
     })
   }
+
+  async toggleFavorite(articleId: string, data: { user_id: string; is_favorite: boolean }): Promise<void> {
+    return this.fetch(`/articles/${articleId}/favorite`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    })
+  }
 }
 
 const API_BASE_URL = "https://knowledge-pholio.ngrok.dev"
