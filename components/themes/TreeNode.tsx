@@ -56,8 +56,8 @@ export function TreeNodeComponent({
   }, [])
   
   const handleSelect = React.useCallback(() => {
-    onSelect(isRootNode ? "all" : node.id)
-  }, [onSelect, isRootNode, node.id])
+    onSelect(node.id)
+  }, [onSelect, node.id])
   
   const handleAddChild = React.useCallback((name: string) => {
     onAddChild(node.id, name)
@@ -72,13 +72,13 @@ export function TreeNodeComponent({
   }, [onDeleteTheme, node.id])
 
   return (
-    <div className="relative">
+    <div className="py-1">
       <div
         className={cn(
-          "relative flex items-center gap-2 py-2 rounded-lg transition-all",
-          "hover:bg-theme-100/50 dark:hover:bg-theme-900/50",
-          "group",
+          "flex items-center rounded-md px-2 py-1.5 hover:bg-muted/50 cursor-pointer",
+          isSelected && "bg-theme-100 text-theme-900 dark:bg-theme-800 dark:text-theme-50"
         )}
+        onClick={handleSelect}
       >
         <CollapseButton 
           isExpanded={isExpanded} 
@@ -93,15 +93,18 @@ export function TreeNodeComponent({
             "transition-all duration-200",
             "hover:shadow-[0_2px_4px_0_rgba(0,0,0,0.1)] dark:hover:shadow-[0_2px_4px_0_rgba(0,0,0,0.3)]",
             isSelected && "bg-theme-100 dark:bg-theme-800",
-            isRootNode && "bg-theme-100 dark:bg-theme-800",
-            !isRootNode && "bg-white dark:bg-gray-950",
+            isRootNode && !isSelected && "bg-gray-100 dark:bg-gray-800",
+            !isRootNode && !isSelected && "bg-white dark:bg-gray-950",
           )}
         >
-          <div
-            onClick={handleSelect}
-            className="flex-1 cursor-pointer"
-          >
-            <span className={cn("text-sm", isRootNode && "font-medium")}>{node.label}</span>
+          <div className="flex-1 cursor-pointer">
+            <span className={cn(
+              "text-sm", 
+              isRootNode && "font-bold",
+              isRootNode && !isSelected && "text-gray-700 dark:text-gray-300"
+            )}>
+              {node.label}
+            </span>
           </div>
 
           {!isReadOnly && (

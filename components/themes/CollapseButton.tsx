@@ -1,5 +1,4 @@
 import { ChevronDown } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 interface CollapseButtonProps {
@@ -10,20 +9,23 @@ interface CollapseButtonProps {
 
 export function CollapseButton({ isExpanded, onToggle, disabled = false }: CollapseButtonProps) {
   return (
-    <Button
-      variant="ghost"
-      size="icon"
+    <button
+      type="button"
       className={cn(
-        "h-6 w-6 p-0.5 transition-transform",
-        isExpanded && "rotate-180",
-        disabled && "opacity-50 cursor-default hover:bg-transparent",
+        "flex h-6 w-6 items-center justify-center rounded-md",
+        disabled ? "opacity-20 cursor-default" : "hover:bg-muted/80 cursor-pointer opacity-70",
+        "transition-transform duration-200",
+        isExpanded && "transform rotate-0",
+        !isExpanded && "transform rotate-[-90deg]"
       )}
-      onClick={onToggle}
-      disabled={disabled}
+      onClick={(e) => {
+        e.stopPropagation()
+        if (!disabled) onToggle()
+      }}
+      aria-label={isExpanded ? "折りたたむ" : "展開する"}
     >
       <ChevronDown className="h-4 w-4" />
-      <span className="sr-only">{isExpanded ? "Collapse" : "Expand"}</span>
-    </Button>
+    </button>
   )
 }
 
