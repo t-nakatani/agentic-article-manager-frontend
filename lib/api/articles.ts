@@ -6,6 +6,7 @@ export interface Article {
   one_line_summary: string
   themes: string[]
   url: string
+  is_favorite: boolean
   created_at: string
   last_viewed_at: string | null
 }

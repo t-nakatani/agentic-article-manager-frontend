@@ -1,0 +1,42 @@
+name: テスト実行
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Node.jsのセットアップ
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: 依存関係のインストール
+      run: npm ci
+    
+    - name: 単体テストと統合テストの実行
+      run: npm test
+    
+    - name: テストカバレッジの収集
+      run: npm run test:coverage
+    
+    - name: カバレッジレポートのアップロード
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: coverage/
+    
+    - name: Cypressテストの実行
+      uses: cypress-io/github-action@v5
+      with:
+        build: npm run build
+        start: npm start
+        wait-on: 'http://localhost:3000' 
