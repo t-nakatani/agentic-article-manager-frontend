@@ -28,13 +28,6 @@
 - Pagination
 - SortControls
 
-### 共通コンポーネント
-- Button
-- Input
-- Modal
-- Dropdown
-- Card
-
 ### レイアウトコンポーネント
 - Header
 - Sidebar
