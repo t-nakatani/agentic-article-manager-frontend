@@ -4,7 +4,7 @@ import type { Article } from "@/lib/api/articles"
 import { selectThemeNameById } from "@/lib/redux/features/themes/selectors"
 
 // 基本セレクター
-const selectArticles = (state: RootState) => state.articles.items
+export const selectArticles = (state: RootState) => state.articles.items
 const selectArticlesStatus = (state: RootState) => state.articles.status
 const selectArticlesError = (state: RootState) => state.articles.error
 
@@ -84,21 +84,32 @@ export const selectSortedArticles = createSelector(
   [selectFilteredArticlesByFavorite, selectSortField, selectSortDirection],
   (articles, field, direction): Article[] => {
     return [...articles].sort((a, b) => {
-      const aValue = a[field]
-      const bValue = b[field]
+      const aValue = a[field];
+      const bValue = b[field];
 
       // Handle null values for lastViewedAt
       if (field === "last_viewed_at") {
-        if (aValue === null && bValue === null) return 0
-        if (aValue === null) return 1
-        if (bValue === null) return -1
+        if (aValue === null && bValue === null) return 0;
+        if (aValue === null) return 1;
+        if (bValue === null) return -1;
       }
 
-      const comparison = direction === "asc" ? 1 : -1
-      return (aValue < bValue ? -1 : aValue > bValue ? 1 : 0) * comparison
-    })
+      // nullチェックを追加
+      if (aValue === null && bValue === null) return 0;
+      if (aValue === null) return 1;
+      if (bValue === null) return -1;
+
+      const comparison = direction === "asc" ? 1 : -1;
+      // 安全な比較のために型チェックを追加
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return aValue.localeCompare(bValue) * comparison;
+      }
+      
+      // 数値または日付の比較
+      return (aValue < bValue ? -1 : aValue > bValue ? 1 : 0) * comparison;
+    });
   },
-)
+);
 
 // メモ化されたセレクター: 検索クエリでフィルタリングされた記事
 export const selectSearchedArticles = createSelector(
