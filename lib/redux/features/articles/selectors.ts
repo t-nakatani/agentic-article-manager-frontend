@@ -31,11 +31,41 @@ export const selectFilteredArticlesByTheme = createSelector(
       return articles
     }
     
+    // 選択されたテーマとその子テーマのIDを取得
+    const themeAndChildrenIds = getThemeAndChildrenIds(state, selectedTheme)
+    const themeAndChildrenNames = themeAndChildrenIds.map(id => 
+      selectThemeNameById(state, id)
+    ).filter(Boolean) as string[]
+    
+    // 記事のテーマが選択されたテーマまたはその子テーマと一致するかチェック
     return articles.filter((article) =>
-      article.themes.some((theme) => theme.toLowerCase() === themeName.toLowerCase()),
+      article.themes.some((theme) => 
+        themeAndChildrenNames.some(name => 
+          name.toLowerCase() === theme.toLowerCase()
+        )
+      )
     )
   },
 )
+
+// 指定されたテーマIDとその子孫テーマのIDをすべて取得する関数
+const getThemeAndChildrenIds = (state: RootState, themeId: string): string[] => {
+  const result = [themeId]
+  const edges = state.themes.edges
+  
+  // 再帰的に子テーマを探索する関数
+  const findChildren = (parentId: string) => {
+    const childEdges = edges.filter(edge => edge.source === parentId)
+    
+    childEdges.forEach(edge => {
+      result.push(edge.target)
+      findChildren(edge.target)
+    })
+  }
+  
+  findChildren(themeId)
+  return result
+}
 
 // お気に入りでフィルタリングされた記事
 export const selectFilteredArticlesByFavorite = createSelector(
