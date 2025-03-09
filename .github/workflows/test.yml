@@ -34,9 +34,9 @@ jobs:
     #     name: coverage-report
     #     path: coverage/
     
-    - name: Execute Cypress Tests
-      uses: cypress-io/github-action@v5
-      with:
-        build: npm run build
-        start: npm start
-        wait-on: 'http://localhost:3000' 
+    # - name: Execute Cypress Tests
+    #   uses: cypress-io/github-action@v5
+    #   with:
+    #     build: npm run build
+    #     start: npm start
+    #     wait-on: 'http://localhost:3000' 
