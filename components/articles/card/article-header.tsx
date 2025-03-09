@@ -8,6 +8,7 @@ import { ArticleDeleteDialog } from "../dialogs/article-delete-dialog"
 import { useReduxAuth } from "@/hooks/useReduxAuth" // useAuthをuseReduxAuthに変更
 import articlesAPI from "@/lib/api/articles"
 import { useToast } from "@/components/ui/use-toast"
+import { FavoriteButton } from "./components/favorite-button"
 
 interface ArticleHeaderProps {
   article: Article
@@ -51,12 +52,15 @@ export function ArticleHeader({ article, onDelete }: ArticleHeaderProps) {
         <h2 className="flex-1 text-sm font-semibold leading-tight hover:text-theme-600 dark:hover:text-theme-400 transition-colors line-clamp-1">
           {article.title}
         </h2>
-        <ArticleMenu
-          articleId={article.article_id}
-          onShowTags={() => setShowTags(true)}
-          onDelete={() => setShowDeleteConfirm(true)}
-          onRegenerate={handleRegenerate}
-        />
+        <div className="flex items-center">
+          <FavoriteButton articleId={article.article_id} />
+          <ArticleMenu
+            articleId={article.article_id}
+            onShowTags={() => setShowTags(true)}
+            onDelete={() => setShowDeleteConfirm(true)}
+            onRegenerate={handleRegenerate}
+          />
+        </div>
       </div>
 
       <ArticleTagsDialog article={article} open={showTags} onOpenChange={setShowTags} />

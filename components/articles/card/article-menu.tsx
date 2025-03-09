@@ -11,15 +11,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Tags, Trash2, BookOpen } from "lucide-react"
+import { MoreHorizontal, Tags, Trash2, BookOpen, RefreshCw } from "lucide-react"
 
 interface ArticleMenuProps {
   articleId: string
   onShowTags: () => void
   onDelete: () => void
+  onRegenerate: () => void
 }
 
-export function ArticleMenu({ articleId, onShowTags, onDelete }: ArticleMenuProps) {
+export function ArticleMenu({ articleId, onShowTags, onDelete, onRegenerate }: ArticleMenuProps) {
   const router = useRouter()
 
   const handleTopicView = (e: React.MouseEvent) => {
@@ -48,6 +49,15 @@ export function ArticleMenu({ articleId, onShowTags, onDelete }: ArticleMenuProp
         <DropdownMenuItem onClick={handleTopicView}>
           <BookOpen className="mr-2 h-4 w-4" />
           トピック要約
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={(e) => {
+            e.stopPropagation()
+            onRegenerate()
+          }}
+        >
+          <RefreshCw className="mr-2 h-4 w-4" />
+          要約を再生成
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
