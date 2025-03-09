@@ -1,7 +1,7 @@
 "use client"
 import ReactFlow from "reactflow"
 import "reactflow/dist/style.css"
-import { useThemeFlow } from "@/hooks/useThemeFlow"
+import { useReduxThemeFlow } from "@/hooks/useReduxThemeFlow"
 import { ThemeNode } from "./ThemeNode"
 import { HandleButton } from "./HandleButton"
 
@@ -10,7 +10,7 @@ const nodeTypes = {
 }
 
 export function ThemeBoard() {
-  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, handleSave } = useThemeFlow()
+  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, handleSave } = useReduxThemeFlow()
 
   return (
     <div className="w-full h-[600px]">
@@ -29,7 +29,7 @@ export function ThemeBoard() {
         ))}
       </ReactFlow>
       <button onClick={handleSave} className="mt-4 bg-primary text-white px-4 py-2 rounded">
-        Save
+        保存
       </button>
     </div>
   )

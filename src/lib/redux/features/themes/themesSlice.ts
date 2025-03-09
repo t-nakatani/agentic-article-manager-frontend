@@ -3,6 +3,7 @@ import type { Node, Edge } from "reactflow"
 import themesAPI from "@/lib/api/themes"
 import { handleAPIError } from "@/lib/api/error"
 import { toast } from "@/components/ui/use-toast"
+import { fetchThemeFlow, saveThemeFlow } from "@/lib/api/themes"
 
 interface ThemesState {
   nodes: Node[]
@@ -10,6 +11,7 @@ interface ThemesState {
   status: "idle" | "loading" | "succeeded" | "failed"
   error: string | null
   selectedTheme: string
+  loading: boolean
 }
 
 const initialState: ThemesState = {
@@ -18,6 +20,7 @@ const initialState: ThemesState = {
   status: "idle",
   error: null,
   selectedTheme: "all",
+  loading: false
 }
 
 export const fetchThemes = createAsyncThunk("themes/fetchThemes", async (userId: string, { rejectWithValue }) => {
@@ -110,6 +113,30 @@ export const saveThemes = createAsyncThunk(
   },
 )
 
+export const fetchThemeFlowAsync = createAsyncThunk(
+  "themes/fetchThemeFlow",
+  async (_, { rejectWithValue }) => {
+    try {
+      const data = await fetchThemeFlow();
+      return data;
+    } catch (error) {
+      return rejectWithValue("テーマデータの取得に失敗しました");
+    }
+  }
+);
+
+export const saveThemeFlowAsync = createAsyncThunk(
+  "themes/saveThemeFlow",
+  async ({ nodes, edges }: { nodes: Node[]; edges: Edge[] }, { rejectWithValue }) => {
+    try {
+      await saveThemeFlow({ nodes, edges });
+      return { nodes, edges };
+    } catch (error) {
+      return rejectWithValue("テーマデータの保存に失敗しました");
+    }
+  }
+);
+
 export const themesSlice = createSlice({
   name: "themes",
   initialState,
@@ -122,6 +149,27 @@ export const themesSlice = createSlice({
     },
     setSelectedTheme: (state, action: PayloadAction<string>) => {
       state.selectedTheme = action.payload
+    },
+    updateNodes: (state, action: PayloadAction<Node[]>) => {
+      state.nodes = action.payload;
+    },
+    updateEdges: (state, action: PayloadAction<Edge[]>) => {
+      state.edges = action.payload;
+    },
+    addNode: (state, action: PayloadAction<Node>) => {
+      state.nodes.push(action.payload);
+    },
+    removeNode: (state, action: PayloadAction<string>) => {
+      state.nodes = state.nodes.filter(node => node.id !== action.payload);
+      state.edges = state.edges.filter(
+        edge => edge.source !== action.payload && edge.target !== action.payload
+      );
+    },
+    addEdge: (state, action: PayloadAction<Edge>) => {
+      state.edges.push(action.payload);
+    },
+    removeEdge: (state, action: PayloadAction<string>) => {
+      state.edges = state.edges.filter(edge => edge.id !== action.payload);
     },
   },
   extraReducers: (builder) => {
@@ -215,9 +263,35 @@ export const themesSlice = createSlice({
           description: "テーマの変更を保存しました。",
         })
       })
+      .addCase(fetchThemeFlowAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchThemeFlowAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.nodes = action.payload.nodes;
+        state.edges = action.payload.edges;
+      })
+      .addCase(fetchThemeFlowAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(saveThemeFlowAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(saveThemeFlowAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.nodes = action.payload.nodes;
+        state.edges = action.payload.edges;
+      })
+      .addCase(saveThemeFlowAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 })
 
-export const { setNodes, setEdges, setSelectedTheme } = themesSlice.actions
+export const { setNodes, setEdges, setSelectedTheme, updateNodes, updateEdges, addNode, removeNode, addEdge, removeEdge } = themesSlice.actions
 export default themesSlice.reducer
 

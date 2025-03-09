@@ -2,7 +2,7 @@ import { createSelector } from "@reduxjs/toolkit"
 import type { RootState } from "@/lib/redux/store"
 import type { TreeNode } from "@/types/theme"
 import { convertFlowNodesToTreeNodes } from "@/lib/theme-utils"
-import type { Node } from "reactflow"
+import type { Node, Edge } from "reactflow"
 
 // 基本セレクター
 const selectThemeNodes = (state: RootState) => state.themes.nodes
@@ -42,4 +42,21 @@ export const selectThemeIdByName = createSelector(
     return node ? node.id : null
   }
 )
+
+// 選択されたテーマを取得するセレクター
+export const selectCurrentTheme = createSelector(
+  [selectThemeNodes, selectSelectedTheme],
+  (nodes, selectedId): Node | undefined => {
+    return nodes.find(node => node.id === selectedId);
+  }
+);
+
+// テーマの子ノードを取得するセレクター
+export const selectChildThemes = createSelector(
+  [selectThemeNodes, selectThemeEdges, selectSelectedTheme],
+  (nodes, edges, parentId): Node[] => {
+    const childEdges = edges.filter(edge => edge.source === parentId);
+    return nodes.filter(node => childEdges.some(edge => edge.target === node.id));
+  }
+);
 

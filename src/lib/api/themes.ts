@@ -131,3 +131,61 @@ if (!API_BASE_URL) {
 const themesAPI = new ThemesAPI(API_BASE_URL)
 export default themesAPI
 
+// モックデータ（実際の実装ではAPIから取得）
+const mockThemeFlow = {
+  nodes: [
+    {
+      id: "1",
+      type: "theme",
+      position: { x: 250, y: 5 },
+      data: { label: "すべて" },
+    },
+    {
+      id: "2",
+      type: "theme",
+      position: { x: 100, y: 100 },
+      data: { label: "技術" },
+    },
+    {
+      id: "3",
+      type: "theme",
+      position: { x: 400, y: 100 },
+      data: { label: "ビジネス" },
+    },
+    {
+      id: "4",
+      type: "theme",
+      position: { x: 100, y: 200 },
+      data: { label: "プログラミング" },
+    },
+  ],
+  edges: [
+    { id: "e1-2", source: "1", target: "2" },
+    { id: "e1-3", source: "1", target: "3" },
+    { id: "e2-4", source: "2", target: "4" },
+  ],
+};
+
+// ローカルストレージのキー
+const THEME_FLOW_STORAGE_KEY = "theme_flow_data";
+
+// テーマフローデータを取得する関数
+export async function fetchThemeFlow() {
+  // ローカルストレージからデータを取得
+  const storedData = localStorage.getItem(THEME_FLOW_STORAGE_KEY);
+  
+  if (storedData) {
+    return JSON.parse(storedData);
+  }
+  
+  // 初回はモックデータを返す
+  return mockThemeFlow;
+}
+
+// テーマフローデータを保存する関数
+export async function saveThemeFlow({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) {
+  // ローカルストレージにデータを保存
+  localStorage.setItem(THEME_FLOW_STORAGE_KEY, JSON.stringify({ nodes, edges }));
+  return { success: true };
+}
+
