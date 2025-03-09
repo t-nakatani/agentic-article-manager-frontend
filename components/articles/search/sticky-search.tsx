@@ -4,6 +4,7 @@ import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { ArticleSearch } from "./article-search"
 import { ArticleSort } from "./article-sort"
+import { ArticleFilter } from "./article-filter"
 import { Button } from "@/components/ui/button"
 import { RefreshCw } from "lucide-react"
 import type { SortField, SortDirection } from "@/types/article"
@@ -15,6 +16,8 @@ interface StickySearchProps {
   sortDirection: SortDirection
   onSortFieldChange: (field: SortField) => void
   onSortDirectionChange: (direction: SortDirection) => void
+  showFavorites: boolean
+  onShowFavoritesChange: (showFavorites: boolean) => void
   onRefresh: () => Promise<void>
   className?: string
   isSticky?: boolean
@@ -27,6 +30,8 @@ export function StickySearch({
   sortDirection,
   onSortFieldChange,
   onSortDirectionChange,
+  showFavorites,
+  onShowFavoritesChange,
   onRefresh,
   className,
   isSticky = false,
@@ -51,13 +56,17 @@ export function StickySearch({
       )}
     >
       <div className="p-4">
-        <div className="grid gap-4 sm:grid-cols-[1fr_auto_auto]">
+        <div className="grid gap-4 sm:grid-cols-[1fr_auto_auto_auto]">
           <ArticleSearch value={searchQuery} onChange={onSearchChange} />
           <ArticleSort
             field={sortField}
             direction={sortDirection}
             onFieldChange={onSortFieldChange}
             onDirectionChange={onSortDirectionChange}
+          />
+          <ArticleFilter
+            showFavorites={showFavorites}
+            onShowFavoritesChange={onShowFavoritesChange}
           />
           <Button
             variant="outline"

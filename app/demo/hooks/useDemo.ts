@@ -16,6 +16,7 @@ export function useDemo() {
   // ページネーション関連の状態を追加
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
+  const [showFavorites, setShowFavorites] = useState(false)
 
   // 初期ロード時に200msの遅延を追加
   useEffect(() => {
@@ -57,9 +58,17 @@ export function useDemo() {
     )
   }, [filteredBySearch, selectedTheme])
 
+  // お気に入りでフィルタリング
+  const filteredByFavorites = useMemo(() => {
+    if (!showFavorites) {
+      return filteredArticles
+    }
+    return filteredArticles.filter((article) => article.is_favorite === true)
+  }, [filteredArticles, showFavorites])
+
   // ソート機能
   const sortedArticles = useMemo(() => {
-    return [...filteredArticles].sort((a, b) => {
+    return [...filteredByFavorites].sort((a, b) => {
       const aValue = a[sortField]
       const bValue = b[sortField]
 
@@ -73,12 +82,12 @@ export function useDemo() {
       const comparison = sortDirection === "asc" ? 1 : -1
       return (aValue < bValue ? -1 : aValue > bValue ? 1 : 0) * comparison
     })
-  }, [filteredArticles, sortField, sortDirection])
+  }, [filteredByFavorites, sortField, sortDirection])
 
   // フィルタリングとソートが変更されたらページをリセット
   useEffect(() => {
     setCurrentPage(1)
-  }, [selectedTheme, searchQuery, sortField, sortDirection])
+  }, [selectedTheme, searchQuery, sortField, sortDirection, showFavorites])
 
   // ページネーションされた記事を取得
   const getPaginatedArticles = () => {
@@ -121,6 +130,8 @@ export function useDemo() {
     isLoading,
     handleDeleteArticle,
     handleRefresh,
+    showFavorites,
+    setShowFavorites,
   }
 }
 

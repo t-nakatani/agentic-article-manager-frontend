@@ -37,9 +37,21 @@ export const selectFilteredArticlesByTheme = createSelector(
   },
 )
 
-// メモ化されたセレクター: ソートされた記事
+// お気に入りでフィルタリングされた記事
+export const selectFilteredArticlesByFavorite = createSelector(
+  [selectFilteredArticlesByTheme, (state) => state.articleFilters.showFavorites],
+  (articles, showFavorites): Article[] => {
+    if (!showFavorites) {
+      return articles
+    }
+    
+    return articles.filter((article) => article.is_favorite === true)
+  }
+)
+
+// ソート前のフィルタリングチェーンを更新
 export const selectSortedArticles = createSelector(
-  [selectFilteredArticlesByTheme, selectSortField, selectSortDirection],
+  [selectFilteredArticlesByFavorite, selectSortField, selectSortDirection],
   (articles, field, direction): Article[] => {
     return [...articles].sort((a, b) => {
       const aValue = a[field]

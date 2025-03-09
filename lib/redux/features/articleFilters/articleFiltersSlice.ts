@@ -8,6 +8,7 @@ interface ArticleFiltersState {
   selectedTheme: string
   currentPage: number
   pageSize: number
+  showFavorites: boolean
 }
 
 const initialState: ArticleFiltersState = {
@@ -17,6 +18,7 @@ const initialState: ArticleFiltersState = {
   selectedTheme: "all",
   currentPage: 1,
   pageSize: 10,
+  showFavorites: false
 }
 
 export const articleFiltersSlice = createSlice({
@@ -46,10 +48,14 @@ export const articleFiltersSlice = createSlice({
       state.pageSize = action.payload
       state.currentPage = 1 // ページサイズ変更時にページをリセット
     },
+    setShowFavorites: (state, action: PayloadAction<boolean>) => {
+      state.showFavorites = action.payload
+      state.currentPage = 1 // フィルタ変更時にページをリセット
+    },
   },
 })
 
-export const { setSortField, setSortDirection, setSearchQuery, setSelectedTheme, setCurrentPage, setPageSize } =
+export const { setSortField, setSortDirection, setSearchQuery, setSelectedTheme, setCurrentPage, setPageSize, setShowFavorites } =
   articleFiltersSlice.actions
 export default articleFiltersSlice.reducer
 

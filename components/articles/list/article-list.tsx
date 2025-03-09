@@ -30,6 +30,8 @@ interface ArticleListProps {
   totalItems?: number
   onPageChange?: (page: number) => void
   onPageSizeChange?: (size: number) => void
+  showFavorites: boolean
+  onShowFavoritesChange: (showFavorites: boolean) => void
 }
 
 const PAGE_SIZES = [10, 20, 50]
@@ -54,6 +56,8 @@ export function ArticleList({
   totalItems = 0,
   onPageChange = () => {},
   onPageSizeChange = () => {},
+  showFavorites,
+  onShowFavoritesChange,
 }: ArticleListProps) {
   // 共通のStickySearchコンポーネント
   const searchComponent = (
@@ -64,6 +68,8 @@ export function ArticleList({
       sortDirection={sortDirection}
       onSortFieldChange={onSortFieldChange}
       onSortDirectionChange={onSortDirectionChange}
+      showFavorites={showFavorites}
+      onShowFavoritesChange={onShowFavoritesChange}
       onRefresh={onRefresh}
       isSticky={stickySearch}
     />

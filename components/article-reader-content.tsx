@@ -10,13 +10,14 @@ import {
   setSortDirection,
   setSearchQuery,
   setSelectedTheme,
+  setShowFavorites,
 } from "@/lib/redux/features/articleFilters/articleFiltersSlice"
 import { useReduxArticles } from "@/hooks/useReduxArticles"
 
 export function ArticleReaderContent() {
   // Reduxの状態とアクション
   const dispatch = useAppDispatch()
-  const { sortField, sortDirection, searchQuery, selectedTheme } = useAppSelector((state) => state.articleFilters)
+  const { sortField, sortDirection, searchQuery, selectedTheme, showFavorites } = useAppSelector((state) => state.articleFilters)
 
   // useReduxArticlesフックを使用
   const {
@@ -51,6 +52,11 @@ export function ArticleReaderContent() {
     dispatch(setSelectedTheme(theme))
   }
 
+  // お気に入りフィルタ変更時にReduxの状態を更新
+  const handleShowFavoritesChange = (showFavorites: boolean) => {
+    dispatch(setShowFavorites(showFavorites))
+  }
+
   return (
     <AuthWrapper>
       <Layout>
@@ -75,6 +81,8 @@ export function ArticleReaderContent() {
               totalItems={totalItems}
               onPageChange={onPageChange}
               onPageSizeChange={onPageSizeChange}
+              showFavorites={showFavorites}
+              onShowFavoritesChange={handleShowFavoritesChange}
             />
           </main>
           <aside className="hidden lg:block">

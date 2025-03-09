@@ -28,6 +28,8 @@ export default function DemoPage() {
     isLoading,
     handleDeleteArticle,
     handleRefresh,
+    showFavorites,
+    setShowFavorites,
   } = useDemo()
 
   return (
@@ -51,12 +53,13 @@ export default function DemoPage() {
               stickySearch={stickySearch}
               onDeleteArticle={handleDeleteArticle}
               onRefresh={handleRefresh}
-              // ページネーション関連のpropsを追加
               currentPage={currentPage}
               pageSize={pageSize}
               totalItems={totalItems}
               onPageChange={onPageChange}
               onPageSizeChange={onPageSizeChange}
+              showFavorites={showFavorites}
+              onShowFavoritesChange={setShowFavorites}
             />
           </main>
           <aside className="hidden lg:block">
