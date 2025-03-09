@@ -8,7 +8,7 @@ module.exports = {
     // CSSモジュールなどのモック設定
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     // パス別名の設定（tsconfig.jsonのpathsと一致させる）
-    '^@/(.*)$': '<rootDir>/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   collectCoverageFrom: [
