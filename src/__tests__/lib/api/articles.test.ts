@@ -1,8 +1,8 @@
 /**
  * @jest-environment node
  */
-import articlesAPI from "../articles";
-import { server } from '../../../mocks/server';
+import articlesAPI from "@/lib/api/articles";
+import { server } from '@/__tests__/mocks/server';
 
 // テスト前にMSWサーバーを起動
 beforeAll(() => server.listen());

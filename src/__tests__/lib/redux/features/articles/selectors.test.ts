@@ -1,4 +1,4 @@
-import { selectArticles } from '../selectors';
+import { selectArticles } from '@/lib/redux/features/articles/selectors';
 import { RootState } from '@/lib/redux/store';
 import type { Article } from '@/lib/api/articles';
 

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { AppLogo } from '../app-logo';
+import { AppLogo } from '@/components/ui/app-logo';
 
 describe('AppLogo', () => {
   it('ロゴが正しくレンダリングされる', () => {
