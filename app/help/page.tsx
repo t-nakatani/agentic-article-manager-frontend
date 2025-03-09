@@ -1,6 +1,13 @@
 import { Layout } from "@/components/layout/Layout"
 import { QACard } from "@/components/help/qa-card"
 import { getQAData } from "@/lib/help"
+import { generateSeoMetadata } from "@/lib/metadata"
+
+export const metadata = generateSeoMetadata({
+  title: "ヘルプセンター",
+  description: "よくある質問や使い方について説明します",
+  image: "https://soi-v0.vercel.app/help-og-image.png"
+})
 
 export default function HelpPage() {
   const qaData = getQAData()

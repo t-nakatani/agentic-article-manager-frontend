@@ -6,6 +6,7 @@ import { Section } from "./components/section"
 import { FeatureCard } from "./components/feature-card"
 import { ChromeTab } from "./components/chrome-tab"
 import { IOSTab } from "./components/ios-tab"
+import { generateSeoMetadata } from '@/lib/metadata'
 
 // 環境変数からURLを取得、未設定の場合はデフォルト値を使用
 const EXTENSION_URL = process.env.NEXT_PUBLIC_EXTENSION_URL || "https://example.com/extension-not-found.zip"
@@ -92,6 +93,12 @@ const features = [
     icon: CheckCircle2,
   },
 ]
+
+export const metadata = generateSeoMetadata({
+  title: '拡張機能 α版',
+  description: 'ブラウザで読んだ記事を簡単に保存・管理できる拡張機能',
+  image: 'https://soi-v0.vercel.app/extension-og-image.png'
+})
 
 export default function ExtensionPage() {
   return (
