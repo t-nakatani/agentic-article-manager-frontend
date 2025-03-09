@@ -15,6 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { UserIdDisplay } from "@/components/dev/user-id-display"
 import { useReduxAuth } from "@/hooks/useReduxAuth"
 import { usePathname } from "next/navigation"
+import { AppLogo } from "@/components/ui/app-logo"
 
 export function Header() {
   const { user, logout } = useReduxAuth()
@@ -29,8 +30,7 @@ export function Header() {
           className="flex items-center gap-2 transition-colors hover:text-theme-600 dark:hover:text-theme-400"
           aria-label="Home"
         >
-          <BookOpen className="h-5 w-5" />
-          <span className="hidden font-bold sm:inline-block">Soi</span>
+          <AppLogo />
         </Link>
         <nav className="flex flex-1 items-center justify-end gap-4">
           <Link
