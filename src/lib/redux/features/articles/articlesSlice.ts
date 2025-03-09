@@ -37,6 +37,22 @@ export const deleteArticle = createAsyncThunk(
   },
 )
 
+export const toggleFavorite = createAsyncThunk(
+  "articles/toggleFavorite",
+  async ({ articleId, isFavorite }: { articleId: string; isFavorite: boolean }, { rejectWithValue }) => {
+    try {
+      await articlesAPI.toggleFavorite(articleId, {
+        user_id: "dummy", // 実際のユーザーIDはAPIクライアント側で取得
+        is_favorite: isFavorite
+      })
+      return { articleId, isFavorite }
+    } catch (error) {
+      await handleAPIError(error)
+      return rejectWithValue("Failed to toggle favorite")
+    }
+  }
+)
+
 export const articlesSlice = createSlice({
   name: "articles",
   initialState,
@@ -57,6 +73,13 @@ export const articlesSlice = createSlice({
       })
       .addCase(deleteArticle.fulfilled, (state, action) => {
         state.items = state.items.filter((article) => article.article_id !== action.payload)
+      })
+      .addCase(toggleFavorite.fulfilled, (state, action) => {
+        const { articleId, isFavorite } = action.payload
+        const article = state.items.find(article => article.article_id === articleId)
+        if (article) {
+          article.is_favorite = isFavorite
+        }
       })
   },
 })

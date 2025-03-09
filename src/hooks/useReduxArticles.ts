@@ -2,13 +2,21 @@
 
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
-import { fetchArticles, deleteArticle } from "@/lib/redux/features/articles/articlesSlice"
+import { 
+  fetchArticles, 
+  deleteArticle,
+  toggleFavorite 
+} from "@/lib/redux/features/articles/articlesSlice"
 import {
   selectPaginatedArticles,
   selectIsArticlesLoading,
   selectTotalItems,
 } from "@/lib/redux/features/articles/selectors"
-import { setCurrentPage, setPageSize } from "@/lib/redux/features/articleFilters/articleFiltersSlice"
+import { 
+  setCurrentPage, 
+  setPageSize,
+  setShowFavorites 
+} from "@/lib/redux/features/articleFilters/articleFiltersSlice"
 import { toast } from "@/components/ui/use-toast"
 
 export function useReduxArticles() {
@@ -20,6 +28,7 @@ export function useReduxArticles() {
   const user = useAppSelector((state) => state.auth.user)
   const currentPage = useAppSelector((state) => state.articleFilters.currentPage)
   const pageSize = useAppSelector((state) => state.articleFilters.pageSize)
+  const showFavorites = useAppSelector((state) => state.articleFilters.showFavorites)
 
   // 元の記事データの有無を取得
   const allArticles = useAppSelector((state) => state.articles.items)
@@ -44,6 +53,17 @@ export function useReduxArticles() {
     }
   }
 
+  const handleToggleFavorite = async (articleId: string, isFavorite: boolean) => {
+    try {
+      await dispatch(toggleFavorite({ articleId, isFavorite })).unwrap()
+    } catch (error) {
+      toast({
+        title: "お気に入りの更新に失敗しました",
+        variant: "destructive",
+      })
+    }
+  }
+
   const refreshArticles = async () => {
     if (user) {
       try {
@@ -62,17 +82,24 @@ export function useReduxArticles() {
     dispatch(setPageSize(size))
   }
 
+  const handleShowFavoritesChange = (show: boolean) => {
+    dispatch(setShowFavorites(show))
+  }
+
   return {
     articles: paginatedArticles,
     totalItems,
     currentPage,
     pageSize,
+    showFavorites,
     isLoading,
     error,
     deleteArticle: handleDeleteArticle,
+    toggleFavorite: handleToggleFavorite,
     refreshArticles,
     onPageChange: handlePageChange,
     onPageSizeChange: handlePageSizeChange,
+    onShowFavoritesChange: handleShowFavoritesChange,
   }
 }
 

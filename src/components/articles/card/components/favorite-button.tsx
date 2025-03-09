@@ -4,7 +4,8 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { StarIcon } from "./star-icon"
 import { useReduxAuth } from "@/hooks/useReduxAuth"
-import articlesAPI from "@/lib/api/articles"
+import { useAppDispatch } from "@/lib/redux/hooks"
+import { toggleFavorite } from "@/lib/redux/features/articles/articlesSlice"
 import { useToast } from "@/components/ui/use-toast"
 
 interface FavoriteButtonProps {
@@ -16,6 +17,7 @@ interface FavoriteButtonProps {
 export function FavoriteButton({ articleId, initialFavorited = false, onToggle }: FavoriteButtonProps) {
   const { user } = useReduxAuth()
   const { toast } = useToast()
+  const dispatch = useAppDispatch()
   const [isFavorited, setIsFavorited] = useState(initialFavorited)
   const [isAnimating, setIsAnimating] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -35,11 +37,11 @@ export function FavoriteButton({ articleId, initialFavorited = false, onToggle }
     setTimeout(() => setIsAnimating(false), 300)
     
     try {
-      // APIリクエストを実行（結果を待たずにUIは更新済み）
-      await articlesAPI.toggleFavorite(articleId, {
-        user_id: user.uid,
-        is_favorite: newFavoriteState
-      })
+      // Reduxアクションをディスパッチ
+      await dispatch(toggleFavorite({
+        articleId,
+        isFavorite: newFavoriteState
+      })).unwrap()
       
       console.log(`記事ID: ${articleId} のお気に入り状態を ${newFavoriteState} に変更しました`)
       

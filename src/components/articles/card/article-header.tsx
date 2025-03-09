@@ -9,6 +9,8 @@ import { useReduxAuth } from "@/hooks/useReduxAuth"
 import articlesAPI from "@/lib/api/articles"
 import { useToast } from "@/components/ui/use-toast"
 import { FavoriteButton } from "./components/favorite-button"
+import { useAppDispatch } from "@/lib/redux/hooks"
+import { toggleFavorite } from "@/lib/redux/features/articles/articlesSlice"
 
 interface ArticleHeaderProps {
   article: Article
@@ -19,6 +21,7 @@ interface ArticleHeaderProps {
 export function ArticleHeader({ article, onDelete, onFavoriteToggle }: ArticleHeaderProps) {
   const { toast } = useToast()
   const { user } = useReduxAuth()
+  const dispatch = useAppDispatch()
   const [showTags, setShowTags] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [isRegenerating, setIsRegenerating] = useState(false)
@@ -47,6 +50,23 @@ export function ArticleHeader({ article, onDelete, onFavoriteToggle }: ArticleHe
     }
   }
 
+  const handleFavoriteToggle = async (isFavorited: boolean) => {
+    if (!user) return
+    
+    try {
+      await dispatch(toggleFavorite({
+        articleId: article.article_id,
+        isFavorite: isFavorited
+      })).unwrap()
+      
+      if (onFavoriteToggle) {
+        onFavoriteToggle(isFavorited)
+      }
+    } catch (error) {
+      // エラーはすでにコンポーネント内で処理されている
+    }
+  }
+
   return (
     <>
       <div className="flex items-start gap-2 p-2.5">
@@ -57,7 +77,7 @@ export function ArticleHeader({ article, onDelete, onFavoriteToggle }: ArticleHe
           <FavoriteButton 
             articleId={article.article_id} 
             initialFavorited={article.is_favorite} 
-            onToggle={onFavoriteToggle}
+            onToggle={handleFavoriteToggle}
           />
           <ArticleMenu
             articleId={article.article_id}
