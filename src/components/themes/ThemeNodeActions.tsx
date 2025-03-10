@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Plus, Pencil, Trash2 } from "lucide-react"
+import { MoreHorizontal, Plus, Pencil, Trash2, Download } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ThemeEditDialog } from "./theme-rename-dialog"
 import { ThemeDeleteDialog } from "./theme-delete-dialog"
@@ -18,9 +18,10 @@ interface ThemeNodeActionsProps {
   nodeId: string
   nodeName: string
   isRootNode: boolean
-  onAddChild: () => void
+  onAddChild: (name: string) => void
   onRename: (newName: string) => void
   onDelete: () => void
+  onExport: () => void
   className?: string
 }
 
@@ -31,6 +32,7 @@ export function ThemeNodeActions({
   onAddChild,
   onRename,
   onDelete,
+  onExport,
   className,
 }: ThemeNodeActionsProps) {
   const [showEdit, setShowEdit] = useState(false)
@@ -97,6 +99,15 @@ export function ThemeNodeActions({
           >
             <Pencil className="mr-2 h-4 w-4" />
             テーマを編集
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.stopPropagation()
+              onExport()
+            }}
+          >
+            <Download className="mr-2 h-4 w-4" />
+            エクスポート
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem

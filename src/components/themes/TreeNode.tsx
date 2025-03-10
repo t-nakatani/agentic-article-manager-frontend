@@ -15,6 +15,7 @@ interface TreeNodeProps {
   onAddChild: (parentId: string | null, name: string) => void
   onUpdateTheme: (id: string, name: string) => void
   onDeleteTheme?: (id: string) => void
+  onExportTheme?: (id: string) => void
   isNewNode?: boolean
   isReadOnly?: boolean
 }
@@ -28,6 +29,7 @@ export function TreeNodeComponent({
   onAddChild,
   onUpdateTheme,
   onDeleteTheme = () => {},
+  onExportTheme = () => {},
   isNewNode = false,
   isReadOnly = false,
 }: TreeNodeProps) {
@@ -70,6 +72,10 @@ export function TreeNodeComponent({
   const handleDelete = React.useCallback(() => {
     onDeleteTheme(node.id)
   }, [onDeleteTheme, node.id])
+
+  const handleExport = React.useCallback(() => {
+    onExportTheme(node.id)
+  }, [onExportTheme, node.id])
 
   return (
     <div className="py-1">
@@ -115,6 +121,7 @@ export function TreeNodeComponent({
               onAddChild={handleAddChild}
               onRename={handleRename}
               onDelete={handleDelete}
+              onExport={handleExport}
               className="opacity-0 group-hover:opacity-100 hover:opacity-100"
             />
           )}
@@ -140,6 +147,7 @@ export function TreeNodeComponent({
               onAddChild={onAddChild}
               onUpdateTheme={onUpdateTheme}
               onDeleteTheme={onDeleteTheme}
+              onExportTheme={onExportTheme}
               isNewNode={child.isNewNode}
               isReadOnly={isReadOnly}
             />

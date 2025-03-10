@@ -7,6 +7,7 @@ import {
   createTheme,
   updateTheme,
   deleteTheme,
+  exportTheme,
   saveThemes,
   setNodes,
   setEdges,
@@ -90,6 +91,17 @@ export function useReduxThemes() {
     dispatch(setSelectedTheme(theme))
   }
 
+  const exportThemeHandler = async (id: string) => {
+    if (!user) return
+
+    await dispatch(
+      exportTheme({
+        userId: user.uid,
+        themeId: id,
+      })
+    ).unwrap()
+  }
+
   return {
     nodes,
     edges,
@@ -103,6 +115,7 @@ export function useReduxThemes() {
     addTheme,
     updateTheme: updateThemeHandler,
     deleteTheme: deleteThemeHandler,
+    exportTheme: exportThemeHandler,
     saveThemes: saveThemesHandler,
   }
 }

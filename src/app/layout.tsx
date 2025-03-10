@@ -1,5 +1,5 @@
 import type React from "react"
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "sonner"
 import { ReduxProvider } from "@/components/providers/redux-provider"
 import { AuthStateListener } from "@/components/auth/AuthStateListener"
 import { generateSeoMetadata } from "@/lib/metadata"

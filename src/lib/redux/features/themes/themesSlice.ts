@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/tool
 import type { Node, Edge } from "reactflow"
 import themesAPI from "@/lib/api/themes"
 import { handleAPIError } from "@/lib/api/error"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 
 interface ThemesState {
   nodes: Node[]
@@ -98,8 +98,7 @@ export const saveThemes = createAsyncThunk(
     try {
       // 実際のAPIでは、ノードとエッジをサーバーに保存するロジックが必要
       // 現在のAPIでは直接的なsaveThemesメソッドがないため、ここではモックとして実装
-      toast({
-        title: "テーマを保存しました",
+      toast.success("テーマを保存しました", {
         description: "テーマの変更を保存しました。",
       })
       return { nodes, edges }
@@ -108,6 +107,21 @@ export const saveThemes = createAsyncThunk(
       return rejectWithValue("Failed to save themes")
     }
   },
+)
+
+export const exportTheme = createAsyncThunk(
+  "themes/exportTheme",
+  async ({ userId, themeId }: { userId: string; themeId: string }, { rejectWithValue }) => {
+    try {
+      const response = await themesAPI.exportTheme(Number(themeId), {
+        user_id: userId,
+      })
+      return { requestId: response.request_id, themeId }
+    } catch (error) {
+      await handleAPIError(error)
+      return rejectWithValue("Failed to export theme")
+    }
+  }
 )
 
 export const themesSlice = createSlice({
@@ -165,8 +179,7 @@ export const themesSlice = createSlice({
           state.edges.push(newEdge)
         }
 
-        toast({
-          title: "テーマを作成しました",
+        toast.success("テーマを作成しました", {
           description: `"${name}" を作成しました`,
         })
       })
@@ -178,8 +191,7 @@ export const themesSlice = createSlice({
           node.id === themeId ? { ...node, data: { ...node.data, label: name } } : node,
         )
 
-        toast({
-          title: "テーマを更新しました",
+        toast.success("テーマを更新しました", {
           description: `"${name}" に更新しました`,
         })
       })
@@ -201,18 +213,25 @@ export const themesSlice = createSlice({
         // 関連するエッジを削除
         state.edges = state.edges.filter((edge) => !nodesToDelete.has(edge.source) && !nodesToDelete.has(edge.target))
 
-        toast({
-          title: "テーマを削除しました",
-        })
+        toast.success("テーマを削除しました")
       })
       .addCase(saveThemes.fulfilled, (state, action) => {
         const { nodes, edges } = action.payload
         state.nodes = nodes
         state.edges = edges
         
-        toast({
-          title: "テーマを保存しました",
+        toast.success("テーマを保存しました", {
           description: "テーマの変更を保存しました。",
+        })
+      })
+      .addCase(exportTheme.fulfilled, (state, action) => {
+        toast.success("エクスポートリクエストを送信しました", {
+          description: "テーマのエクスポート処理が開始されました。",
+        })
+      })
+      .addCase(exportTheme.rejected, (state, action) => {
+        toast.error("エクスポートに失敗しました", {
+          description: action.payload as string || "エラーが発生しました。",
         })
       })
   },

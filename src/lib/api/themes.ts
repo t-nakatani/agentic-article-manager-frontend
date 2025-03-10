@@ -26,6 +26,16 @@ interface ThemeResponse {
   root: ThemeNode[]
 }
 
+// テーマエクスポートリクエストの型定義
+interface ExportThemeRequest {
+  user_id: string
+}
+
+// テーマエクスポートレスポンスの型定義
+interface ExportThemeResponse {
+  request_id: string
+}
+
 class ThemesAPI extends BaseAPIClient {
   async getThemes(userId: string): Promise<{ nodes: Node[]; edges: Edge[] } | null> {
     const response = await this.fetch<ThemeResponse>(`/themes?user_id=${encodeURIComponent(userId)}`)
@@ -119,6 +129,14 @@ class ThemesAPI extends BaseAPIClient {
   async deleteTheme(themeId: string, userId: string): Promise<void> {
     return this.fetch(`/themes/${encodeURIComponent(themeId)}?user_id=${encodeURIComponent(userId)}`, {
       method: "DELETE",
+    })
+  }
+
+  // テーマエクスポート用のメソッドを追加
+  async exportTheme(themeId: number, data: ExportThemeRequest): Promise<ExportThemeResponse> {
+    return this.fetch(`/themes/${themeId}/export`, {
+      method: "POST",
+      body: JSON.stringify(data),
     })
   }
 }

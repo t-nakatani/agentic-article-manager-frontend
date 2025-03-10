@@ -19,6 +19,7 @@ export function ThemeTree({ onSelectTheme, selectedTheme, isDemoMode = false, de
     addTheme,
     updateTheme: updateThemeHandler,
     deleteTheme: deleteThemeHandler,
+    exportTheme: exportThemeHandler,
   } = useReduxThemes()
 
   // デモモードの場合はデモ用のテーマを使用
@@ -68,6 +69,19 @@ export function ThemeTree({ onSelectTheme, selectedTheme, isDemoMode = false, de
     }
   }
 
+  const handleExportTheme = async (id: string) => {
+    if (isDemoMode) {
+      console.log("Demo mode: Cannot export themes")
+      return
+    }
+
+    try {
+      await exportThemeHandler(id)
+    } catch (error) {
+      console.error("Failed to export theme:", error)
+    }
+  }
+
   if (isLoading && !isDemoMode) {
     return <div>Loading themes...</div>
   }
@@ -88,6 +102,7 @@ export function ThemeTree({ onSelectTheme, selectedTheme, isDemoMode = false, de
             onAddChild={handleAddChild}
             onUpdateTheme={handleUpdateTheme}
             onDeleteTheme={handleDeleteTheme}
+            onExportTheme={handleExportTheme}
             isReadOnly={isDemoMode}
           />
         ))}
