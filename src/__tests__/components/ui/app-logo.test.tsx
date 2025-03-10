@@ -8,7 +8,7 @@ describe('AppLogo', () => {
     const logoText = screen.getByText('Soi');
     expect(logoText).toBeInTheDocument();
     
-    const subText = screen.getByText('Agenticによるwebページ管理');
+    const subText = screen.getByText('Agentによるwebページ管理');
     expect(subText).toBeInTheDocument();
   });
 }); 
