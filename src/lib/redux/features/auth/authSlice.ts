@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit"
 import { signInWithPopup, signOut, type User } from "firebase/auth"
 import { auth, googleProvider } from "@/lib/firebase"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 
 // シリアライズ可能なユーザー情報の型を定義
 interface SerializableUser {
@@ -34,16 +34,13 @@ const serializeUser = (user: User): SerializableUser => ({
 export const signInWithGoogle = createAsyncThunk("auth/signInWithGoogle", async (_, { rejectWithValue }) => {
   try {
     const result = await signInWithPopup(auth, googleProvider)
-    toast({
-      title: "ログインしました",
+    toast.success("ログインしました", {
       description: `${result.user.displayName}さん、ようこそ！`,
     })
     return serializeUser(result.user)
   } catch (error) {
-    toast({
-      title: "ログインに失敗しました",
+    toast.error("ログインに失敗しました", {
       description: "もう一度お試しください",
-      variant: "destructive",
     })
     return rejectWithValue("Login failed")
   }
@@ -52,15 +49,11 @@ export const signInWithGoogle = createAsyncThunk("auth/signInWithGoogle", async 
 export const logout = createAsyncThunk("auth/logout", async (_, { rejectWithValue }) => {
   try {
     await signOut(auth)
-    toast({
-      title: "ログアウトしました",
-    })
+    toast.success("ログアウトしました")
     return null
   } catch (error) {
-    toast({
-      title: "ログアウトに失敗しました",
+    toast.error("ログアウトに失敗しました", {
       description: "もう一度お試しください",
-      variant: "destructive",
     })
     return rejectWithValue("Logout failed")
   }

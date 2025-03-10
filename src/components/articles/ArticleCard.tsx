@@ -12,6 +12,7 @@ import { ArticleDeleteDialog } from "./article-delete-dialog"
 import { ArticleCardMenu } from "./article-card-menu"
 import { useReduxAuth } from "@/hooks/useReduxAuth" // AuthContextの代わりにuseReduxAuthを使用
 import articlesAPI from "@/lib/api/articles"
+import { toast } from "sonner"
 
 interface ArticleCardProps {
   article: Article
@@ -19,7 +20,6 @@ interface ArticleCardProps {
 }
 
 export function ArticleCard({ article, onDelete }: ArticleCardProps) {
-  const { toast } = useToast()
   const { user } = useReduxAuth() // AuthContextの代わりにuseReduxAuthを使用
   const [showTags, setShowTags] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -28,14 +28,9 @@ export function ArticleCard({ article, onDelete }: ArticleCardProps) {
   const handleDelete = async () => {
     try {
       await onDelete(article.article_id)
-      toast({
-        title: "記事を削除しました",
-      })
+      toast.success("記事を削除しました")
     } catch (error) {
-      toast({
-        title: "削除に失敗しました",
-        variant: "destructive",
-      })
+      toast.error("削除に失敗しました")
     } finally {
       setShowDeleteConfirm(false)
     }
@@ -50,15 +45,12 @@ export function ArticleCard({ article, onDelete }: ArticleCardProps) {
         user_id: user.uid,
         url: article.url,
       })
-      toast({
-        title: "要約を再生成しました",
+      toast.success("要約を再生成しました", {
         description: "更新された内容を確認してください",
       })
     } catch (error) {
-      toast({
-        title: "再生成に失敗しました",
+      toast.error("再生成に失敗しました", {
         description: "もう一度お試しください",
-        variant: "destructive",
       })
     } finally {
       setIsRegenerating(false)

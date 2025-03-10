@@ -2,12 +2,11 @@
 
 import { useCallback } from "react"
 import { useNodesState, useEdgesState, addEdge, type Connection, type Edge, useReactFlow } from "reactflow"
-import { useToast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 import { useReduxThemes } from "@/hooks/useReduxThemes" // useThemeをuseReduxThemesに変更
 import type { NodeAddPosition } from "@/types/theme-board"
 
 export function useThemeFlow() {
-  const { toast } = useToast()
   const reactFlowInstance = useReactFlow()
   const {
     nodes: initialNodes,
@@ -125,15 +124,12 @@ export function useThemeFlow() {
       setContextNodes(nodes)
       setContextEdges(edges)
       await saveThemes()
-      toast({
-        title: "保存しました",
+      toast.success("保存しました", {
         description: "テーマの変更を保存しました。",
       })
     } catch (error) {
-      toast({
-        title: "エラーが発生しました",
+      toast.error("エラーが発生しました", {
         description: "テーマの保存に失敗しました。",
-        variant: "destructive",
       })
     }
   }

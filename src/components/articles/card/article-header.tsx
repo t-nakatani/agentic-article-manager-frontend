@@ -7,7 +7,7 @@ import { ArticleTagsDialog } from "../dialogs/article-tags-dialog"
 import { ArticleDeleteDialog } from "../dialogs/article-delete-dialog"
 import { useReduxAuth } from "@/hooks/useReduxAuth"
 import articlesAPI from "@/lib/api/articles"
-import { useToast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 import { FavoriteButton } from "./components/favorite-button"
 
 interface ArticleHeaderProps {
@@ -17,7 +17,6 @@ interface ArticleHeaderProps {
 }
 
 export function ArticleHeader({ article, onDelete, onFavoriteToggle }: ArticleHeaderProps) {
-  const { toast } = useToast()
   const { user } = useReduxAuth()
   const [showTags, setShowTags] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -32,15 +31,12 @@ export function ArticleHeader({ article, onDelete, onFavoriteToggle }: ArticleHe
         user_id: user.uid,
         url: article.url,
       })
-      toast({
-        title: "要約を再生成しました",
+      toast.success("要約を再生成しました", {
         description: "更新された内容を確認してください",
       })
     } catch (error) {
-      toast({
-        title: "再生成に失敗しました",
+      toast.error("再生成に失敗しました", {
         description: "もう一度お試しください",
-        variant: "destructive",
       })
     } finally {
       setIsRegenerating(false)

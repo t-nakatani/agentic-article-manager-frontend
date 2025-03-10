@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { StarIcon } from "./star-icon"
 import { useReduxAuth } from "@/hooks/useReduxAuth"
 import articlesAPI from "@/lib/api/articles"
-import { useToast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 
 interface FavoriteButtonProps {
   articleId: string
@@ -15,7 +15,6 @@ interface FavoriteButtonProps {
 
 export function FavoriteButton({ articleId, initialFavorited = false, onToggle }: FavoriteButtonProps) {
   const { user } = useReduxAuth()
-  const { toast } = useToast()
   const [isFavorited, setIsFavorited] = useState(initialFavorited)
   const [isAnimating, setIsAnimating] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -51,10 +50,8 @@ export function FavoriteButton({ articleId, initialFavorited = false, onToggle }
       console.error("お気に入り状態の更新に失敗しました", error)
       setIsFavorited(!newFavoriteState)
       
-      toast({
-        title: "お気に入りの更新に失敗しました",
+      toast.error("お気に入りの更新に失敗しました", {
         description: "もう一度お試しください",
-        variant: "destructive",
       })
     } finally {
       setIsLoading(false)

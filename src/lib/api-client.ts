@@ -1,4 +1,4 @@
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 
 // const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 const API_BASE_URL = "https://c6d3-2400-2410-8ee4-3900-15cd-b852-6c7-d526.ngrok-free.app"
@@ -144,16 +144,12 @@ export async function handleAPIError(error: unknown) {
   console.error("API Error:", error)
 
   if (error instanceof APIError) {
-    toast({
-      title: "エラーが発生しました",
+    toast.error("エラーが発生しました", {
       description: error.message,
-      variant: "destructive",
     })
   } else {
-    toast({
-      title: "エラーが発生しました",
+    toast.error("エラーが発生しました", {
       description: "予期せぬエラーが発生しました。",
-      variant: "destructive",
     })
   }
 }

@@ -9,7 +9,7 @@ import {
   selectTotalItems,
 } from "@/lib/redux/features/articles/selectors"
 import { setCurrentPage, setPageSize } from "@/lib/redux/features/articleFilters/articleFiltersSlice"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 
 export function useReduxArticles() {
   const dispatch = useAppDispatch()
@@ -33,14 +33,9 @@ export function useReduxArticles() {
   const handleDeleteArticle = async (articleId: string) => {
     try {
       await dispatch(deleteArticle(articleId)).unwrap()
-      toast({
-        title: "記事を削除しました",
-      })
+      toast.success("記事を削除しました")
     } catch (error) {
-      toast({
-        title: "削除に失敗しました",
-        variant: "destructive",
-      })
+      toast.error("削除に失敗しました")
     }
   }
 

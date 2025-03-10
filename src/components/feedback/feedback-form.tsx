@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 import { useReduxAuth } from "@/hooks/useReduxAuth" // AuthContextの代わりにuseReduxAuthを使用
 import feedbackAPI from "@/lib/api/feedback"
 import type { FeedbackRating, FeedbackCategory } from "@/types/feedback"
@@ -50,16 +50,13 @@ export function FeedbackForm({ onClose }: FeedbackFormProps) {
         comment,
       })
 
-      toast({
-        title: "フィードバックを送信しました",
+      toast.success("フィードバックを送信しました", {
         description: "ご協力ありがとうございます。",
       })
       onClose()
     } catch (error) {
-      toast({
-        title: "エラーが発生しました",
+      toast.error("エラーが発生しました", {
         description: "もう一度お試しください。",
-        variant: "destructive",
       })
     } finally {
       setIsSubmitting(false)
