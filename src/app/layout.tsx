@@ -5,16 +5,29 @@ import { AuthStateListener } from "@/components/auth/AuthStateListener"
 import { generateSeoMetadata } from "@/lib/metadata"
 import "./globals.css"
 
+const title = "Soi - あなたが読んだ記事はAIが管理"
+const description = "閲覧したwebページを1-clickで保存 / 自動整理しましょう"
+const url = "https://soi-v0.vercel.app"
+const imagePath = "https://soi-v0.vercel.app/og-image.png"
+
 // ルートレイアウトのメタデータを生成
 export const metadata = {
   ...generateSeoMetadata({
-    title: "Soi - 記事管理アプリ",
-    description: "閲覧したwebページを保存して自動管理するアプリ",
-    url: "https://soi-v0.vercel.app",
-    image: "https://soi-v0.vercel.app/og-image.png"
+    title: title,
+    description: description,
+    url: url,
+    image: imagePath
   }),
   icons: {
     icon: '/favicon.ico',
+  },
+  // Twitter/X用のカードメタデータを追加
+  twitter: {
+    card: 'summary_large_image',
+    title: title,
+    description: description,
+    creator: '@your_twitter_handle', // あなたのTwitterハンドルに変更してください
+    images: [imagePath],
   }
 }
 
