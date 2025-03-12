@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Tags, Trash2, BookOpen, RefreshCw } from "lucide-react"
+import { MoreHorizontal, Tags, Trash2, RefreshCw } from "lucide-react"
 
 interface ArticleMenuProps {
   articleId: string
@@ -45,10 +45,6 @@ export function ArticleMenu({ articleId, onShowTags, onDelete, onRegenerate }: A
         >
           <Tags className="mr-2 h-4 w-4" />
           タグを表示
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleTopicView}>
-          <BookOpen className="mr-2 h-4 w-4" />
-          トピック要約
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={(e) => {

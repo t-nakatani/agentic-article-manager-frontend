@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Tags, Trash2, BookOpen, RefreshCw } from "lucide-react"
+import { MoreHorizontal, Tags, Trash2, RefreshCw } from "lucide-react"
 
 interface ArticleCardMenuProps {
   articleId: string
@@ -44,10 +44,6 @@ export function ArticleCardMenu({ articleId, onShowTags, onDelete, onRegenerate 
         >
           <Tags className="mr-2 h-4 w-4" />
           タグを表示
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleTopicView} disabled>
-          <BookOpen className="mr-2 h-4 w-4" />
-          トピック要約 {/* TODO: バックエンド開発完了後に有効化 */}
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={(e) => {
