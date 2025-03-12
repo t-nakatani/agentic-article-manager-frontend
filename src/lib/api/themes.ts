@@ -1,6 +1,9 @@
 import { BaseAPIClient } from "./base"
 import type { Node, Edge } from "reactflow"
 
+// 定数定義
+export const ROOT_THEME_PARENT_ID = -1 // 「すべて」の直下を示す特別な親ID
+
 // 型定義を追加
 interface InitializeThemesRequest {
   user_id: string
@@ -137,6 +140,20 @@ class ThemesAPI extends BaseAPIClient {
     return this.fetch(`/themes/${themeId}/export`, {
       method: "POST",
       body: JSON.stringify(data),
+    })
+  }
+
+  // テーマパスを更新するメソッドを修正
+  async updateThemePath(themeId: number, userId: string, parentThemeId: number | null): Promise<void> {
+    // 親がない場合（「すべて」の直下）は特別な値を使用
+    const actualParentId = parentThemeId === null ? ROOT_THEME_PARENT_ID : parentThemeId
+    
+    return this.fetch(`/themes/${themeId}/path`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        user_id: userId,
+        parent_theme_id: actualParentId,
+      }),
     })
   }
 }

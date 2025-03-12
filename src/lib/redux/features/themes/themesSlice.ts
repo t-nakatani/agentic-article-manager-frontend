@@ -124,6 +124,23 @@ export const exportTheme = createAsyncThunk(
   }
 )
 
+export const moveTheme = createAsyncThunk(
+  "themes/moveTheme",
+  async (
+    { userId, themeId, parentThemeId }: { userId: string; themeId: number; parentThemeId: number | null },
+    { rejectWithValue }
+  ) => {
+    try {
+      await themesAPI.updateThemePath(themeId, userId, parentThemeId)
+      // 移動後のテーマツリーを再取得
+      return await themesAPI.getThemes(userId)
+    } catch (error) {
+      await handleAPIError(error)
+      return rejectWithValue("Failed to move theme")
+    }
+  }
+)
+
 export const themesSlice = createSlice({
   name: "themes",
   initialState,
@@ -233,6 +250,20 @@ export const themesSlice = createSlice({
         toast.error("エクスポートに失敗しました", {
           description: action.payload as string || "エラーが発生しました。",
         })
+      })
+      .addCase(moveTheme.pending, (state) => {
+        state.status = "loading"
+      })
+      .addCase(moveTheme.fulfilled, (state, action) => {
+        state.status = "succeeded"
+        if (action.payload) {
+          state.nodes = action.payload.nodes
+          state.edges = action.payload.edges
+        }
+      })
+      .addCase(moveTheme.rejected, (state, action) => {
+        state.status = "failed"
+        state.error = action.payload as string
       })
   },
 })

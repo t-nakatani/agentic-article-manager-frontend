@@ -134,6 +134,21 @@ class APIClient {
       body: JSON.stringify(data),
     })
   }
+
+  // テーマパス更新メソッドを追加
+  async updateThemePath(
+    themeId: number,
+    userId: string,
+    parentThemeId: number | null
+  ): Promise<void> {
+    return this.fetch(`/themes/${themeId}/path`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        user_id: userId,
+        parent_theme_id: parentThemeId,
+      }),
+    })
+  }
 }
 
 // APIClientのインスタンスを作成してエクスポート
