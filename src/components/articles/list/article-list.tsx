@@ -126,7 +126,7 @@ export function ArticleList({
         ))}
       </div>
       {totalItems > 0 && (
-        <div className="flex items-center justify-between border-t pt-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-t pt-4 gap-4">
           <div className="flex items-center gap-4 text-sm text-muted-foreground min-w-[280px]">
             <span>表示件数:</span>
             <Select value={pageSize.toString()} onValueChange={(value) => onPageSizeChange(Number(value))}>

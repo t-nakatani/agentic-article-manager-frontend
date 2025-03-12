@@ -55,9 +55,12 @@ export function StickySearch({
         className,
       )}
     >
-      <div className="p-4">
-        <div className="grid gap-4 sm:grid-cols-[1fr_auto_auto_auto]">
+      <div className="p-4 space-y-4">
+        <div className="w-full">
           <ArticleSearch value={searchQuery} onChange={onSearchChange} />
+        </div>
+        
+        <div className="flex flex-wrap items-center gap-4 justify-end">
           <ArticleSort
             field={sortField}
             direction={sortDirection}

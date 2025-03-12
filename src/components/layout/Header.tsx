@@ -37,21 +37,21 @@ export function Header() {
             href="/"
             className="text-sm font-medium transition-colors hover:text-theme-600 dark:hover:text-theme-400"
           >
-            Home
+            <span className="hidden sm:inline">Home</span>
           </Link>
           <Link
             href="/extension"
             className="text-sm font-medium transition-colors hover:text-theme-600 dark:hover:text-theme-400 flex items-center gap-1"
           >
             <Download className="h-4 w-4" />
-            拡張機能
+            <span className="hidden sm:inline">拡張機能</span>
           </Link>
           <Link
             href="/help"
             className="text-sm font-medium transition-colors hover:text-theme-600 dark:hover:text-theme-400 flex items-center gap-1"
           >
             <HelpCircle className="h-4 w-4" />
-            ヘルプ
+            <span className="hidden sm:inline">ヘルプ</span>
           </Link>
           {/* デモリンクはログインしていない場合のみ表示 */}
           {!user && (
@@ -60,7 +60,7 @@ export function Header() {
               className="text-sm font-medium transition-colors hover:text-theme-600 dark:hover:text-theme-400 flex items-center gap-1"
             >
               <PlayCircle className="h-4 w-4" />
-              デモ
+              <span className="hidden sm:inline">デモ</span>
             </Link>
           )}
           {user ? (
@@ -92,7 +92,10 @@ export function Header() {
           ) : (
             !isLoginPage && (
               <Button variant="ghost" size="sm" asChild>
-                <Link href="/login">ログイン</Link>
+                <Link href="/login">
+                  <span className="hidden sm:inline">ログイン</span>
+                  <span className="sm:hidden">ログイン</span>
+                </Link>
               </Button>
             )
           )}
