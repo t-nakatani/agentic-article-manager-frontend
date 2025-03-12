@@ -84,7 +84,7 @@ export default function PrivacyPolicyPage() {
               当サービスは、必要に応じてプライバシーポリシーを変更することがあります。変更があった場合は、サイト上でお知らせします。
             </p>
             <p className="text-sm text-muted-foreground">
-              最終更新日：2024年3月15日
+              最終更新日: 2025年3月12日
             </p>
           </section>
         </div>
