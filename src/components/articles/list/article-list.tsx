@@ -3,8 +3,7 @@
 import { ArticleCard } from "@/components/articles/card/article-card"
 import { ArticleListSkeleton } from "./article-list-skeleton"
 import { StickySearch } from "../search/sticky-search"
-import { Pagination } from "@/components/ui/pagination"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { ArticleListFooter } from "./article-list-footer"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import type { SortField, SortDirection } from "@/types/article"
 import type { Article } from "@/lib/api/articles"
@@ -33,8 +32,6 @@ interface ArticleListProps {
   showFavorites: boolean
   onShowFavoritesChange: (showFavorites: boolean) => void
 }
-
-const PAGE_SIZES = [10, 20, 50]
 
 export function ArticleList({
   articles,
@@ -111,12 +108,6 @@ export function ArticleList({
     )
   }
 
-  // 総ページ数を計算
-  const totalPages = Math.ceil(totalItems / pageSize)
-  // 表示範囲を計算
-  const startIndex = (currentPage - 1) * pageSize
-  const endIndex = Math.min(startIndex + pageSize, totalItems)
-
   return (
     <div className="space-y-4">
       {searchComponent}
@@ -125,31 +116,13 @@ export function ArticleList({
           <ArticleCard key={article.article_id} article={article} onDelete={onDeleteArticle} />
         ))}
       </div>
-      {totalItems > 0 && onPageChange && onPageSizeChange && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4">
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">表示件数:</span>
-            <Select
-              value={pageSize.toString()}
-              onValueChange={(value) => onPageSizeChange(parseInt(value))}
-            >
-              <SelectTrigger className="h-8 w-[70px]">
-                <SelectValue placeholder={pageSize.toString()} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="20">20</SelectItem>
-                <SelectItem value="50">50</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <Pagination
-            currentPage={currentPage}
-            totalPages={Math.ceil(totalItems / pageSize)}
-            onPageChange={onPageChange}
-          />
-        </div>
-      )}
+      <ArticleListFooter
+        currentPage={currentPage}
+        pageSize={pageSize}
+        totalItems={totalItems}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
+      />
     </div>
   )
 }
