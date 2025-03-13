@@ -9,12 +9,14 @@ interface ArticlesState {
   items: Article[]
   status: "idle" | "loading" | "succeeded" | "failed"
   error: string | null
+  faviconCache: Record<string, string | null>
 }
 
 const initialState: ArticlesState = {
   items: [],
   status: "idle",
   error: null,
+  faviconCache: {},
 }
 
 export const fetchArticles = createAsyncThunk("articles/fetchArticles", async (userId: string, { rejectWithValue }) => {
@@ -87,6 +89,13 @@ export const regenerateArticle = createAsyncThunk(
   }
 )
 
+export const cacheFavicon = createAsyncThunk(
+  "articles/cacheFavicon",
+  async ({ domain, faviconUrl }: { domain: string; faviconUrl: string | null }) => {
+    return { domain, faviconUrl }
+  }
+)
+
 export const articlesSlice = createSlice({
   name: "articles",
   initialState,
@@ -125,6 +134,10 @@ export const articlesSlice = createSlice({
       .addCase(regenerateArticle.rejected, (state, action) => {
         state.status = "failed"
         state.error = action.payload as string
+      })
+      .addCase(cacheFavicon.fulfilled, (state, action) => {
+        const { domain, faviconUrl } = action.payload
+        state.faviconCache[domain] = faviconUrl
       })
   },
 })

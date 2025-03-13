@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
 import type { Article } from "@/types/article"
 import { Card } from "@/components/ui/card"
 import { ArticleHeader } from "./article-header"
@@ -14,21 +13,6 @@ interface ArticleCardProps {
 }
 
 export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCardProps) {
-  const [favicon, setFavicon] = useState<string | null>(null)
-  
-  useEffect(() => {
-    // URLからドメイン部分を抽出
-    try {
-      const url = new URL(article.url)
-      const domain = url.hostname
-      // Google Favicon APIを使用してファビコンを取得
-      setFavicon(`https://www.google.com/s2/favicons?domain=${domain}&sz=32`)
-    } catch (error) {
-      console.error("ファビコンの取得に失敗しました", error)
-      setFavicon(null)
-    }
-  }, [article.url])
-
   const handleDelete = async () => {
     await onDelete(article.article_id)
   }
@@ -56,7 +40,6 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
           article={article} 
           onDelete={handleDelete} 
           onFavoriteToggle={handleFavoriteToggle}
-          favicon={favicon}
         />
         <ArticleFooter article={article} />
       </div>

@@ -11,14 +11,15 @@ import { toast } from "sonner"
 import { FavoriteButton } from "./components/favorite-button"
 import { useAppDispatch } from "@/lib/redux/hooks"
 import { regenerateArticle } from "@/lib/redux/features/articles/articlesSlice"
+import { Favicon } from "./components/favicon"
 
 interface ArticleHeaderProps {
   article: Article
   onDelete: () => Promise<void>
-  favicon?: string | null
+  onFavoriteToggle?: (isFavorited: boolean) => void
 }
 
-export function ArticleHeader({ article, onDelete, favicon }: ArticleHeaderProps) {
+export function ArticleHeader({ article, onDelete, onFavoriteToggle }: ArticleHeaderProps) {
   const { user } = useReduxAuth()
   const dispatch = useAppDispatch()
   const [showTags, setShowTags] = useState(false)
@@ -45,21 +46,7 @@ export function ArticleHeader({ article, onDelete, favicon }: ArticleHeaderProps
   return (
     <>
       <div className="flex items-start gap-2 p-2.5">
-        {favicon && (
-          <div className="flex-shrink-0 w-4 h-4 mt-0.5">
-            <img 
-              src={favicon} 
-              alt="" 
-              className="w-full h-full object-contain"
-              width={16}
-              height={16}
-              onError={(e) => {
-                // エラー時に画像を非表示にする
-                (e.target as HTMLImageElement).style.display = 'none'
-              }}
-            />
-          </div>
-        )}
+        <Favicon url={article.url} size={16} className="mt-0.5" />
         <h2 className="flex-1 text-sm font-semibold leading-tight hover:text-theme-600 dark:hover:text-theme-400 transition-colors line-clamp-1">
           {article.title}
         </h2>
