@@ -12,6 +12,7 @@ export function useReduxAuth() {
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
   const loading = useAppSelector((state) => state.auth.loading)
   const error = useAppSelector((state) => state.auth.error)
+  const registrationPaused = useAppSelector((state) => state.auth.registrationPaused)
   const router = useRouter()
 
   const handleSignInWithGoogle = async () => {
@@ -30,6 +31,7 @@ export function useReduxAuth() {
     isAuthenticated,
     loading,
     error,
+    registrationPaused,
     signInWithGoogle: handleSignInWithGoogle,
     logout: handleLogout,
   }

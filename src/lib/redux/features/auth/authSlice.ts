@@ -15,12 +15,14 @@ interface AuthState {
   user: SerializableUser | null
   loading: boolean
   error: string | null
+  registrationPaused: boolean  // 新規登録一時停止フラグを追加
 }
 
 const initialState: AuthState = {
   user: null,
   loading: true,
   error: null,
+  registrationPaused: true  // デフォルトで一時停止状態に設定
 }
 
 // Firebaseユーザーオブジェクトからシリアライズ可能なオブジェクトに変換する関数
@@ -73,6 +75,9 @@ export const authSlice = createSlice({
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload
     },
+    setRegistrationPaused: (state, action: PayloadAction<boolean>) => {
+      state.registrationPaused = action.payload
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -105,6 +110,6 @@ export const authSlice = createSlice({
   },
 })
 
-export const { setUser, setLoading, setError } = authSlice.actions
+export const { setUser, setLoading, setError, setRegistrationPaused } = authSlice.actions
 export default authSlice.reducer
 

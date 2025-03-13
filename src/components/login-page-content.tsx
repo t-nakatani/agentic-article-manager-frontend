@@ -9,7 +9,7 @@ import { NewsSection } from "@/components/news/news-section"
 import { useReduxAuth } from "@/hooks/useReduxAuth"
 
 export function LoginPageContent() {
-  const { user, loading, signInWithGoogle } = useReduxAuth()
+  const { user, loading, signInWithGoogle, registrationPaused } = useReduxAuth()
 
   if (loading) {
     return (
@@ -55,10 +55,19 @@ export function LoginPageContent() {
           </div>
           <Card>
             <CardContent className="pt-6">
-              <Button onClick={signInWithGoogle} className="w-full" size="lg">
-                <Chrome className="mr-2 h-5 w-5" />
-                Googleでログイン
-              </Button>
+              <div className="space-y-4">
+                {registrationPaused && (
+                  <div className="bg-amber-50 dark:bg-amber-950 p-4 rounded-lg border border-amber-200 dark:border-amber-800">
+                    <p className="text-sm text-amber-800 dark:text-amber-300">
+                      現在、新規登録を一時的に停止中です。既存のアカウントのみログイン可能です。
+                    </p>
+                  </div>
+                )}
+                <Button onClick={signInWithGoogle} className="w-full" size="lg">
+                  <Chrome className="mr-2 h-5 w-5" />
+                  Googleでログイン
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </section>
