@@ -3,6 +3,7 @@ import articlesAPI from "@/lib/api/articles"
 import type { Article } from "@/lib/api/articles"
 import { handleAPIError } from "@/lib/api/error"
 import { RootState } from "@/lib/redux/store"
+import { toast } from "sonner"
 
 interface ArticlesState {
   items: Article[]
@@ -62,6 +63,30 @@ export const toggleFavorite = createAsyncThunk(
   }
 )
 
+export const regenerateArticle = createAsyncThunk(
+  "articles/regenerateArticle",
+  async ({ articleId, userId, url }: { articleId: string; userId: string; url: string }, { rejectWithValue }) => {
+    try {
+      await articlesAPI.regenerateArticle(articleId, {
+        user_id: userId,
+        url: url,
+      })
+      
+      toast.success("要約を再生成しました", {
+        description: "更新された内容を確認してください",
+      })
+      
+      return { articleId }
+    } catch (error) {
+      toast.error("再生成に失敗しました", {
+        description: "もう一度お試しください",
+      })
+      await handleAPIError(error)
+      return rejectWithValue("要約の再生成に失敗しました")
+    }
+  }
+)
+
 export const articlesSlice = createSlice({
   name: "articles",
   initialState,
@@ -89,6 +114,17 @@ export const articlesSlice = createSlice({
         if (article) {
           article.is_favorite = isFavorite
         }
+      })
+      .addCase(regenerateArticle.pending, (state) => {
+        state.status = "loading"
+      })
+      .addCase(regenerateArticle.fulfilled, (state, action) => {
+        state.status = "succeeded"
+        // action.payloadは{ articleId }のみなので、ここでは記事の内容を更新せず
+      })
+      .addCase(regenerateArticle.rejected, (state, action) => {
+        state.status = "failed"
+        state.error = action.payload as string
       })
   },
 })

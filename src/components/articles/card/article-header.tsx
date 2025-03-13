@@ -9,16 +9,18 @@ import { useReduxAuth } from "@/hooks/useReduxAuth"
 import articlesAPI from "@/lib/api/articles"
 import { toast } from "sonner"
 import { FavoriteButton } from "./components/favorite-button"
+import { useAppDispatch } from "@/lib/redux/hooks"
+import { regenerateArticle } from "@/lib/redux/features/articles/articlesSlice"
 
 interface ArticleHeaderProps {
   article: Article
   onDelete: () => Promise<void>
-  onFavoriteToggle?: (isFavorited: boolean) => void
   favicon?: string | null
 }
 
-export function ArticleHeader({ article, onDelete, onFavoriteToggle, favicon }: ArticleHeaderProps) {
+export function ArticleHeader({ article, onDelete, favicon }: ArticleHeaderProps) {
   const { user } = useReduxAuth()
+  const dispatch = useAppDispatch()
   const [showTags, setShowTags] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [isRegenerating, setIsRegenerating] = useState(false)
@@ -28,17 +30,13 @@ export function ArticleHeader({ article, onDelete, onFavoriteToggle, favicon }: 
 
     try {
       setIsRegenerating(true)
-      await articlesAPI.regenerateArticle(article.article_id, {
-        user_id: user.uid,
-        url: article.url,
-      })
-      toast.success("要約を再生成しました", {
-        description: "更新された内容を確認してください",
-      })
+      await dispatch(regenerateArticle({
+        articleId: article.article_id,
+        userId: user.uid,
+        url: article.url
+      })).unwrap()
     } catch (error) {
-      toast.error("再生成に失敗しました", {
-        description: "もう一度お試しください",
-      })
+      // エラー処理はReduxアクション内で行われるため、ここでは何もしない
     } finally {
       setIsRegenerating(false)
     }
@@ -68,8 +66,7 @@ export function ArticleHeader({ article, onDelete, onFavoriteToggle, favicon }: 
         <div className="flex items-center">
           <FavoriteButton 
             articleId={article.article_id} 
-            initialFavorited={article.is_favorite} 
-            onToggle={onFavoriteToggle}
+            initialFavorited={article.is_favorite}
           />
           <ArticleMenu
             articleId={article.article_id}
