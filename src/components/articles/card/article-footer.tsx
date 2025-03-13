@@ -8,14 +8,19 @@ interface ArticleFooterProps {
 
 export function ArticleFooter({ article }: ArticleFooterProps) {
   return (
-    <div className="flex justify-end gap-3 px-2.5 pb-2.5 text-[11px] text-muted-foreground">
-      <div className="flex items-center gap-1">
-        <Calendar className="h-3 w-3" />
-        <span>{formatRelativeDate(article.created_at)}</span>
-      </div>
-      <div className="flex items-center gap-1">
-        <Eye className="h-3 w-3" />
-        <span>{formatRelativeDate(article.last_viewed_at)}</span>
+    <div className="flex items-center justify-between px-2.5 pb-2.5">
+      <p className="text-xs text-theme-600 dark:text-theme-400 line-clamp-1 max-w-[70%]">
+        {article.one_line_summary}
+      </p>
+      <div className="flex gap-3 text-[11px] text-muted-foreground">
+        <div className="flex items-center gap-1">
+          <Calendar className="h-3 w-3" />
+          <span>{formatRelativeDate(article.created_at)}</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <Eye className="h-3 w-3" />
+          <span>{formatRelativeDate(article.last_viewed_at)}</span>
+        </div>
       </div>
     </div>
   )

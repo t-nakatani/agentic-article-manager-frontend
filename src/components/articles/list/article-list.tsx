@@ -120,7 +120,7 @@ export function ArticleList({
   return (
     <div className="space-y-4">
       {searchComponent}
-      <div className="grid gap-4">
+      <div className="grid gap-3.5">
         {articles.map((article) => (
           <ArticleCard key={article.article_id} article={article} onDelete={onDeleteArticle} />
         ))}

@@ -5,7 +5,6 @@ import type React from "react"
 import type { Article } from "@/types/article"
 import { Card } from "@/components/ui/card"
 import { ArticleHeader } from "./article-header"
-import { ArticleContent } from "./article-content"
 import { ArticleFooter } from "./article-footer"
 
 interface ArticleCardProps {
@@ -43,7 +42,6 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
           onDelete={handleDelete} 
           onFavoriteToggle={handleFavoriteToggle}
         />
-        <ArticleContent article={article} />
         <ArticleFooter article={article} />
       </div>
     </Card>
