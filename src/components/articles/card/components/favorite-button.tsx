@@ -1,10 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { StarIcon } from "./star-icon"
 import { useReduxAuth } from "@/hooks/useReduxAuth"
-import articlesAPI from "@/lib/api/articles"
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
+import { toggleFavorite } from "@/lib/redux/features/articles/articlesSlice"
 import { toast } from "sonner"
 
 interface FavoriteButtonProps {
@@ -15,18 +16,32 @@ interface FavoriteButtonProps {
 
 export function FavoriteButton({ articleId, initialFavorited = false, onToggle }: FavoriteButtonProps) {
   const { user } = useReduxAuth()
+  const dispatch = useAppDispatch()
+  
+  // Reduxストアから記事の状態を取得
+  const article = useAppSelector(state => 
+    state.articles.items.find(item => item.article_id === articleId)
+  )
+  
+  // ローカルステートはReduxの状態を反映するだけ
   const [isFavorited, setIsFavorited] = useState(initialFavorited)
   const [isAnimating, setIsAnimating] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  
+  // Reduxストアの状態が変わったらローカルステートを更新
+  useEffect(() => {
+    if (article) {
+      setIsFavorited(article.is_favorite || false)
+    }
+  }, [article])
 
   const handleToggleFavorite = async (e: React.MouseEvent) => {
     e.stopPropagation() // カードのクリックイベントが発火しないようにする
     
     if (!user || isLoading) return
     
-    // 即座に状態を更新してアニメーションを開始
+    // アニメーション用のローカルステートを更新
     const newFavoriteState = !isFavorited
-    setIsFavorited(newFavoriteState)
     setIsAnimating(true)
     setIsLoading(true)
     
@@ -34,21 +49,16 @@ export function FavoriteButton({ articleId, initialFavorited = false, onToggle }
     setTimeout(() => setIsAnimating(false), 300)
     
     try {
-      // APIリクエストを実行（結果を待たずにUIは更新済み）
-      await articlesAPI.toggleFavorite(articleId, {
-        user_id: user.uid,
-        is_favorite: newFavoriteState
-      })
+      // Reduxアクションをディスパッチ
+      await dispatch(toggleFavorite({ articleId, isFavorite: newFavoriteState })).unwrap()
       
-      console.log(`記事ID: ${articleId} のお気に入り状態を ${newFavoriteState} に変更しました`)
-      
+      // 親コンポーネントのコールバックも呼び出す（後方互換性のため）
       if (onToggle) {
         onToggle(newFavoriteState)
       }
     } catch (error) {
-      // エラー時は元の状態に戻す
+      // エラー時はトースト表示のみ（状態はReduxで管理）
       console.error("お気に入り状態の更新に失敗しました", error)
-      setIsFavorited(!newFavoriteState)
       
       toast.error("お気に入りの更新に失敗しました", {
         description: "もう一度お試しください",

@@ -1,7 +1,8 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import articlesAPI from "@/lib/api/articles"
 import type { Article } from "@/lib/api/articles"
 import { handleAPIError } from "@/lib/api/error"
+import { RootState } from "@/lib/redux/store"
 
 interface ArticlesState {
   items: Article[]
@@ -37,6 +38,30 @@ export const deleteArticle = createAsyncThunk(
   },
 )
 
+export const toggleFavorite = createAsyncThunk(
+  "articles/toggleFavorite",
+  async ({ articleId, isFavorite }: { articleId: string; isFavorite: boolean }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState() as RootState
+      const user = state.auth.user
+      
+      if (!user) {
+        return rejectWithValue("ユーザーが認証されていません")
+      }
+      
+      await articlesAPI.toggleFavorite(articleId, {
+        user_id: user.uid,
+        is_favorite: isFavorite
+      })
+      
+      return { articleId, isFavorite }
+    } catch (error) {
+      await handleAPIError(error)
+      return rejectWithValue("お気に入りの更新に失敗しました")
+    }
+  }
+)
+
 export const articlesSlice = createSlice({
   name: "articles",
   initialState,
@@ -57,6 +82,13 @@ export const articlesSlice = createSlice({
       })
       .addCase(deleteArticle.fulfilled, (state, action) => {
         state.items = state.items.filter((article) => article.article_id !== action.payload)
+      })
+      .addCase(toggleFavorite.fulfilled, (state, action) => {
+        const { articleId, isFavorite } = action.payload
+        const article = state.items.find(item => item.article_id === articleId)
+        if (article) {
+          article.is_favorite = isFavorite
+        }
       })
   },
 })

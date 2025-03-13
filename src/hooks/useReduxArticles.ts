@@ -2,7 +2,7 @@
 
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
-import { fetchArticles, deleteArticle } from "@/lib/redux/features/articles/articlesSlice"
+import { fetchArticles, deleteArticle, toggleFavorite } from "@/lib/redux/features/articles/articlesSlice"
 import {
   selectPaginatedArticles,
   selectIsArticlesLoading,
@@ -39,6 +39,14 @@ export function useReduxArticles() {
     }
   }
 
+  const handleToggleFavorite = async (articleId: string, isFavorite: boolean) => {
+    try {
+      await dispatch(toggleFavorite({ articleId, isFavorite })).unwrap()
+    } catch (error) {
+      toast.error("お気に入りの更新に失敗しました")
+    }
+  }
+
   const refreshArticles = async () => {
     if (user) {
       try {
@@ -65,6 +73,7 @@ export function useReduxArticles() {
     isLoading,
     error,
     deleteArticle: handleDeleteArticle,
+    toggleFavorite: handleToggleFavorite,
     refreshArticles,
     onPageChange: handlePageChange,
     onPageSizeChange: handlePageSizeChange,

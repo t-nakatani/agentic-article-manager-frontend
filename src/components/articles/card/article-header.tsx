@@ -76,6 +76,7 @@ export function ArticleHeader({ article, onDelete, onFavoriteToggle, favicon }: 
             onShowTags={() => setShowTags(true)}
             onDelete={() => setShowDeleteConfirm(true)}
             onRegenerate={handleRegenerate}
+            isRegenerating={isRegenerating}
           />
         </div>
       </div>
