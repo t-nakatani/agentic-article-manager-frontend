@@ -48,7 +48,7 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
 
   return (
     <Card
-      className="bg-white dark:bg-theme-900 hover:shadow-lg transition-all duration-200 cursor-pointer"
+      className="bg-white dark:bg-theme-900 hover:shadow-lg transition-all duration-200 cursor-pointer shadow-none"
       onClick={handleCardClick}
     >
       <div className="space-y-0.5">

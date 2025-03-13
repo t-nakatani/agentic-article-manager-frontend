@@ -1,6 +1,6 @@
 "use client"
 
-import { ArticleCard } from "../card/article-card"
+import { ArticleCard } from "@/components/articles/card/article-card"
 import { ArticleListSkeleton } from "./article-list-skeleton"
 import { StickySearch } from "../search/sticky-search"
 import { Pagination } from "@/components/ui/pagination"
