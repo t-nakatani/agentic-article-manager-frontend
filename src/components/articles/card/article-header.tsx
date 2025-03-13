@@ -12,11 +12,12 @@ import { FavoriteButton } from "./components/favorite-button"
 
 interface ArticleHeaderProps {
   article: Article
-  onDelete: () => void
+  onDelete: () => Promise<void>
   onFavoriteToggle?: (isFavorited: boolean) => void
+  favicon?: string | null
 }
 
-export function ArticleHeader({ article, onDelete, onFavoriteToggle }: ArticleHeaderProps) {
+export function ArticleHeader({ article, onDelete, onFavoriteToggle, favicon }: ArticleHeaderProps) {
   const { user } = useReduxAuth()
   const [showTags, setShowTags] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -46,6 +47,21 @@ export function ArticleHeader({ article, onDelete, onFavoriteToggle }: ArticleHe
   return (
     <>
       <div className="flex items-start gap-2 p-2.5">
+        {favicon && (
+          <div className="flex-shrink-0 w-4 h-4 mt-0.5">
+            <img 
+              src={favicon} 
+              alt="" 
+              className="w-full h-full object-contain"
+              width={16}
+              height={16}
+              onError={(e) => {
+                // エラー時に画像を非表示にする
+                (e.target as HTMLImageElement).style.display = 'none'
+              }}
+            />
+          </div>
+        )}
         <h2 className="flex-1 text-sm font-semibold leading-tight hover:text-theme-600 dark:hover:text-theme-400 transition-colors line-clamp-1">
           {article.title}
         </h2>
