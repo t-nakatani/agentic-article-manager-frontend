@@ -52,7 +52,7 @@ export function ArticleList({
   onRefresh,
   // ページネーション関連のpropsにデフォルト値を設定
   currentPage = 1,
-  pageSize = 10,
+  pageSize = 20,
   totalItems = 0,
   onPageChange = () => {},
   onPageSizeChange = () => {},
@@ -125,30 +125,27 @@ export function ArticleList({
           <ArticleCard key={article.article_id} article={article} onDelete={onDeleteArticle} />
         ))}
       </div>
-      {totalItems > 0 && (
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-t pt-4 gap-4">
-          <div className="flex items-center gap-4 text-sm text-muted-foreground min-w-[280px]">
-            <span>表示件数:</span>
-            <Select value={pageSize.toString()} onValueChange={(value) => onPageSizeChange(Number(value))}>
+      {totalItems > 0 && onPageChange && onPageSizeChange && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">表示件数:</span>
+            <Select
+              value={pageSize.toString()}
+              onValueChange={(value) => onPageSizeChange(parseInt(value))}
+            >
               <SelectTrigger className="h-8 w-[70px]">
-                <SelectValue />
+                <SelectValue placeholder={pageSize.toString()} />
               </SelectTrigger>
               <SelectContent>
-                {PAGE_SIZES.map((size) => (
-                  <SelectItem key={size} value={size.toString()}>
-                    {size}
-                  </SelectItem>
-                ))}
+                <SelectItem value="20">20</SelectItem>
+                <SelectItem value="50">50</SelectItem>
               </SelectContent>
             </Select>
-            <span>
-              {startIndex + 1}-{endIndex} / {totalItems}件
-            </span>
           </div>
+          
           <Pagination
-            totalItems={totalItems}
             currentPage={currentPage}
-            pageSize={pageSize}
+            totalPages={Math.ceil(totalItems / pageSize)}
             onPageChange={onPageChange}
           />
         </div>

@@ -17,7 +17,7 @@ const initialState: ArticleFiltersState = {
   searchQuery: "",
   selectedTheme: "all",
   currentPage: 1,
-  pageSize: 10,
+  pageSize: 20,
   showFavorites: false
 }
 
