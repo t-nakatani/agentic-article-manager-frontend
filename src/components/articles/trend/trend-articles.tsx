@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Card } from "@/components/ui/card"
-import { ChevronDown, ChevronUp } from "lucide-react"
+import { ChevronDown, ChevronUp, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import type { Article } from "@/types/article"
 import { ArticleCard } from "../card/article-card"
@@ -29,7 +29,10 @@ function TrendSection({ title, articles, onDelete }: TrendSectionProps) {
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h2 className="text-xl font-semibold tracking-tight text-theme-700 dark:text-theme-300">トレンド記事</h2>
+          <div className="flex items-center gap-1.5 text-theme-700 dark:text-theme-300">
+            <TrendingUp className="h-5 w-5" />
+            <h2 className="text-xl font-semibold tracking-tight">トレンド記事</h2>
+          </div>
           <span className="bg-theme-500 text-white dark:bg-theme-600 dark:text-theme-50 text-xs px-2 py-0.5 rounded-full font-medium">
             trend: {title}
           </span>
