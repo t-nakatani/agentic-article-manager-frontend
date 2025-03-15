@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import type { SortField, SortDirection } from "@/types/article"
 import type { Article } from "@/lib/api/articles"
 import Link from "next/link"
+import { TrendArticles } from "../trend/trend-articles"
 
 interface ArticleListProps {
   articles: Article[]
@@ -108,14 +109,25 @@ export function ArticleList({
     )
   }
 
+  // トレンド記事用の記事（最初の9つを使用）
+  const trendArticles = articles.slice(0, 9)
+  // 残りの記事（トレンド記事を除く）
+  const remainingArticles = articles.slice(9)
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {searchComponent}
-      <div className="grid gap-3.5">
-        {articles.map((article) => (
+
+      {/* トレンド記事セクション */}
+      <TrendArticles articles={trendArticles} onDelete={onDeleteArticle} />
+      
+      {/* 残りの記事一覧 */}
+      <div className="grid gap-2.5">
+        {remainingArticles.map((article) => (
           <ArticleCard key={article.article_id} article={article} onDelete={onDeleteArticle} />
         ))}
       </div>
+      
       <ArticleListFooter
         currentPage={currentPage}
         pageSize={pageSize}
@@ -126,4 +138,3 @@ export function ArticleList({
     </div>
   )
 }
-
