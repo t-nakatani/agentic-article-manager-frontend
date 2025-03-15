@@ -115,14 +115,14 @@ export function ArticleList({
   const remainingArticles = articles.slice(9)
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {searchComponent}
-      
+
       {/* トレンド記事セクション */}
       <TrendArticles articles={trendArticles} onDelete={onDeleteArticle} />
       
       {/* 残りの記事一覧 */}
-      <div className="grid gap-3.5">
+      <div className="grid gap-2.5">
         {remainingArticles.map((article) => (
           <ArticleCard key={article.article_id} article={article} onDelete={onDeleteArticle} />
         ))}
@@ -138,4 +138,3 @@ export function ArticleList({
     </div>
   )
 }
-
