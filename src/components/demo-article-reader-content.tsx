@@ -1,0 +1,173 @@
+"use client"
+
+import { useState, useEffect, useMemo } from "react"
+import { Layout } from "@/components/layout/Layout"
+import { ThemeTree } from "@/components/themes/ThemeTree"
+import { ArticleList } from "@/components/articles/list/article-list"
+import type { SortField, SortDirection, Article } from "@/types/article"
+import { demoArticles, demoThemes } from "@/app/demo/data"
+import Link from "next/link"
+export function DemoArticleReaderContent() {
+  // 状態管理
+  const [sortField, setSortField] = useState<SortField>("created_at")
+  const [sortDirection, setSortDirection] = useState<SortDirection>("desc")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedTheme, setSelectedTheme] = useState("")
+  const [showFavorites, setShowFavorites] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [filteredArticles, setFilteredArticles] = useState<Article[]>([])
+  
+  // ページネーション用の状態
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(5)
+  const [totalItems, setTotalItems] = useState(0)
+
+  // 記事のフィルタリングと並び替え
+  useEffect(() => {
+    // 初期ロード時は少し遅延させてローディング状態を表示
+    const timer = setTimeout(() => {
+      // 検索とテーマでフィルタリング
+      let filtered = [...demoArticles]
+      
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase()
+        filtered = filtered.filter(
+          article => 
+            article.title.toLowerCase().includes(query) || 
+            article.one_line_summary.toLowerCase().includes(query)
+        )
+      }
+      
+      if (selectedTheme) {
+        filtered = filtered.filter(
+          article => {
+            // テーマIDが数値の場合（親テーマの場合）、文字列に変換して比較
+            return article.themes.some(theme => 
+              typeof theme === 'number' 
+                ? String(theme) === selectedTheme 
+                : theme === selectedTheme
+            )
+          }
+        )
+      }
+      
+      // 並び替え
+      filtered.sort((a, b) => {
+        const aValue = a[sortField]
+        const bValue = b[sortField]
+        
+        if (aValue === null) return sortDirection === "asc" ? -1 : 1
+        if (bValue === null) return sortDirection === "asc" ? 1 : -1
+        
+        if (sortDirection === "asc") {
+          return aValue < bValue ? -1 : 1
+        } else {
+          return aValue > bValue ? -1 : 1
+        }
+      })
+      
+      setTotalItems(filtered.length)
+      
+      // ページネーション
+      const startIndex = (currentPage - 1) * pageSize
+      const paginatedArticles = filtered.slice(startIndex, startIndex + pageSize)
+      
+      setFilteredArticles(paginatedArticles)
+      setIsLoading(false)
+    }, 800); // 初期ロード時は少し長めの遅延を設定
+    
+    return () => clearTimeout(timer);
+  }, [sortField, sortDirection, searchQuery, selectedTheme, showFavorites, currentPage, pageSize])
+
+  // ハンドラー関数
+  const handleSortFieldChange = (field: SortField) => {
+    setSortField(field)
+  }
+
+  const handleSortDirectionChange = (direction: SortDirection) => {
+    setSortDirection(direction)
+  }
+
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query)
+    setCurrentPage(1) // 検索時は1ページ目に戻る
+  }
+
+  const handleThemeSelect = (theme: string) => {
+    setSelectedTheme(theme === selectedTheme ? "" : theme) // 同じテーマを選択した場合は選択解除
+    setCurrentPage(1) // テーマ変更時は1ページ目に戻る
+  }
+
+  const handleShowFavoritesChange = (show: boolean) => {
+    setShowFavorites(show)
+    setCurrentPage(1) // お気に入りフィルタ変更時は1ページ目に戻る
+  }
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  const handlePageSizeChange = (size: number) => {
+    setPageSize(size)
+    setCurrentPage(1) // ページサイズ変更時は1ページ目に戻る
+  }
+
+  const handleDeleteArticle = async (articleId: string) => {
+    // デモ用なので実際には削除せず、UIだけ更新
+    setFilteredArticles(prev => prev.filter(article => article.article_id !== articleId))
+    return Promise.resolve()
+  }
+
+  const handleRefreshArticles = async () => {
+    setIsLoading(true)
+    // デモ用なのでタイマーで少し待ってからロード完了とする
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 500)
+    return Promise.resolve()
+  }
+
+  return (
+    <Layout>
+      <div className="grid gap-6 lg:grid-cols-[1fr_300px] lg:gap-8">
+        <main className="min-w-0">
+          <div className="space-y-4 mb-6">
+            <h1 className="text-2xl font-bold tracking-tight">デモ記事一覧</h1>
+            <p className="text-muted-foreground">
+              これはデモページです。あなたの記事を保存するには<Link href="/login" className="text-theme-600 dark:text-theme-400 hover:underline mx-1">ログイン</Link>して下さい。
+            </p>
+          </div>
+          <ArticleList
+            articles={filteredArticles}
+            isLoading={isLoading}
+            selectedTheme={selectedTheme}
+            sortField={sortField}
+            sortDirection={sortDirection}
+            onSortFieldChange={handleSortFieldChange}
+            onSortDirectionChange={handleSortDirectionChange}
+            searchQuery={searchQuery}
+            onSearchChange={handleSearchChange}
+            stickySearch={true}
+            onDeleteArticle={handleDeleteArticle}
+            onRefresh={handleRefreshArticles}
+            currentPage={currentPage}
+            pageSize={pageSize}
+            totalItems={totalItems}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
+            showFavorites={showFavorites}
+            onShowFavoritesChange={handleShowFavoritesChange}
+          />
+        </main>
+        <aside className="hidden lg:block">
+          <ThemeTree 
+            onSelectTheme={handleThemeSelect} 
+            selectedTheme={selectedTheme}
+            isDemoMode={true}
+            demoThemes={demoThemes}
+          />
+        </aside>
+      </div>
+    </Layout>
+  )
+} 

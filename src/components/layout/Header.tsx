@@ -21,6 +21,7 @@ export function Header() {
   const { user, logout } = useReduxAuth()
   const pathname = usePathname()
   const isLoginPage = pathname === "/login"
+  const isDemoPage = pathname === "/demo"
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -53,8 +54,8 @@ export function Header() {
             <HelpCircle className="h-4 w-4" />
             <span className="hidden sm:inline">ヘルプ</span>
           </Link>
-          {/* デモリンクはログインしていない場合のみ表示 */}
-          {!user && (
+          {/* デモリンクはログインしていない場合かつデモページではない場合のみ表示 */}
+          {!user && !isDemoPage && (
             <Link
               href="/demo"
               className="text-sm font-medium transition-colors hover:text-theme-600 dark:hover:text-theme-400 flex items-center gap-1"
