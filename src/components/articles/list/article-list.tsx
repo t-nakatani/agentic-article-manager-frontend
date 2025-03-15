@@ -115,9 +115,9 @@ export function ArticleList({
   const remainingArticles = articles.slice(9)
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {searchComponent}
-      
+
       {/* トレンド記事セクション */}
       <TrendArticles articles={trendArticles} onDelete={onDeleteArticle} />
       
