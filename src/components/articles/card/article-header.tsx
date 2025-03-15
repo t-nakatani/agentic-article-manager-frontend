@@ -47,7 +47,7 @@ export function ArticleHeader({ article, onDelete, onFavoriteToggle }: ArticleHe
     <>
       <div className="flex items-start gap-2 p-2.5">
         <Favicon url={article.url} size={16} className="mt-0.5" />
-        <h2 className="flex-1 text-sm font-semibold leading-tight hover:text-theme-600 dark:hover:text-theme-400 transition-colors line-clamp-1">
+        <h2 className="flex-1 text-sm font-semibold leading-tight hover:text-theme-600 dark:hover:text-theme-400 transition-colors line-clamp-1 sm:line-clamp-1 line-clamp-2">
           {article.title}
         </h2>
         <div className="flex items-center">
