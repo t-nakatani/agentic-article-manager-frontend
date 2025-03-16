@@ -9,9 +9,12 @@ interface ArticleFooterProps {
 export function ArticleFooter({ article }: ArticleFooterProps) {
   return (
     <div className="flex items-center justify-between px-2.5 pb-2.5">
-      <p className="text-xs text-theme-600 dark:text-theme-400 line-clamp-1 max-w-[70%] hidden sm:block">
-        {article.one_line_summary}
-      </p>
+      {/* スマホの非表示と1行での表示のための省略を行うためにdivブロックに分離 */}
+      <div className="hidden md:block  max-w-[80%]">
+        <p className="text-xs text-theme-600 dark:text-theme-400 line-clamp-1">
+          {article.one_line_summary}
+        </p>
+      </div>
       <div className="flex gap-3 text-[11px] text-muted-foreground ml-auto">
         <div className="flex items-center gap-1">
           <Calendar className="h-3 w-3" />
