@@ -78,11 +78,10 @@ export function TreeNodeComponent({
   }, [onExportTheme, node.id])
 
   return (
-    <div className="py-1">
+    <div className="mb-1">
       <div
         className={cn(
-          "flex items-center rounded-md px-2 py-1.5 hover:bg-muted/50 cursor-pointer",
-          isSelected && "bg-theme-100 text-theme-900 dark:bg-theme-800 dark:text-theme-50"
+          "flex items-center gap-1 rounded-md py-1 px-2",
         )}
         onClick={handleSelect}
       >

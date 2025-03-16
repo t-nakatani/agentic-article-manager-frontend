@@ -55,6 +55,7 @@ export function ThemeNode({ id, data, selected }: ThemeNodeProps) {
         "px-4 py-2 rounded-md shadow-md border-2 min-w-[150px] text-center",
         selected ? "border-theme-500" : "border-theme-200 dark:border-theme-800",
         id === "all" ? "bg-theme-100 dark:bg-theme-900" : "bg-white dark:bg-theme-950",
+        "hover:bg-theme-50 dark:hover:bg-theme-900/70",
       )}
       onDoubleClick={handleDoubleClick}
     >
