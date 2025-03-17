@@ -9,37 +9,31 @@ export class APIError extends Error {
   }
 }
 
-export abstract class BaseAPIClient {
-  constructor(protected baseUrl: string) {}
+export class BaseAPIClient {
+  baseUrl: string;
 
-  protected async fetch<T>(path: string, options: RequestInit = {}): Promise<T> {
-    const url = `${this.baseUrl}${path}`
-    const headers = {
-      "Content-Type": "application/json",
-      "ngrok-skip-browser-warning": "true", // ngrokのブラウザ警告をスキップするヘッダーを追加
-      ...options.headers,
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
+  }
+
+  async fetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+    const url = `${this.baseUrl}${path}`;
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`APIリクエストエラー: ${response.status}`);
     }
 
-    try {
-      const response = await fetch(url, {
-        ...options,
-        headers,
-        mode: "cors",
-        credentials: "include",
-      })
-
-      if (!response.ok) {
-        throw new APIError(`API request failed: ${response.statusText}`, response.status)
-      }
-
-      const data = await response.json()
-      return data as T
-    } catch (error) {
-      if (error instanceof APIError) {
-        throw error
-      }
-      throw new APIError(`API request failed: ${error instanceof Error ? error.message : "Unknown error"}`)
-    }
+    return response.json();
   }
 }
+
+// APIのベースURL
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://knowledge-pholio.ngrok.dev"
 

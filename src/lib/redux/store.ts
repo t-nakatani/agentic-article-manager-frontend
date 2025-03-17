@@ -3,6 +3,7 @@ import articleFiltersReducer from "./features/articleFilters/articleFiltersSlice
 import articlesReducer from "./features/articles/articlesSlice"
 import themesReducer from "./features/themes/themesSlice"
 import authReducer from "./features/auth/authSlice"
+import filesReducer from "./features/files/filesSlice"
 
 // 初期状態では空のリデューサー
 const rootReducer = {
@@ -10,6 +11,7 @@ const rootReducer = {
   articles: articlesReducer,
   themes: themesReducer,
   auth: authReducer,
+  files: filesReducer,
 }
 
 export const store = configureStore({
