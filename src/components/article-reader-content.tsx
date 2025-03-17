@@ -15,6 +15,8 @@ import {
 import { useReduxArticles } from "@/hooks/useReduxArticles"
 import { useReduxTrendArticles } from "@/hooks/useReduxTrendArticles"
 import { TrendArticlesContainer } from "@/components/articles/trend/trend-articles-container"
+import { SearchContainer } from "@/components/articles/search/search-container"
+import FeatureFlags from "@/config/feature-flags"
 
 export function ArticleReaderContent() {
   // Reduxの状態とアクション
@@ -73,31 +75,35 @@ export function ArticleReaderContent() {
       <Layout>
         <div className="grid gap-6 lg:grid-cols-[1fr_300px] lg:gap-8">
           <main className="min-w-0">
+            {/* 検索バーセクション */}
+            <SearchContainer
+              searchQuery={searchQuery}
+              onSearchChange={handleSearchChange}
+              sortField={sortField}
+              sortDirection={sortDirection}
+              onSortFieldChange={handleSortFieldChange}
+              onSortDirectionChange={handleSortDirectionChange}
+              showFavorites={showFavorites}
+              onShowFavoritesChange={handleShowFavoritesChange}
+              onRefresh={handleRefreshAll}
+              isSticky={true}
+            />
+            
             {/* トレンド記事セクション */}
-            <TrendArticlesContainer onDeleteArticle={deleteArticle} />
+            {!FeatureFlags.TREND_ARTICLES_IN_DEVELOPMENT && (
+              <TrendArticlesContainer onDeleteArticle={deleteArticle} />
+            )}
             
             {/* 通常の記事一覧 */}
             <ArticleList
               articles={articles}
               isLoading={isLoading}
-              selectedTheme={selectedTheme}
-              sortField={sortField}
-              sortDirection={sortDirection}
-              onSortFieldChange={handleSortFieldChange}
-              onSortDirectionChange={handleSortDirectionChange}
-              searchQuery={searchQuery}
-              onSearchChange={handleSearchChange}
-              stickySearch={true}
               onDeleteArticle={deleteArticle}
-              onRefresh={handleRefreshAll}
-              // ページネーション関連のpropsを追加
               currentPage={currentPage}
               pageSize={pageSize}
               totalItems={totalItems}
               onPageChange={onPageChange}
               onPageSizeChange={onPageSizeChange}
-              showFavorites={showFavorites}
-              onShowFavoritesChange={handleShowFavoritesChange}
             />
           </main>
           <aside className="hidden lg:block">

@@ -8,6 +8,8 @@ import type { SortField, SortDirection, Article } from "@/types/article"
 import { demoArticles, demoThemes } from "@/app/demo/data"
 import Link from "next/link"
 import { TrendArticles } from "@/components/articles/trend/trend-articles"
+import { SearchContainer } from "@/components/articles/search/search-container"
+import FeatureFlags from "@/config/feature-flags"
 
 export function DemoArticleReaderContent() {
   // 状態管理
@@ -117,32 +119,37 @@ export function DemoArticleReaderContent() {
             </p>
           </div>
           
+          {/* 検索バーセクション */}
+          <SearchContainer
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            sortField={sortField}
+            sortDirection={sortDirection}
+            onSortFieldChange={setSortField}
+            onSortDirectionChange={setSortDirection}
+            showFavorites={showFavorites}
+            onShowFavoritesChange={setShowFavorites}
+            onRefresh={handleRefresh}
+            isSticky={true}
+          />
+          
           {/* トレンド記事セクション */}
-          <div className="mb-6">
-            <TrendArticles articles={demoTrendArticles} onDelete={handleDeleteArticle} />
-          </div>
+          {!FeatureFlags.TREND_ARTICLES_IN_DEVELOPMENT && (
+            <div className="mb-6">
+              <TrendArticles articles={demoTrendArticles} onDelete={handleDeleteArticle} />
+            </div>
+          )}
           
           {/* 通常の記事一覧 */}
           <ArticleList
             articles={filteredArticles}
             isLoading={isLoading}
-            selectedTheme={selectedTheme}
-            sortField={sortField}
-            sortDirection={sortDirection}
-            onSortFieldChange={setSortField}
-            onSortDirectionChange={setSortDirection}
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            stickySearch={true}
             onDeleteArticle={handleDeleteArticle}
-            onRefresh={handleRefresh}
             currentPage={currentPage}
             pageSize={pageSize}
             totalItems={totalItems}
             onPageChange={setCurrentPage}
             onPageSizeChange={setPageSize}
-            showFavorites={showFavorites}
-            onShowFavoritesChange={setShowFavorites}
           />
         </main>
         <aside className="hidden lg:block">
