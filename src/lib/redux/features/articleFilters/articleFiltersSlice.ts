@@ -9,6 +9,8 @@ interface ArticleFiltersState {
   currentPage: number
   pageSize: number
   showFavorites: boolean
+  isSelectionMode: boolean
+  selectedArticleIds: string[]
 }
 
 const initialState: ArticleFiltersState = {
@@ -18,7 +20,9 @@ const initialState: ArticleFiltersState = {
   selectedTheme: "all",
   currentPage: 1,
   pageSize: 20,
-  showFavorites: false
+  showFavorites: false,
+  isSelectionMode: false,
+  selectedArticleIds: []
 }
 
 export const articleFiltersSlice = createSlice({
@@ -52,10 +56,43 @@ export const articleFiltersSlice = createSlice({
       state.showFavorites = action.payload
       state.currentPage = 1 // フィルタ変更時にページをリセット
     },
+    setSelectionMode: (state, action: PayloadAction<boolean>) => {
+      state.isSelectionMode = action.payload
+      // 選択モードを終了する場合は選択された記事をクリア
+      if (!action.payload) {
+        state.selectedArticleIds = []
+      }
+    },
+    toggleArticleSelection: (state, action: PayloadAction<string>) => {
+      const articleId = action.payload
+      const index = state.selectedArticleIds.indexOf(articleId)
+      
+      if (index === -1) {
+        // 選択されていない場合は追加
+        state.selectedArticleIds.push(articleId)
+      } else {
+        // 既に選択されている場合は削除
+        state.selectedArticleIds.splice(index, 1)
+      }
+    },
+    clearSelectedArticles: (state) => {
+      state.selectedArticleIds = []
+    }
   },
 })
 
-export const { setSortField, setSortDirection, setSearchQuery, setSelectedTheme, setCurrentPage, setPageSize, setShowFavorites } =
-  articleFiltersSlice.actions
+export const { 
+  setSortField, 
+  setSortDirection, 
+  setSearchQuery, 
+  setSelectedTheme, 
+  setCurrentPage, 
+  setPageSize, 
+  setShowFavorites,
+  setSelectionMode,
+  toggleArticleSelection,
+  clearSelectedArticles
+} = articleFiltersSlice.actions
+
 export default articleFiltersSlice.reducer
 
