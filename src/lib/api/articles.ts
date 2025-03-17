@@ -16,6 +16,12 @@ interface RegenerateArticleRequest {
   url: string
 }
 
+export class TrendArticlesAPI extends BaseAPIClient {
+  async getTrendArticles(userId: string): Promise<{ articles: Article[] }> {
+    return this.fetch<{ articles: Article[] }>(`/trend-articles?user_id=${encodeURIComponent(userId)}`)
+  }
+}
+
 class ArticlesAPI extends BaseAPIClient {
   async getArticles(userId: string): Promise<Article[]> {
     return this.fetch<Article[]>(`/articles?user_id=${encodeURIComponent(userId)}`)
@@ -45,5 +51,8 @@ class ArticlesAPI extends BaseAPIClient {
 
 const API_BASE_URL = "https://knowledge-pholio.ngrok.dev"
 const articlesAPI = new ArticlesAPI(API_BASE_URL)
+const trendArticlesAPI = new TrendArticlesAPI(API_BASE_URL)
+
+export { trendArticlesAPI }
 export default articlesAPI
 

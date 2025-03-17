@@ -13,6 +13,7 @@ import {
   setShowFavorites,
 } from "@/lib/redux/features/articleFilters/articleFiltersSlice"
 import { useReduxArticles } from "@/hooks/useReduxArticles"
+import { useReduxTrendArticles } from "@/hooks/useReduxTrendArticles"
 
 export function ArticleReaderContent() {
   // Reduxの状態とアクション
@@ -31,6 +32,14 @@ export function ArticleReaderContent() {
     onPageChange,
     onPageSizeChange,
   } = useReduxArticles()
+
+  // useReduxTrendArticlesフックを使用
+  const {
+    trendArticles,
+    isTrendLoading,
+    hasTrendArticles,
+    refreshTrendArticles
+  } = useReduxTrendArticles()
 
   // ソートフィールド変更時にReduxの状態を更新
   const handleSortFieldChange = (field: SortField) => {
@@ -57,6 +66,12 @@ export function ArticleReaderContent() {
     dispatch(setShowFavorites(showFavorites))
   }
 
+  // 両方の記事を更新する関数
+  const handleRefreshAll = async () => {
+    await refreshArticles()
+    await refreshTrendArticles()
+  }
+
   return (
     <AuthWrapper>
       <Layout>
@@ -74,7 +89,7 @@ export function ArticleReaderContent() {
               onSearchChange={handleSearchChange}
               stickySearch={true}
               onDeleteArticle={deleteArticle}
-              onRefresh={refreshArticles}
+              onRefresh={handleRefreshAll}
               // ページネーション関連のpropsを追加
               currentPage={currentPage}
               pageSize={pageSize}
@@ -83,6 +98,10 @@ export function ArticleReaderContent() {
               onPageSizeChange={onPageSizeChange}
               showFavorites={showFavorites}
               onShowFavoritesChange={handleShowFavoritesChange}
+              // トレンド記事関連のpropsを追加
+              trendArticles={trendArticles}
+              isTrendLoading={isTrendLoading}
+              hasTrendArticles={hasTrendArticles}
             />
           </main>
           <aside className="hidden lg:block">

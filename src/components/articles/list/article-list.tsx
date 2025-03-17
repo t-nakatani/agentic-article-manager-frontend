@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import type { SortField, SortDirection } from "@/types/article"
 import type { Article } from "@/lib/api/articles"
 import Link from "next/link"
+import { TrendArticles } from "../trend/trend-articles"
 
 interface ArticleListProps {
   articles: Article[]
@@ -23,7 +24,7 @@ interface ArticleListProps {
   stickySearch?: boolean
   onDeleteArticle: (articleId: string) => Promise<void>
   onRefresh: () => Promise<void>
-  // ページネーション関連のpropsを追加
+  // ページネーション関連のprops
   currentPage?: number
   pageSize?: number
   totalItems?: number
@@ -31,6 +32,10 @@ interface ArticleListProps {
   onPageSizeChange?: (size: number) => void
   showFavorites: boolean
   onShowFavoritesChange: (showFavorites: boolean) => void
+  // トレンド記事関連のprops
+  trendArticles: Article[]
+  isTrendLoading: boolean
+  hasTrendArticles: boolean
 }
 
 export function ArticleList({
@@ -55,6 +60,10 @@ export function ArticleList({
   onPageSizeChange = () => {},
   showFavorites,
   onShowFavoritesChange,
+  // トレンド記事関連のprops
+  trendArticles,
+  isTrendLoading,
+  hasTrendArticles,
 }: ArticleListProps) {
   // 共通のStickySearchコンポーネント
   const searchComponent = (
@@ -95,7 +104,7 @@ export function ArticleList({
     )
   }
 
-  if (articles.length === 0) {
+  if (articles.length === 0 && !hasTrendArticles) {
     return (
       <div className="space-y-4">
         {searchComponent}
@@ -109,20 +118,32 @@ export function ArticleList({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {searchComponent}
-      <div className="grid gap-4 sm:gap-2.5 animate-fadeIn">
-        {articles.map((article) => (
-          <ArticleCard key={article.article_id} article={article} onDelete={onDeleteArticle} />
-        ))}
-      </div>
-      <ArticleListFooter
-        currentPage={currentPage}
-        pageSize={pageSize}
-        totalItems={totalItems}
-        onPageChange={onPageChange}
-        onPageSizeChange={onPageSizeChange}
-      />
+
+      {/* トレンド記事セクション */}
+      {!isTrendLoading && hasTrendArticles && (
+        <TrendArticles articles={trendArticles} onDelete={onDeleteArticle} />
+      )}
+      
+      {/* 通常の記事一覧 */}
+      {articles.length > 0 && (
+        <div className="grid gap-2.5 animate-fadeIn">
+          {articles.map((article) => (
+            <ArticleCard key={article.article_id} article={article} onDelete={onDeleteArticle} />
+          ))}
+        </div>
+      )}
+      
+      {articles.length > 0 && (
+        <ArticleListFooter
+          currentPage={currentPage}
+          pageSize={pageSize}
+          totalItems={totalItems}
+          onPageChange={onPageChange}
+          onPageSizeChange={onPageSizeChange}
+        />
+      )}
     </div>
   )
 }

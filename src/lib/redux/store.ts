@@ -4,6 +4,7 @@ import articlesReducer from "./features/articles/articlesSlice"
 import themesReducer from "./features/themes/themesSlice"
 import authReducer from "./features/auth/authSlice"
 import filesReducer from "./features/files/filesSlice"
+import trendArticlesReducer from "./features/trendArticles/trendArticlesSlice"
 
 // 初期状態では空のリデューサー
 const rootReducer = {
@@ -12,6 +13,7 @@ const rootReducer = {
   themes: themesReducer,
   auth: authReducer,
   files: filesReducer,
+  trendArticles: trendArticlesReducer,
 }
 
 export const store = configureStore({

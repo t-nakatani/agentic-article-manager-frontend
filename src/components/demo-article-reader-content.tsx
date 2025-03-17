@@ -7,6 +7,7 @@ import { ArticleList } from "@/components/articles/list/article-list"
 import type { SortField, SortDirection, Article } from "@/types/article"
 import { demoArticles, demoThemes } from "@/app/demo/data"
 import Link from "next/link"
+
 export function DemoArticleReaderContent() {
   // 状態管理
   const [sortField, setSortField] = useState<SortField>("created_at")
@@ -21,6 +22,14 @@ export function DemoArticleReaderContent() {
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(5)
   const [totalItems, setTotalItems] = useState(0)
+
+  // デモ用のトレンド記事
+  const demoTrendArticles = useMemo(() => {
+    return demoArticles.slice(0, 9).map(article => ({
+      ...article,
+      is_favorite: Math.random() > 0.5
+    }))
+  }, [])
 
   // 記事のフィルタリングと並び替え
   useEffect(() => {
@@ -74,56 +83,25 @@ export function DemoArticleReaderContent() {
       
       setFilteredArticles(paginatedArticles)
       setIsLoading(false)
-    }, 800); // 初期ロード時は少し長めの遅延を設定
-    
-    return () => clearTimeout(timer);
-  }, [sortField, sortDirection, searchQuery, selectedTheme, showFavorites, currentPage, pageSize])
+    }, 1000)
 
-  // ハンドラー関数
-  const handleSortFieldChange = (field: SortField) => {
-    setSortField(field)
-  }
+    return () => clearTimeout(timer)
+  }, [searchQuery, selectedTheme, sortField, sortDirection, showFavorites])
 
-  const handleSortDirectionChange = (direction: SortDirection) => {
-    setSortDirection(direction)
-  }
-
-  const handleSearchChange = (query: string) => {
-    setSearchQuery(query)
-    setCurrentPage(1) // 検索時は1ページ目に戻る
-  }
-
-  const handleThemeSelect = (theme: string) => {
-    setSelectedTheme(theme === selectedTheme ? "" : theme) // 同じテーマを選択した場合は選択解除
-    setCurrentPage(1) // テーマ変更時は1ページ目に戻る
-  }
-
-  const handleShowFavoritesChange = (show: boolean) => {
-    setShowFavorites(show)
-    setCurrentPage(1) // お気に入りフィルタ変更時は1ページ目に戻る
-  }
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-  }
-
-  const handlePageSizeChange = (size: number) => {
-    setPageSize(size)
-    setCurrentPage(1) // ページサイズ変更時は1ページ目に戻る
-  }
-
+  // 記事削除のモック関数
   const handleDeleteArticle = async (articleId: string) => {
     // デモ用なので実際には削除せず、UIだけ更新
     setFilteredArticles(prev => prev.filter(article => article.article_id !== articleId))
+    setTotalItems(prev => prev - 1)
     return Promise.resolve()
   }
 
-  const handleRefreshArticles = async () => {
+  // 更新のモック関数
+  const handleRefresh = async () => {
     setIsLoading(true)
-    // デモ用なのでタイマーで少し待ってからロード完了とする
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 500)
+    // 少し遅延させてローディング状態を表示
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setIsLoading(false)
     return Promise.resolve()
   }
 
@@ -143,28 +121,31 @@ export function DemoArticleReaderContent() {
             selectedTheme={selectedTheme}
             sortField={sortField}
             sortDirection={sortDirection}
-            onSortFieldChange={handleSortFieldChange}
-            onSortDirectionChange={handleSortDirectionChange}
+            onSortFieldChange={setSortField}
+            onSortDirectionChange={setSortDirection}
             searchQuery={searchQuery}
-            onSearchChange={handleSearchChange}
+            onSearchChange={setSearchQuery}
             stickySearch={true}
             onDeleteArticle={handleDeleteArticle}
-            onRefresh={handleRefreshArticles}
+            onRefresh={handleRefresh}
             currentPage={currentPage}
             pageSize={pageSize}
             totalItems={totalItems}
-            onPageChange={handlePageChange}
-            onPageSizeChange={handlePageSizeChange}
+            onPageChange={setCurrentPage}
+            onPageSizeChange={setPageSize}
             showFavorites={showFavorites}
-            onShowFavoritesChange={handleShowFavoritesChange}
+            onShowFavoritesChange={setShowFavorites}
+            // トレンド記事関連のprops
+            trendArticles={demoTrendArticles}
+            isTrendLoading={isLoading}
+            hasTrendArticles={true}
           />
         </main>
         <aside className="hidden lg:block">
           <ThemeTree 
-            onSelectTheme={handleThemeSelect} 
+            onSelectTheme={setSelectedTheme} 
             selectedTheme={selectedTheme}
-            isDemoMode={true}
-            demoThemes={demoThemes}
+            themes={demoThemes}
           />
         </aside>
       </div>
