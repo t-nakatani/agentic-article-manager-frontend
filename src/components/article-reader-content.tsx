@@ -14,6 +14,7 @@ import {
 } from "@/lib/redux/features/articleFilters/articleFiltersSlice"
 import { useReduxArticles } from "@/hooks/useReduxArticles"
 import { useReduxTrendArticles } from "@/hooks/useReduxTrendArticles"
+import { TrendArticlesContainer } from "@/components/articles/trend/trend-articles-container"
 
 export function ArticleReaderContent() {
   // Reduxの状態とアクション
@@ -33,13 +34,8 @@ export function ArticleReaderContent() {
     onPageSizeChange,
   } = useReduxArticles()
 
-  // useReduxTrendArticlesフックを使用
-  const {
-    trendArticles,
-    isTrendLoading,
-    hasTrendArticles,
-    refreshTrendArticles
-  } = useReduxTrendArticles()
+  // トレンド記事の更新用
+  const { refreshTrendArticles } = useReduxTrendArticles()
 
   // ソートフィールド変更時にReduxの状態を更新
   const handleSortFieldChange = (field: SortField) => {
@@ -77,6 +73,10 @@ export function ArticleReaderContent() {
       <Layout>
         <div className="grid gap-6 lg:grid-cols-[1fr_300px] lg:gap-8">
           <main className="min-w-0">
+            {/* トレンド記事セクション */}
+            <TrendArticlesContainer onDeleteArticle={deleteArticle} />
+            
+            {/* 通常の記事一覧 */}
             <ArticleList
               articles={articles}
               isLoading={isLoading}
@@ -98,10 +98,6 @@ export function ArticleReaderContent() {
               onPageSizeChange={onPageSizeChange}
               showFavorites={showFavorites}
               onShowFavoritesChange={handleShowFavoritesChange}
-              // トレンド記事関連のpropsを追加
-              trendArticles={trendArticles}
-              isTrendLoading={isTrendLoading}
-              hasTrendArticles={hasTrendArticles}
             />
           </main>
           <aside className="hidden lg:block">

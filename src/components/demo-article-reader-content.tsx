@@ -7,6 +7,7 @@ import { ArticleList } from "@/components/articles/list/article-list"
 import type { SortField, SortDirection, Article } from "@/types/article"
 import { demoArticles, demoThemes } from "@/app/demo/data"
 import Link from "next/link"
+import { TrendArticles } from "@/components/articles/trend/trend-articles"
 
 export function DemoArticleReaderContent() {
   // 状態管理
@@ -115,6 +116,13 @@ export function DemoArticleReaderContent() {
               これはデモページです。あなたの記事を保存するには<Link href="/login" className="text-theme-600 dark:text-theme-400 hover:underline mx-1">ログイン</Link>して下さい。
             </p>
           </div>
+          
+          {/* トレンド記事セクション */}
+          <div className="mb-6">
+            <TrendArticles articles={demoTrendArticles} onDelete={handleDeleteArticle} />
+          </div>
+          
+          {/* 通常の記事一覧 */}
           <ArticleList
             articles={filteredArticles}
             isLoading={isLoading}
@@ -135,10 +143,6 @@ export function DemoArticleReaderContent() {
             onPageSizeChange={setPageSize}
             showFavorites={showFavorites}
             onShowFavoritesChange={setShowFavorites}
-            // トレンド記事関連のprops
-            trendArticles={demoTrendArticles}
-            isTrendLoading={isLoading}
-            hasTrendArticles={true}
           />
         </main>
         <aside className="hidden lg:block">
