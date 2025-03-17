@@ -24,7 +24,7 @@ interface ArticleListProps {
   stickySearch?: boolean
   onDeleteArticle: (articleId: string) => Promise<void>
   onRefresh: () => Promise<void>
-  // ページネーション関連のpropsを追加
+  // ページネーション関連のprops
   currentPage?: number
   pageSize?: number
   totalItems?: number
@@ -32,6 +32,10 @@ interface ArticleListProps {
   onPageSizeChange?: (size: number) => void
   showFavorites: boolean
   onShowFavoritesChange: (showFavorites: boolean) => void
+  // トレンド記事関連のprops
+  trendArticles: Article[]
+  isTrendLoading: boolean
+  hasTrendArticles: boolean
 }
 
 export function ArticleList({
@@ -56,6 +60,10 @@ export function ArticleList({
   onPageSizeChange = () => {},
   showFavorites,
   onShowFavoritesChange,
+  // トレンド記事関連のprops
+  trendArticles,
+  isTrendLoading,
+  hasTrendArticles,
 }: ArticleListProps) {
   // 共通のStickySearchコンポーネント
   const searchComponent = (
@@ -96,7 +104,7 @@ export function ArticleList({
     )
   }
 
-  if (articles.length === 0) {
+  if (articles.length === 0 && !hasTrendArticles) {
     return (
       <div className="space-y-4">
         {searchComponent}
@@ -109,32 +117,33 @@ export function ArticleList({
     )
   }
 
-  // トレンド記事用の記事（最初の9つを使用）
-  const trendArticles = articles.slice(0, 9)
-  // 残りの記事（トレンド記事を除く）
-  const remainingArticles = articles.slice(9)
-
   return (
     <div className="space-y-3">
       {searchComponent}
 
       {/* トレンド記事セクション */}
-      <TrendArticles articles={trendArticles} onDelete={onDeleteArticle} />
+      {!isTrendLoading && hasTrendArticles && (
+        <TrendArticles articles={trendArticles} onDelete={onDeleteArticle} />
+      )}
       
-      {/* 残りの記事一覧 */}
-      <div className="grid gap-2.5 animate-fadeIn">
-        {remainingArticles.map((article) => (
-          <ArticleCard key={article.article_id} article={article} onDelete={onDeleteArticle} />
-        ))}
-      </div>
+      {/* 通常の記事一覧 */}
+      {articles.length > 0 && (
+        <div className="grid gap-2.5 animate-fadeIn">
+          {articles.map((article) => (
+            <ArticleCard key={article.article_id} article={article} onDelete={onDeleteArticle} />
+          ))}
+        </div>
+      )}
       
-      <ArticleListFooter
-        currentPage={currentPage}
-        pageSize={pageSize}
-        totalItems={totalItems}
-        onPageChange={onPageChange}
-        onPageSizeChange={onPageSizeChange}
-      />
+      {articles.length > 0 && (
+        <ArticleListFooter
+          currentPage={currentPage}
+          pageSize={pageSize}
+          totalItems={totalItems}
+          onPageChange={onPageChange}
+          onPageSizeChange={onPageSizeChange}
+        />
+      )}
     </div>
   )
 }
