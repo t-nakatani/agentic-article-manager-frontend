@@ -62,6 +62,7 @@ function TrendSection({ title, articles, onDelete }: TrendSectionProps) {
 }
 
 export function TrendArticles({ articles, onDelete }: TrendArticlesProps) {
+  // TODO: APIレスポンスでトレンド記事をテーマごとに分割して返す
   // 記事を3つのグループに分ける（各グループ3つの記事）
   const section1Articles = articles.slice(0, 3)
   const section2Articles = articles.slice(3, 6)
