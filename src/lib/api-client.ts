@@ -1,11 +1,7 @@
 import { toast } from "sonner"
-
-// const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
-const API_BASE_URL = "https://c6d3-2400-2410-8ee4-3900-15cd-b852-6c7-d526.ngrok-free.app"
-
-// if (!API_BASE_URL) {
-//   throw new Error("API_BASE_URL is not set")
-// }
+import { BaseAPIClient, API_BASE_URL } from "./api/base"
+import filesAPI from "./api/files"
+import type { File } from "./api/files"
 
 class APIError extends Error {
   constructor(
@@ -18,40 +14,19 @@ class APIError extends Error {
   }
 }
 
+// APIクライアントクラス
 class APIClient {
-  private baseUrl: string
+  files: typeof filesAPI;
+  baseClient: BaseAPIClient;
 
   constructor(baseUrl: string) {
-    this.baseUrl = baseUrl
+    this.files = filesAPI;
+    this.baseClient = new BaseAPIClient(baseUrl);
   }
 
-  private async fetch<T>(path: string, options: RequestInit = {}): Promise<T> {
-    const url = `${this.baseUrl}${path}`
-    const headers = {
-      "Content-Type": "application/json",
-      ...options.headers,
-    }
-
-    try {
-      const response = await fetch(url, {
-        ...options,
-        headers,
-        mode: "cors",
-        credentials: "include",
-      })
-
-      if (!response.ok) {
-        throw new APIError(`API request failed: ${response.statusText}`, response.status)
-      }
-
-      const data = await response.json()
-      return data as T
-    } catch (error) {
-      if (error instanceof APIError) {
-        throw error
-      }
-      throw new APIError(`API request failed: ${error instanceof Error ? error.message : "Unknown error"}`)
-    }
+  // 他のAPIメソッドはbaseClientを使用
+  async fetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+    return this.baseClient.fetch<T>(path, options);
   }
 
   // Articles
@@ -59,57 +34,6 @@ class APIClient {
     return this.fetch<Article[]>(`/articles?user_id=${encodeURIComponent(userId)}`, {
       method: "GET",
     })
-  }
-
-  // Themes
-  async getThemes(): Promise<ThemeData> {
-    // モックデータを返す
-    return {
-      technology: {
-        blockchain: {
-          Ethereum: {
-            L2: {
-              Arbitrum: {},
-              Optimism: {},
-            },
-            PoS: {},
-            zkEVM: {},
-          },
-          Bitcoin: {},
-          Solana: {},
-        },
-        AI: {
-          "Machine Learning": {},
-          "Deep Learning": {},
-          NLP: {},
-          "Computer Vision": {},
-        },
-      },
-      culture: {
-        music: {
-          Jazz: {},
-          Rock: {},
-          Pop: {},
-        },
-        movie: {
-          Action: {},
-          Comedy: {},
-          Drama: {},
-        },
-      },
-      business: {
-        startup: {
-          SaaS: {},
-          B2B: {},
-          B2C: {},
-        },
-        investment: {
-          Stocks: {},
-          "Real Estate": {},
-          Crypto: {},
-        },
-      },
-    }
   }
 
   // テーマの更新
@@ -187,4 +111,8 @@ export interface FeedbackData {
   rating: number
   comment: string
 }
+
+// 型をエクスポート
+export type { File }
+export { BaseAPIClient }
 

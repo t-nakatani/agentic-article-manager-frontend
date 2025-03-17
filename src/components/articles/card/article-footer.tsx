@@ -10,7 +10,7 @@ export function ArticleFooter({ article }: ArticleFooterProps) {
   return (
     <div className="flex items-center justify-between px-2.5 pb-2.5">
       {/* スマホの非表示と1行での表示のための省略を行うためにdivブロックに分離 */}
-      <div className="hidden md:block  max-w-[80%]">
+      <div className="hidden md:block max-w-[80%] pl-6">
         <p className="text-xs text-theme-600 dark:text-theme-400 line-clamp-1">
           {article.one_line_summary}
         </p>

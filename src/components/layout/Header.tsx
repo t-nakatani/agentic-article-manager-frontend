@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { BookOpen, LogOut, PlayCircle, HelpCircle, Download } from "lucide-react"
+import { BookOpen, LogOut, PlayCircle, HelpCircle, Download, Beaker } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,6 +53,13 @@ export function Header() {
           >
             <HelpCircle className="h-4 w-4" />
             <span className="hidden sm:inline">ヘルプ</span>
+          </Link>
+          <Link
+            href="/dev"
+            className="text-sm font-medium transition-colors hover:text-theme-600 dark:hover:text-theme-400 flex items-center gap-1"
+          >
+            <Beaker className="h-4 w-4" />
+            <span className="hidden sm:inline">ベータ機能</span>
           </Link>
           {/* デモリンクはログインしていない場合かつデモページではない場合のみ表示 */}
           {!user && !isDemoPage && (
