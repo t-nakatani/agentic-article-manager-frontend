@@ -32,7 +32,7 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
 
   return (
     <Card
-      className="bg-white dark:bg-theme-900 hover:shadow-lg transition-all duration-200 cursor-pointer shadow-none border border-transparent hover:border-theme-200 dark:hover:border-theme-800 rounded-xl overflow-hidden relative before:content-[''] before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1 before:bg-theme-200/50 dark:before:bg-theme-700/30"
+      className="bg-white dark:bg-theme-900 hover:shadow-lg transition-all duration-200 cursor-pointer shadow-none border border-sky-100 dark:border-sky-900 hover:border-theme-200 dark:hover:border-theme-800 rounded-xl overflow-hidden relative before:content-[''] before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1 before:bg-theme-200/50 dark:before:bg-theme-700/30"
       onClick={handleCardClick}
     >
       <div className="space-y-0.5">
