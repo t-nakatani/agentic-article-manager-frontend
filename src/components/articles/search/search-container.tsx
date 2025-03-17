@@ -2,6 +2,7 @@
 
 import { StickySearch } from "./sticky-search"
 import type { SortField, SortDirection } from "@/types/article"
+import { cn } from "@/lib/utils"
 
 interface SearchContainerProps {
   searchQuery: string
@@ -29,7 +30,8 @@ export function SearchContainer({
   isSticky = true
 }: SearchContainerProps) {
   return (
-    <div className="mb-4">
+    // 常にスティッキー表示する
+    <div className={cn("mb-4 sticky top-[57px] z-30")}>
       <StickySearch
         searchQuery={searchQuery}
         onSearchChange={onSearchChange}

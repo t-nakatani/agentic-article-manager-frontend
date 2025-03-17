@@ -78,7 +78,7 @@ export function StickySearch({
     <div
       className={cn(
         "rounded-lg border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60",
-        isSticky && "sticky top-[57px] z-30",
+        // isSticky && "sticky top-[120px] z-30",
         className,
       )}
     >
