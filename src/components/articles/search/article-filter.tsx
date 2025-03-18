@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Filter } from "lucide-react"
+import { Filter, Star, BookmarkIcon } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,9 +15,16 @@ import {
 interface ArticleFilterProps {
   showFavorites: boolean
   onShowFavoritesChange: (showFavorites: boolean) => void
+  showReadLater: boolean
+  onShowReadLaterChange: (showReadLater: boolean) => void
 }
 
-export function ArticleFilter({ showFavorites, onShowFavoritesChange }: ArticleFilterProps) {
+export function ArticleFilter({
+  showFavorites,
+  onShowFavoritesChange,
+  showReadLater,
+  onShowReadLaterChange,
+}: ArticleFilterProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -33,7 +40,15 @@ export function ArticleFilter({ showFavorites, onShowFavoritesChange }: ArticleF
           checked={showFavorites}
           onCheckedChange={onShowFavoritesChange}
         >
-          お気に入りのみ表示
+          <Star className="mr-2 h-4 w-4 text-yellow-500" />
+          <span>お気に入り</span>
+        </DropdownMenuCheckboxItem>
+        <DropdownMenuCheckboxItem
+          checked={showReadLater}
+          onCheckedChange={onShowReadLaterChange}
+        >
+          <BookmarkIcon className="mr-2 h-4 w-4 text-blue-500" />
+          <span>あとで読む</span>
         </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>

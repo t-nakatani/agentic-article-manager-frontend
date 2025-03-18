@@ -18,6 +18,7 @@ export function DemoArticleReaderContent() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedTheme, setSelectedTheme] = useState("")
   const [showFavorites, setShowFavorites] = useState(false)
+  const [showReadLater, setShowReadLater] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [filteredArticles, setFilteredArticles] = useState<Article[]>([])
   
@@ -63,6 +64,16 @@ export function DemoArticleReaderContent() {
         )
       }
       
+      // お気に入りフィルタリング
+      if (showFavorites) {
+        filtered = filtered.filter(article => article.is_favorite)
+      }
+      
+      // あとで読むフィルタリング
+      if (showReadLater) {
+        filtered = filtered.filter(article => article.read_later)
+      }
+      
       // 並び替え
       filtered.sort((a, b) => {
         const aValue = a[sortField]
@@ -89,7 +100,7 @@ export function DemoArticleReaderContent() {
     }, 1000)
 
     return () => clearTimeout(timer)
-  }, [searchQuery, selectedTheme, sortField, sortDirection, showFavorites])
+  }, [searchQuery, selectedTheme, sortField, sortDirection, showFavorites, showReadLater])
 
   // 記事削除のモック関数
   const handleDeleteArticle = async (articleId: string) => {
@@ -129,6 +140,8 @@ export function DemoArticleReaderContent() {
             onSortDirectionChange={setSortDirection}
             showFavorites={showFavorites}
             onShowFavoritesChange={setShowFavorites}
+            showReadLater={showReadLater}
+            onShowReadLaterChange={setShowReadLater}
             onRefresh={handleRefresh}
             isSticky={true}
           />

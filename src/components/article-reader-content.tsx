@@ -11,6 +11,7 @@ import {
   setSearchQuery,
   setSelectedTheme,
   setShowFavorites,
+  setShowReadLater,
 } from "@/lib/redux/features/articleFilters/articleFiltersSlice"
 import { useReduxArticles } from "@/hooks/useReduxArticles"
 import { useReduxTrendArticles } from "@/hooks/useReduxTrendArticles"
@@ -21,7 +22,7 @@ import FeatureFlags from "@/config/feature-flags"
 export function ArticleReaderContent() {
   // Reduxの状態とアクション
   const dispatch = useAppDispatch()
-  const { sortField, sortDirection, searchQuery, selectedTheme, showFavorites } = useAppSelector((state) => state.articleFilters)
+  const { sortField, sortDirection, searchQuery, selectedTheme, showFavorites, showReadLater } = useAppSelector((state) => state.articleFilters)
 
   // useReduxArticlesフックを使用
   const {
@@ -64,6 +65,11 @@ export function ArticleReaderContent() {
     dispatch(setShowFavorites(showFavorites))
   }
 
+  // あとで読むフィルタ変更時にReduxの状態を更新
+  const handleShowReadLaterChange = (showReadLater: boolean) => {
+    dispatch(setShowReadLater(showReadLater))
+  }
+
   // 両方の記事を更新する関数
   const handleRefreshAll = async () => {
     await refreshArticles()
@@ -85,6 +91,8 @@ export function ArticleReaderContent() {
               onSortDirectionChange={handleSortDirectionChange}
               showFavorites={showFavorites}
               onShowFavoritesChange={handleShowFavoritesChange}
+              showReadLater={showReadLater}
+              onShowReadLaterChange={handleShowReadLaterChange}
               onRefresh={handleRefreshAll}
               isSticky={true}
             />

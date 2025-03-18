@@ -7,6 +7,7 @@ export interface Article {
   themes: string[]
   url: string
   is_favorite: boolean
+  read_later: boolean
   created_at: string
   last_viewed_at: string | null
 }
@@ -43,6 +44,13 @@ class ArticlesAPI extends BaseAPIClient {
 
   async toggleFavorite(articleId: string, data: { user_id: string; is_favorite: boolean }): Promise<void> {
     return this.fetch(`/articles/${articleId}/favorite`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    })
+  }
+
+  async toggleReadLater(articleId: string, data: { user_id: string; read_later: boolean }): Promise<void> {
+    return this.fetch(`/articles/${articleId}/read-later`, {
       method: "POST",
       body: JSON.stringify(data),
     })

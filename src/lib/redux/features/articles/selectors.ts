@@ -79,9 +79,21 @@ export const selectFilteredArticlesByFavorite = createSelector(
   }
 )
 
+// あとでreadLaterでフィルタリングされた記事を取得
+export const selectFilteredArticlesByReadLater = createSelector(
+  [selectFilteredArticlesByFavorite, (state) => state.articleFilters.showReadLater],
+  (articles, showReadLater): Article[] => {
+    if (!showReadLater) {
+      return articles
+    }
+    
+    return articles.filter((article) => article.read_later === true)
+  }
+)
+
 // ソート前のフィルタリングチェーンを更新
 export const selectSortedArticles = createSelector(
-  [selectFilteredArticlesByFavorite, selectSortField, selectSortDirection],
+  [selectFilteredArticlesByReadLater, selectSortField, selectSortDirection],
   (articles, field, direction): Article[] => {
     return [...articles].sort((a, b) => {
       const aValue = a[field];

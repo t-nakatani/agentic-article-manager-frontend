@@ -96,6 +96,18 @@ export const cacheFavicon = createAsyncThunk(
   }
 )
 
+export const toggleReadLater = createAsyncThunk(
+  "articles/toggleReadLater",
+  async ({ articleId, isReadLater, userId }: { articleId: string; isReadLater: boolean; userId: string }, { rejectWithValue }) => {
+    try {
+      await articlesAPI.toggleReadLater(articleId, { user_id: userId, read_later: isReadLater })
+      return { articleId, isReadLater }
+    } catch (error) {
+      return rejectWithValue("リードレーター状態の更新に失敗しました")
+    }
+  }
+)
+
 export const articlesSlice = createSlice({
   name: "articles",
   initialState,
@@ -138,6 +150,13 @@ export const articlesSlice = createSlice({
       .addCase(cacheFavicon.fulfilled, (state, action) => {
         const { domain, faviconUrl } = action.payload
         state.faviconCache[domain] = faviconUrl
+      })
+      .addCase(toggleReadLater.fulfilled, (state, action) => {
+        const { articleId, isReadLater } = action.payload
+        const article = state.items.find(item => item.article_id === articleId)
+        if (article) {
+          article.read_later = isReadLater
+        }
       })
   },
 })

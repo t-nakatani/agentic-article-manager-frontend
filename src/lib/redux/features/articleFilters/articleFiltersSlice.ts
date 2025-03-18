@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 import type { SortField, SortDirection } from "@/types/article"
+import { createAction } from "@reduxjs/toolkit"
 
 interface ArticleFiltersState {
   sortField: SortField
@@ -9,6 +10,7 @@ interface ArticleFiltersState {
   currentPage: number
   pageSize: number
   showFavorites: boolean
+  showReadLater: boolean
   isSelectionMode: boolean
   selectedArticleIds: string[]
 }
@@ -21,6 +23,7 @@ const initialState: ArticleFiltersState = {
   currentPage: 1,
   pageSize: 20,
   showFavorites: false,
+  showReadLater: false,
   isSelectionMode: false,
   selectedArticleIds: []
 }
@@ -56,6 +59,9 @@ export const articleFiltersSlice = createSlice({
       state.showFavorites = action.payload
       state.currentPage = 1 // フィルタ変更時にページをリセット
     },
+    setShowReadLater: (state, action: PayloadAction<boolean>) => {
+      state.showReadLater = action.payload
+    },
     setSelectionMode: (state, action: PayloadAction<boolean>) => {
       state.isSelectionMode = action.payload
       // 選択モードを終了する場合は選択された記事をクリア
@@ -89,6 +95,7 @@ export const {
   setCurrentPage, 
   setPageSize, 
   setShowFavorites,
+  setShowReadLater,
   setSelectionMode,
   toggleArticleSelection,
   clearSelectedArticles
