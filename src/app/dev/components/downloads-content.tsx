@@ -52,21 +52,26 @@ export function DownloadsContent() {
         </Button>
       </div>
       <div className="grid gap-4">
-        {files.map((file) => (
-          <div key={file.id} className="flex items-center justify-between p-3 border rounded-md hover:bg-accent/50">
-            <div>
-              <h3 className="font-medium">{file.name || getFileNameFromPath(file.path || file.url || "")}</h3>
-              {file.size && <p className="text-sm text-muted-foreground">{formatFileSize(file.size)}</p>}
+        {files.map((file) => {
+          const fileName = file.name || getFileNameFromPath(file.path || file.url || "")
+          const fileUrl = file.url || file.path || ""
+          
+          return (
+            <div key={file.id} className="flex items-center justify-between p-3 border rounded-md hover:bg-accent/50">
+              <div>
+                <h3 className="font-medium">{fileName}</h3>
+                {file.size && <p className="text-sm text-muted-foreground">{formatFileSize(file.size)}</p>}
+              </div>
+              <Button 
+                onClick={() => handleFileDownload(fileUrl, fileName)}
+                size="sm"
+                className="flex items-center gap-1"
+              >
+                ダウンロード
+              </Button>
             </div>
-            <a 
-              href={file.url || file.path} 
-              download={file.name || getFileNameFromPath(file.path || file.url || "")}
-              className="px-3 py-1 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 text-sm"
-            >
-              ダウンロード
-            </a>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )
@@ -92,4 +97,24 @@ function getFileNameFromPath(path: string): string {
     const segments = path.split('/')
     return segments[segments.length - 1] || "ファイル"
   }
+}
+
+// ファイルをダウンロードする関数
+function handleFileDownload(url: string, fileName: string) {
+  fetch(url)
+    .then(response => response.blob())
+    .then(blob => {
+      const downloadUrl = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = downloadUrl
+      link.setAttribute('download', fileName)
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      window.URL.revokeObjectURL(downloadUrl)
+    })
+    .catch(error => {
+      console.error('ファイルのダウンロードに失敗しました:', error)
+      // エラーハンドリングの追加（必要に応じて）
+    })
 }
