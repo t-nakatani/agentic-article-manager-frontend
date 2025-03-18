@@ -3,7 +3,7 @@ import { ArticleSearch } from "../article-search"
 import { ArticleSort } from "../article-sort"
 import { ArticleFilter } from "../article-filter"
 import { Button } from "@/components/ui/button"
-import { RefreshCw, Download } from "lucide-react"
+import { RefreshCw, Share, ExternalLink } from "lucide-react"
 import type { SortField, SortDirection } from "@/types/article"
 
 interface DesktopSearchControlsProps {
@@ -70,7 +70,7 @@ export function DesktopSearchControls({
         onClick={toggleSelectionMode}
         className="h-9 w-9"
       >
-        <Download className="h-4 w-4" />
+        <Share className="h-4 w-4" />
         <span className="sr-only">記事を選択</span>
       </Button>
     </div>

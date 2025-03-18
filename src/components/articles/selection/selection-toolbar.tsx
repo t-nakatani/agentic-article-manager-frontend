@@ -2,12 +2,13 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { X, FileDown, Loader2 } from "lucide-react"
+import { X, FileDown, Loader2, HelpCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
 import { setSelectionMode } from "@/lib/redux/features/articleFilters/articleFiltersSlice"
 import { toast } from "sonner"
 import bulkArticleAPI from "@/lib/api/bulk-article"
+import { ExportHelpModal } from "@/components/articles/selection/export-help-modal"
 
 interface SelectionToolbarProps {
   className?: string
@@ -15,6 +16,7 @@ interface SelectionToolbarProps {
 
 export function SelectionToolbar({ className }: SelectionToolbarProps) {
   const [isExporting, setIsExporting] = useState(false)
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false)
   
   // Reduxから選択モードの状態を取得
   const dispatch = useAppDispatch()
@@ -81,20 +83,36 @@ export function SelectionToolbar({ className }: SelectionToolbarProps) {
             {selectedArticleIds.length}件の記事を選択中
           </span>
         </div>
-        <Button
-          variant="default"
-          size="sm"
-          onClick={handleExportAsMd}
-          className="ml-auto"
-          disabled={selectedArticleIds.length === 0 || isExporting}
-        >
-          {isExporting ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <FileDown className="mr-2 h-4 w-4" />
-          )}
-          MDでエクスポート
-        </Button>
+        <div className="flex items-center ml-auto">
+          <Button
+            variant="default"
+            size="sm"
+            onClick={handleExportAsMd}
+            disabled={selectedArticleIds.length === 0 || isExporting}
+          >
+            {isExporting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <FileDown className="mr-2 h-4 w-4" />
+            )}
+            MDでエクスポート
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="ml-2 h-8 w-8"
+            onClick={() => setIsHelpModalOpen(true)}
+          >
+            <HelpCircle className="h-4 w-4" />
+            <span className="sr-only">エクスポートについてのヘルプ</span>
+          </Button>
+          
+          {/* モーダルコンポーネント */}
+          <ExportHelpModal 
+            isOpen={isHelpModalOpen} 
+            onClose={() => setIsHelpModalOpen(false)} 
+          />
+        </div>
       </div>
     </div>
   )
