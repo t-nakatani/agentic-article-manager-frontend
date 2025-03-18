@@ -1,0 +1,34 @@
+
+## コードの変更や機能追加について
+目的Aを達成するための修正で、別の目的Bを同時に修正しないでください。
+
+ロジックの追加や変更の前後で、見た目(UI)変更が起こらないよう最大限の注意を払ってください。
+
+見た目(UI)の変更時に、ロジックの変更が起こらないよう最大限の注意を払ってください。
+
+
+
+## 設計・コードについて
+
+SOLID原則を意識してください。
+特に、開放閉鎖の原則と単一責務の原則を意識ししてください。
+
+開放閉鎖の原則は、新しい機能を追加する際に、既存のコードを変更しないで済むようにするために重要です。
+単一責務の原則は、複数の責務を持つ大きなモジュールを責務分離により小さく保つために重要です。
+
+モジュール化を意識してください。
+モジュールを作成する際は、そのモジュールが変更・削除されても他のモジュールに影響が及ばない設計を意識してください。
+
+### 状態管理について
+Reduxを利用してください。
+
+## プロジェクトについて
+APIは外部のものを利用しています
+- articles
+- themes
+- feedback
+- files
+
+## Markdown Formatting
+* If there are code snippets, display the code as plaintext in markdown and do not add any additional formatting such as backticks or indents  
+* DO NOT ADD ANY FORMATTING INCLUDING BACKTICKS WITH THE EXCEPTION OF INDENTS INSIDE THE MARKDOWN
