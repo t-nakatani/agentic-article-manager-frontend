@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { BookOpen, LogOut, PlayCircle, HelpCircle, Download, Beaker } from "lucide-react"
+import { LogOut, HelpCircle, Download, Beaker } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,14 +29,17 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center">
-        <Link
-          href="/"
-          className="flex items-center gap-2 transition-colors hover:text-theme-600 dark:hover:text-theme-400"
-          aria-label="Home"
-        >
-          <AppLogo />
-        </Link>
-        <nav className="flex flex-1 items-center justify-end gap-4">
+        <div className="w-1/3"></div>
+        <div className="w-1/3 flex justify-center">
+          <Link
+            href="/"
+            className="flex items-center gap-2 transition-colors hover:text-theme-600 dark:hover:text-theme-400"
+            aria-label="Home"
+          >
+            <AppLogo />
+          </Link>
+        </div>
+        <nav className="w-1/3 flex items-center justify-end gap-4">
           <NavigationLinks />
           
           {isAuthenticated ? (
