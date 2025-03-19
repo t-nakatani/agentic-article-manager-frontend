@@ -1,7 +1,7 @@
 "use client"
 
 import type { Article } from "@/types/article"
-import { ArticleMenu } from "./article-menu"
+import { ArticleMenu, MenuItem } from "./article-menu"
 import { useState } from "react"
 import { ArticleTagsDialog } from "../dialogs/article-tags-dialog"
 import { ArticleDeleteDialog } from "../dialogs/article-delete-dialog"
@@ -13,6 +13,7 @@ import { useAppDispatch } from "@/lib/redux/hooks"
 import { regenerateArticle } from "@/lib/redux/features/articles/articlesSlice"
 import { Favicon } from "./components/favicon"
 import { ReadLaterButton } from "./components/read-later-button"
+import { createTagsMenuItem, createRegenerateMenuItem, createDeleteMenuItem } from "./components/article-menu-items"
 
 interface ArticleHeaderProps {
   article: Article
@@ -37,6 +38,17 @@ export function ArticleHeader({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [isRegenerating, setIsRegenerating] = useState(false)
 
+  // タグダイアログ表示処理
+  const handleShowTags = () => {
+    setShowTags(true)
+  }
+
+  // 削除確認ダイアログ表示処理
+  const handleShowDeleteConfirm = () => {
+    setShowDeleteConfirm(true)
+  }
+
+  // 再生成処理
   const handleRegenerate = async () => {
     if (!user) return
 
@@ -47,12 +59,20 @@ export function ArticleHeader({
         userId: user.uid,
         url: article.url
       })).unwrap()
+      toast.success("要約の再生成が開始されました")
     } catch (error) {
-      // エラー処理はReduxアクション内で行われるため、ここでは何もしない
+      toast.error("要約の再生成に失敗しました")
     } finally {
       setIsRegenerating(false)
     }
   }
+
+  // メニュー項目を作成
+  const menuItems: MenuItem[] = [
+    createTagsMenuItem({ onShowTags: handleShowTags }),
+    createRegenerateMenuItem({ onRegenerate: handleRegenerate }),
+    createDeleteMenuItem({ onDelete: handleShowDeleteConfirm })
+  ]
 
   return (
     <div className="flex items-center justify-between space-x-2 p-2.5">
@@ -73,15 +93,26 @@ export function ArticleHeader({
           initialReadLater={article.is_read_later}
           onToggle={onToggleReadLater}
         />
-        <ArticleMenu
-          articleId={article.article_id}
-          onShowTags={onShowTags}
-          onDelete={onDelete}
-          onRegenerate={onRegenerate}
-          onToggleReadLater={onToggleReadLater}
-          isReadLater={article.is_read_later}
-        />
+        <ArticleMenu menuItems={menuItems} />
       </div>
+
+      {/* タグ表示ダイアログ */}
+      <ArticleTagsDialog
+        article={article}
+        open={showTags}
+        onOpenChange={setShowTags}
+      />
+
+      {/* 削除確認ダイアログ */}
+      <ArticleDeleteDialog
+        article={article}
+        open={showDeleteConfirm}
+        onOpenChange={setShowDeleteConfirm}
+        onConfirm={() => {
+          onDelete()
+          setShowDeleteConfirm(false)
+        }}
+      />
     </div>
   )
 }

@@ -11,24 +11,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Tags, Trash2, RefreshCw, Bookmark } from "lucide-react"
+import { MoreHorizontal } from "lucide-react"
 
-export interface ArticleMenuProps {
-  articleId: string
-  onShowTags: () => void
-  onDelete: () => void
-  onRegenerate: () => void
-  onToggleReadLater?: (isReadLater: boolean) => void
-  isReadLater?: boolean
+export interface MenuItem {
+  icon: React.ReactNode
+  label: string
+  onClick: (e: React.MouseEvent) => void
+  className?: string
+  isDanger?: boolean
 }
 
-export function ArticleMenu({ articleId, onShowTags, onDelete, onRegenerate, onToggleReadLater, isReadLater }: ArticleMenuProps) {
-  const router = useRouter()
+export interface ArticleMenuProps {
+  menuItems: MenuItem[]
+}
 
-  const handleTopicView = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    router.push(`/articles/${articleId}/topics`)
-  }
+export function ArticleMenu({ menuItems }: ArticleMenuProps) {
+  // 通常のメニュー項目と危険な操作のメニュー項目を分離
+  const normalMenuItems = menuItems.filter(item => !item.isDanger)
+  const dangerMenuItems = menuItems.filter(item => item.isDanger)
+  
+  // 危険な操作のメニュー項目が存在するかどうか
+  const hasDangerItems = dangerMenuItems.length > 0
 
   return (
     <DropdownMenu>
@@ -39,44 +42,32 @@ export function ArticleMenu({ articleId, onShowTags, onDelete, onRegenerate, onT
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuItem
-          onClick={(e) => {
-            e.stopPropagation()
-            onShowTags()
-          }}
-        >
-          <Tags className="mr-2 h-4 w-4" />
-          タグを表示
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={(e) => {
-            e.stopPropagation()
-            onToggleReadLater?.(!isReadLater)
-          }}
-        >
-          <Bookmark className="mr-2 h-4 w-4" />
-          {isReadLater ? "後で読むから削除" : "後で読むに追加"}
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={(e) => {
-            e.stopPropagation()
-            onRegenerate()
-          }}
-        >
-          <RefreshCw className="mr-2 h-4 w-4" />
-          要約を再生成
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={(e) => {
-            e.stopPropagation()
-            onDelete()
-          }}
-          className="text-red-600 dark:text-red-400"
-        >
-          <Trash2 className="mr-2 h-4 w-4" />
-          削除
-        </DropdownMenuItem>
+        {normalMenuItems.map((item, index) => (
+          <DropdownMenuItem
+            key={`menu-item-${index}`}
+            onClick={item.onClick}
+            className={item.className}
+          >
+            {item.icon}
+            {item.label}
+          </DropdownMenuItem>
+        ))}
+        
+        {hasDangerItems && (
+          <>
+            <DropdownMenuSeparator />
+            {dangerMenuItems.map((item, index) => (
+              <DropdownMenuItem
+                key={`danger-item-${index}`}
+                onClick={item.onClick}
+                className={item.className || "text-red-600 dark:text-red-400"}
+              >
+                {item.icon}
+                {item.label}
+              </DropdownMenuItem>
+            ))}
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   )
