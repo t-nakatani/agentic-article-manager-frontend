@@ -51,7 +51,7 @@ class ArticlesAPI extends BaseAPIClient {
 
   async toggleReadLater(articleId: string, data: { user_id: string; read_later: boolean }): Promise<void> {
     return this.fetch(`/articles/${articleId}/read-later`, {
-      method: "POST",
+      method: "PUT",
       body: JSON.stringify(data),
     })
   }

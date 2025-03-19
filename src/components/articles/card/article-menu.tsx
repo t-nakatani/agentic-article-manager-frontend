@@ -11,16 +11,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Tags, Trash2, RefreshCw } from "lucide-react"
+import { MoreHorizontal, Tags, Trash2, RefreshCw, Bookmark } from "lucide-react"
 
-interface ArticleMenuProps {
+export interface ArticleMenuProps {
   articleId: string
   onShowTags: () => void
   onDelete: () => void
   onRegenerate: () => void
+  onToggleReadLater?: (isReadLater: boolean) => void
+  isReadLater?: boolean
 }
 
-export function ArticleMenu({ articleId, onShowTags, onDelete, onRegenerate }: ArticleMenuProps) {
+export function ArticleMenu({ articleId, onShowTags, onDelete, onRegenerate, onToggleReadLater, isReadLater }: ArticleMenuProps) {
   const router = useRouter()
 
   const handleTopicView = (e: React.MouseEvent) => {
@@ -45,6 +47,15 @@ export function ArticleMenu({ articleId, onShowTags, onDelete, onRegenerate }: A
         >
           <Tags className="mr-2 h-4 w-4" />
           タグを表示
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={(e) => {
+            e.stopPropagation()
+            onToggleReadLater?.(!isReadLater)
+          }}
+        >
+          <Bookmark className="mr-2 h-4 w-4" />
+          {isReadLater ? "後で読むから削除" : "後で読むに追加"}
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={(e) => {

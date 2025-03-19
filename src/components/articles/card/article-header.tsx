@@ -12,14 +12,25 @@ import { FavoriteButton } from "./components/favorite-button"
 import { useAppDispatch } from "@/lib/redux/hooks"
 import { regenerateArticle } from "@/lib/redux/features/articles/articlesSlice"
 import { Favicon } from "./components/favicon"
+import { ReadLaterButton } from "./components/read-later-button"
 
 interface ArticleHeaderProps {
   article: Article
-  onDelete: () => Promise<void>
-  onFavoriteToggle?: (isFavorited: boolean) => void
+  onShowTags: () => void
+  onDelete: () => void
+  onRegenerate: () => void
+  onToggleFavorite: (isFavorited: boolean) => void
+  onToggleReadLater: (isReadLater: boolean) => void
 }
 
-export function ArticleHeader({ article, onDelete, onFavoriteToggle }: ArticleHeaderProps) {
+export function ArticleHeader({
+  article,
+  onShowTags,
+  onDelete,
+  onRegenerate,
+  onToggleFavorite,
+  onToggleReadLater
+}: ArticleHeaderProps) {
   const { user } = useReduxAuth()
   const dispatch = useAppDispatch()
   const [showTags, setShowTags] = useState(false)
@@ -44,35 +55,34 @@ export function ArticleHeader({ article, onDelete, onFavoriteToggle }: ArticleHe
   }
 
   return (
-    <>
-      <div className="flex items-start gap-2 p-2.5">
+    <div className="flex items-center justify-between space-x-2 p-2.5">
+      <div className="flex items-center space-x-2 min-w-0">
         <Favicon url={article.url} size={16} className="mt-0.5" />
         <h2 className="flex-1 text-sm font-semibold leading-tight hover:text-theme-600 dark:hover:text-theme-400 transition-colors line-clamp-1 sm:line-clamp-1 line-clamp-2">
           {article.title}
         </h2>
-        <div className="flex items-center">
-          <FavoriteButton 
-            articleId={article.article_id} 
-            initialFavorited={article.is_favorite}
-          />
-          <ArticleMenu
-            articleId={article.article_id}
-            onShowTags={() => setShowTags(true)}
-            onDelete={() => setShowDeleteConfirm(true)}
-            onRegenerate={handleRegenerate}
-            isRegenerating={isRegenerating}
-          />
-        </div>
       </div>
-
-      <ArticleTagsDialog article={article} open={showTags} onOpenChange={setShowTags} />
-      <ArticleDeleteDialog
-        article={article}
-        open={showDeleteConfirm}
-        onOpenChange={setShowDeleteConfirm}
-        onConfirm={onDelete}
-      />
-    </>
+      <div className="flex items-center space-x-1">
+        <FavoriteButton
+          articleId={article.article_id}
+          initialFavorited={article.is_favorite}
+          onToggle={onToggleFavorite}
+        />
+        <ReadLaterButton
+          articleId={article.article_id}
+          initialReadLater={article.is_read_later}
+          onToggle={onToggleReadLater}
+        />
+        <ArticleMenu
+          articleId={article.article_id}
+          onShowTags={onShowTags}
+          onDelete={onDelete}
+          onRegenerate={onRegenerate}
+          onToggleReadLater={onToggleReadLater}
+          isReadLater={article.is_read_later}
+        />
+      </div>
+    </div>
   )
 }
 
