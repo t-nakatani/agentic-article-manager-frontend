@@ -40,10 +40,16 @@ export function FavoriteButton({ articleId, initialFavorited = false, onToggle }
     
     if (!user || isLoading) return
     
-    // アニメーション用のローカルステートを更新
+    // 楽観的UI更新のためにローカルステートをすぐに更新
     const newFavoriteState = !isFavorited
+    setIsFavorited(newFavoriteState)
     setIsAnimating(true)
     setIsLoading(true)
+    
+    // 親コンポーネントのコールバックも即時呼び出す
+    if (onToggle) {
+      onToggle(newFavoriteState)
+    }
     
     // アニメーション終了のタイマーを設定
     setTimeout(() => setIsAnimating(false), 300)
@@ -51,15 +57,14 @@ export function FavoriteButton({ articleId, initialFavorited = false, onToggle }
     try {
       // Reduxアクションをディスパッチ
       await dispatch(toggleFavorite({ articleId, isFavorite: newFavoriteState })).unwrap()
-      
-      // 親コンポーネントのコールバックも呼び出す（後方互換性のため）
-      if (onToggle) {
-        onToggle(newFavoriteState)
-      }
     } catch (error) {
-      // エラー時はトースト表示のみ（状態はReduxで管理）
+      // エラー時は元の状態に戻す
       console.error("お気に入り状態の更新に失敗しました", error)
       
+      // UIを元の状態に戻す
+      setIsFavorited(!newFavoriteState)
+      
+      // エラーメッセージを表示
       toast.error("お気に入りの更新に失敗しました", {
         description: "もう一度お試しください",
       })

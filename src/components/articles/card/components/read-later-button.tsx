@@ -39,30 +39,35 @@ export function ReadLaterButton({ articleId, initialReadLater = false, onToggle 
     
     if (!user || isLoading) return
     
-    // アニメーション用のローカルステートを更新
+    // 楽観的UI更新のためにローカルステートをすぐに更新
+    const newState = !isReadLater
+    setIsReadLater(newState)
     setIsAnimating(true)
     setIsLoading(true)
+    
+    // 親コンポーネントのコールバックも即時呼び出す
+    if (onToggle) {
+      onToggle(newState)
+    }
     
     // アニメーション終了のタイマー
     setTimeout(() => setIsAnimating(false), 300)
     
     try {
       // Reduxアクションをディスパッチ
-      const newState = !isReadLater
       await dispatch(toggleReadLater({ 
         articleId, 
         isReadLater: newState,
         userId: user.uid 
       })).unwrap()
-      
-      // 親コンポーネントのコールバックも呼び出す（後方互換性のため）
-      if (onToggle) {
-        onToggle(newState)
-      }
     } catch (error) {
-      // エラー時はトースト表示
+      // エラー時は元の状態に戻す
       console.error("後で読む状態の更新に失敗しました", error)
       
+      // UIを元の状態に戻す
+      setIsReadLater(!newState)
+      
+      // エラーメッセージを表示
       toast.error("後で読むの更新に失敗しました", {
         description: "もう一度お試しください",
       })
