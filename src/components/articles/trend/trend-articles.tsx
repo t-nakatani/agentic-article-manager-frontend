@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { Card } from "@/components/ui/card"
 import { ChevronDown, ChevronUp, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -62,17 +62,46 @@ function TrendSection({ title, articles, onDelete }: TrendSectionProps) {
 }
 
 export function TrendArticles({ articles, onDelete }: TrendArticlesProps) {
-  // TODO: APIレスポンスでトレンド記事をテーマごとに分割して返す
-  // 記事を3つのグループに分ける（各グループ3つの記事）
-  const section1Articles = articles.slice(0, 3)
-  const section2Articles = articles.slice(3, 6)
-  const section3Articles = articles.slice(6, 9)
+  // 記事をグループ化する（APIレスポンスがグループ化されていない場合のフォールバック）
+  const groupedArticles = useMemo(() => {
+    // 記事のグループが既に設定されている場合はそのまま使用
+    const groups: Record<string, Article[]> = {};
+    
+    articles.forEach((article) => {
+      const groupKey = article.trendGroup || 'default';
+      if (!groups[groupKey]) {
+        groups[groupKey] = [];
+      }
+      groups[groupKey].push(article);
+    });
+    
+    // グループがない場合は、均等に分割する
+    if (Object.keys(groups).length === 1 && groups['default']) {
+      const defaultArticles = groups['default'];
+      const groupSize = Math.ceil(defaultArticles.length / 3);
+      
+      return {
+        'トレンド1': defaultArticles.slice(0, groupSize),
+        'トレンド2': defaultArticles.slice(groupSize, groupSize * 2),
+        'トレンド3': defaultArticles.slice(groupSize * 2)
+      };
+    }
+    
+    return groups;
+  }, [articles]);
 
   return (
     <div className="grid gap-2.5">
-      <TrendSection title="test-1" articles={section1Articles} onDelete={onDelete} />
-      <TrendSection title="test-2" articles={section2Articles} onDelete={onDelete} />
-      <TrendSection title="test-3" articles={section3Articles} onDelete={onDelete} />
+      {Object.entries(groupedArticles).map(([title, groupArticles]) => 
+        groupArticles.length > 0 && (
+          <TrendSection 
+            key={title} 
+            title={title} 
+            articles={groupArticles} 
+            onDelete={onDelete} 
+          />
+        )
+      )}
     </div>
   )
 } 
