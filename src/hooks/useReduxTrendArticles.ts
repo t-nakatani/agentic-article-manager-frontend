@@ -9,6 +9,7 @@ export function useReduxTrendArticles() {
   const dispatch = useAppDispatch()
   const { articles: trendArticles, status: trendStatus, error } = useAppSelector((state) => state.trendArticles)
   const user = useAppSelector((state) => state.auth.user)
+  const isAnonymous = useAppSelector((state) => state.auth.isAnonymous)
 
   // ユーザーIDが利用可能になったらトレンド記事を取得
   useEffect(() => {
@@ -20,6 +21,12 @@ export function useReduxTrendArticles() {
   // 記事を再取得する関数
   const refreshTrendArticles = async () => {
     if (!user) return
+    
+    // 匿名ユーザーの場合は操作を制限
+    if (isAnonymous) {
+      toast.info("ゲストモードでは一部機能が制限されています")
+      return
+    }
 
     try {
       await dispatch(fetchTrendArticles(user.uid)).unwrap()

@@ -18,11 +18,15 @@ import { useReduxTrendArticles } from "@/hooks/useReduxTrendArticles"
 import { TrendArticlesContainer } from "@/components/articles/trend/trend-articles-container"
 import { SearchContainer } from "@/components/articles/search/search-container"
 import FeatureFlags from "@/config/feature-flags"
+import { useReduxAuth } from "@/hooks/useReduxAuth"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
 export function ArticleReaderContent() {
   // Reduxの状態とアクション
   const dispatch = useAppDispatch()
   const { sortField, sortDirection, searchQuery, selectedTheme, showFavorites, showReadLater } = useAppSelector((state) => state.articleFilters)
+  const { isAnonymous, signInWithGoogle } = useReduxAuth()
 
   // useReduxArticlesフックを使用
   const {
@@ -79,6 +83,22 @@ export function ArticleReaderContent() {
   return (
     <AuthWrapper>
       <Layout>
+        {isAnonymous ? (
+          <div className="mb-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>ゲストモードでご利用中です</CardTitle>
+                <CardDescription>
+                  現在、ゲストとして閲覧しています。すべての機能を利用するには、ログインしてください。
+                </CardDescription>
+              </CardHeader>
+              <CardFooter>
+                <Button onClick={signInWithGoogle}>ログインする</Button>
+              </CardFooter>
+            </Card>
+          </div>
+        ) : null}
+        
         <div className="grid gap-6 lg:grid-cols-[1fr_300px] lg:gap-8">
           <main className="min-w-0">
             {/* 検索バーセクション */}

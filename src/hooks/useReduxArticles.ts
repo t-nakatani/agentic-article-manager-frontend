@@ -18,6 +18,7 @@ export function useReduxArticles() {
   const isLoading = useAppSelector(selectIsArticlesLoading)
   const error = useAppSelector((state) => state.articles.error)
   const user = useAppSelector((state) => state.auth.user)
+  const isAnonymous = useAppSelector((state) => state.auth.isAnonymous)
   const currentPage = useAppSelector((state) => state.articleFilters.currentPage)
   const pageSize = useAppSelector((state) => state.articleFilters.pageSize)
 
@@ -26,11 +27,18 @@ export function useReduxArticles() {
 
   useEffect(() => {
     if (user && allArticles.length === 0 && !isLoading) {
+      // 匿名ユーザーの場合もAPI呼び出しができるように
       dispatch(fetchArticles(user.uid))
     }
   }, [dispatch, user, allArticles.length, isLoading])
 
   const handleDeleteArticle = async (articleId: string) => {
+    // 匿名ユーザーの場合は操作を制限
+    if (isAnonymous) {
+      toast.error("この操作にはログインが必要です")
+      return
+    }
+    
     try {
       await dispatch(deleteArticle(articleId)).unwrap()
       toast.success("記事を削除しました")
@@ -40,6 +48,12 @@ export function useReduxArticles() {
   }
 
   const handleToggleFavorite = async (articleId: string, isFavorite: boolean) => {
+    // 匿名ユーザーの場合は操作を制限
+    if (isAnonymous) {
+      toast.error("この操作にはログインが必要です")
+      return
+    }
+    
     try {
       await dispatch(toggleFavorite({ articleId, isFavorite })).unwrap()
     } catch (error) {

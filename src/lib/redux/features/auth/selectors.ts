@@ -5,9 +5,20 @@ import type { RootState } from "@/lib/redux/store"
 const selectUser = (state: RootState) => state.auth.user
 const selectAuthLoading = (state: RootState) => state.auth.loading
 const selectAuthError = (state: RootState) => state.auth.error
+const selectIsAnonymous = (state: RootState) => state.auth.isAnonymous
 
 // メモ化されたセレクター: ユーザーがログインしているかどうか
-export const selectIsAuthenticated = createSelector([selectUser], (user): boolean => user !== null)
+// 匿名ユーザーもログイン済みとみなす
+export const selectIsAuthenticated = createSelector(
+  [selectUser, selectIsAnonymous], 
+  (user, isAnonymous): boolean => user !== null
+)
+
+// 実際に認証されているユーザーかどうか（匿名ユーザーは除外）
+export const selectIsRealAuthenticated = createSelector(
+  [selectUser, selectIsAnonymous], 
+  (user, isAnonymous): boolean => user !== null && !isAnonymous
+)
 
 // メモ化されたセレクター: ユーザー情報
 export const selectUserInfo = createSelector([selectUser], (user) => {

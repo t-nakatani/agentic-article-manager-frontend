@@ -4,17 +4,20 @@ import type React from "react"
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Skeleton } from "@/components/ui/skeleton"
-import { useAppSelector } from "@/lib/redux/hooks"
+import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
+import { useReduxAuth } from "@/hooks/useReduxAuth"
 
 export function AuthWrapper({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAppSelector((state) => state.auth)
+  const dispatch = useAppDispatch()
+  const { user, loading, setAnonymousUser, isAnonymous } = useReduxAuth()
   const router = useRouter()
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push("/login")
+      // ユーザーがログインしていない場合は匿名ユーザーを設定
+      setAnonymousUser()
     }
-  }, [user, loading, router])
+  }, [user, loading, setAnonymousUser])
 
   if (loading) {
     return (

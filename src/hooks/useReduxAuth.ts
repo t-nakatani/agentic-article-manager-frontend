@@ -1,7 +1,7 @@
 "use client"
 
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
-import { signInWithGoogle, logout } from "@/lib/redux/features/auth/authSlice"
+import { signInWithGoogle, logout, setAnonymousUser } from "@/lib/redux/features/auth/authSlice"
 import { selectIsAuthenticated, selectUserInfo } from "@/lib/redux/features/auth/selectors"
 import { useRouter } from "next/navigation"
 
@@ -13,6 +13,7 @@ export function useReduxAuth() {
   const loading = useAppSelector((state) => state.auth.loading)
   const error = useAppSelector((state) => state.auth.error)
   const registrationPaused = useAppSelector((state) => state.auth.registrationPaused)
+  const isAnonymous = useAppSelector((state) => state.auth.isAnonymous)
   const router = useRouter()
 
   const handleSignInWithGoogle = async () => {
@@ -25,6 +26,11 @@ export function useReduxAuth() {
     router.push("/login")
   }
 
+  const handleSetAnonymousUser = async () => {
+    await dispatch(setAnonymousUser()).unwrap()
+    router.push("/")
+  }
+
   return {
     user,
     userInfo,
@@ -32,8 +38,10 @@ export function useReduxAuth() {
     loading,
     error,
     registrationPaused,
+    isAnonymous,
     signInWithGoogle: handleSignInWithGoogle,
     logout: handleLogout,
+    setAnonymousUser: handleSetAnonymousUser,
   }
 }
 

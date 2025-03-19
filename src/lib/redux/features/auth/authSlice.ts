@@ -11,18 +11,28 @@ interface SerializableUser {
   photoURL: string | null
 }
 
+// 匿名ユーザーを表す定数
+export const ANONYMOUS_USER: SerializableUser = {
+  uid: 'anonymous',
+  email: null,
+  displayName: 'ゲスト',
+  photoURL: null,
+}
+
 interface AuthState {
   user: SerializableUser | null
   loading: boolean
   error: string | null
   registrationPaused: boolean  // 新規登録一時停止フラグを追加
+  isAnonymous: boolean  // 匿名ユーザーかどうかのフラグを追加
 }
 
 const initialState: AuthState = {
   user: null,
   loading: true,
   error: null,
-  registrationPaused: true  // デフォルトで一時停止状態に設定
+  registrationPaused: true,  // デフォルトで一時停止状態に設定
+  isAnonymous: false  // 初期状態では匿名ではない
 }
 
 // Firebaseユーザーオブジェクトからシリアライズ可能なオブジェクトに変換する関数
@@ -61,6 +71,12 @@ export const logout = createAsyncThunk("auth/logout", async (_, { rejectWithValu
   }
 })
 
+export const setAnonymousUser = createAsyncThunk("auth/setAnonymousUser", async (_, { dispatch }) => {
+  dispatch(setUser(ANONYMOUS_USER))
+  dispatch(setIsAnonymous(true))
+  return ANONYMOUS_USER
+})
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -77,6 +93,9 @@ export const authSlice = createSlice({
     },
     setRegistrationPaused: (state, action: PayloadAction<boolean>) => {
       state.registrationPaused = action.payload
+    },
+    setIsAnonymous: (state, action: PayloadAction<boolean>) => {
+      state.isAnonymous = action.payload
     },
   },
   extraReducers: (builder) => {
@@ -107,9 +126,15 @@ export const authSlice = createSlice({
         state.loading = false
         state.error = (action.payload as string) || "Unknown error"
       })
+      .addCase(setAnonymousUser.fulfilled, (state, action) => {
+        state.user = action.payload
+        state.loading = false
+        state.error = null
+        state.isAnonymous = true
+      })
   },
 })
 
-export const { setUser, setLoading, setError, setRegistrationPaused } = authSlice.actions
+export const { setUser, setLoading, setError, setRegistrationPaused, setIsAnonymous } = authSlice.actions
 export default authSlice.reducer
 
