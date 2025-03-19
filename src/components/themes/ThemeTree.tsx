@@ -8,11 +8,9 @@ import type { TreeNode } from "@/types/theme"
 interface ThemeTreeProps {
   onSelectTheme: (id: string) => void
   selectedTheme: string | null
-  isDemoMode?: boolean
-  demoThemes?: TreeNode[]
 }
 
-export function ThemeTree({ onSelectTheme, selectedTheme, isDemoMode = false, demoThemes }: ThemeTreeProps) {
+export function ThemeTree({ onSelectTheme, selectedTheme }) {
   const {
     themeTree,
     isLoading,
@@ -22,20 +20,7 @@ export function ThemeTree({ onSelectTheme, selectedTheme, isDemoMode = false, de
     exportTheme: exportThemeHandler,
   } = useReduxThemes()
 
-  // デモモードの場合はデモ用のテーマを使用
-  const treeNodes = React.useMemo(() => {
-    if (isDemoMode && demoThemes) {
-      return demoThemes
-    }
-    return themeTree
-  }, [themeTree, isDemoMode, demoThemes])
-
   const handleAddChild = async (parentId: string | null, name: string) => {
-    if (isDemoMode) {
-      console.log("Demo mode: Cannot add themes")
-      return
-    }
-
     try {
       await addTheme(parentId, name)
     } catch (error) {
@@ -44,11 +29,6 @@ export function ThemeTree({ onSelectTheme, selectedTheme, isDemoMode = false, de
   }
 
   const handleUpdateTheme = async (id: string, name: string) => {
-    if (isDemoMode) {
-      console.log("Demo mode: Cannot update themes")
-      return
-    }
-
     try {
       await updateThemeHandler(id, name)
     } catch (error) {
@@ -57,11 +37,6 @@ export function ThemeTree({ onSelectTheme, selectedTheme, isDemoMode = false, de
   }
 
   const handleDeleteTheme = async (id: string) => {
-    if (isDemoMode) {
-      console.log("Demo mode: Cannot delete themes")
-      return
-    }
-
     try {
       await deleteThemeHandler(id)
     } catch (error) {
@@ -70,11 +45,6 @@ export function ThemeTree({ onSelectTheme, selectedTheme, isDemoMode = false, de
   }
 
   const handleExportTheme = async (id: string) => {
-    if (isDemoMode) {
-      console.log("Demo mode: Cannot export themes")
-      return
-    }
-
     try {
       await exportThemeHandler(id)
     } catch (error) {
@@ -82,7 +52,7 @@ export function ThemeTree({ onSelectTheme, selectedTheme, isDemoMode = false, de
     }
   }
 
-  if (isLoading && !isDemoMode) {
+  if (isLoading) {
     return <div>Loading themes...</div>
   }
 
@@ -92,7 +62,7 @@ export function ThemeTree({ onSelectTheme, selectedTheme, isDemoMode = false, de
         <h2 className="text-lg font-semibold">Themes</h2>
       </div>
       <div className="p-4">
-        {treeNodes.map((node) => (
+        {themeTree.map((node) => (
           <TreeNodeComponent
             key={node.id}
             node={node}
@@ -103,7 +73,6 @@ export function ThemeTree({ onSelectTheme, selectedTheme, isDemoMode = false, de
             onUpdateTheme={handleUpdateTheme}
             onDeleteTheme={handleDeleteTheme}
             onExportTheme={handleExportTheme}
-            isReadOnly={isDemoMode}
           />
         ))}
       </div>

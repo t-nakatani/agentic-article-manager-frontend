@@ -15,7 +15,7 @@ interface SerializableUser {
 export const ANONYMOUS_USER: SerializableUser = {
   uid: 'anonymous',
   email: null,
-  displayName: 'ゲスト',
+  displayName: 'Anonymous Guest',
   photoURL: null,
 }
 

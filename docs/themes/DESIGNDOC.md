@@ -103,11 +103,6 @@
 - ログインユーザー向け
 - すべての操作が可能
 
-### Demo Mode
-- 読み取り専用
-- 未ログインユーザー向け
-- 編集機能を制限
-
 ## Future Considerations
 
 ### Performance
