@@ -10,6 +10,7 @@ import {
 } from "@/lib/redux/features/articles/selectors"
 import { setCurrentPage, setPageSize } from "@/lib/redux/features/articleFilters/articleFiltersSlice"
 import { toast } from "sonner"
+import { selectIsAuthenticated } from "@/lib/redux/features/auth/selectors"
 
 export function useReduxArticles() {
   const dispatch = useAppDispatch()
@@ -18,7 +19,7 @@ export function useReduxArticles() {
   const isLoading = useAppSelector(selectIsArticlesLoading)
   const error = useAppSelector((state) => state.articles.error)
   const user = useAppSelector((state) => state.auth.user)
-  const isAnonymous = useAppSelector((state) => state.auth.isAnonymous)
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
   const currentPage = useAppSelector((state) => state.articleFilters.currentPage)
   const pageSize = useAppSelector((state) => state.articleFilters.pageSize)
 
@@ -33,8 +34,8 @@ export function useReduxArticles() {
   }, [dispatch, user, allArticles.length, isLoading])
 
   const handleDeleteArticle = async (articleId: string) => {
-    // 匿名ユーザーの場合は操作を制限
-    if (isAnonymous) {
+    // 認証されていないユーザーの場合は操作を制限
+    if (!isAuthenticated) {
       toast.error("この操作にはログインが必要です")
       return
     }
@@ -49,7 +50,7 @@ export function useReduxArticles() {
 
   const handleToggleFavorite = async (articleId: string, isFavorite: boolean) => {
     // 匿名ユーザーの場合は操作を制限
-    if (isAnonymous) {
+    if (!isAuthenticated) {
       toast.error("この操作にはログインが必要です")
       return
     }

@@ -21,7 +21,7 @@ import { NavigationLinks } from "./NavigationLinks"
 import { UserMenu } from "./UserMenu"
 
 export function Header() {
-  const { user } = useReduxAuth()
+  const { user, isAuthenticated } = useReduxAuth()
   const isAnonymous = useAppSelector((state) => state.auth.isAnonymous)
   const pathname = usePathname()
   const isLoginPage = pathname === "/login"
@@ -39,17 +39,8 @@ export function Header() {
         <nav className="flex flex-1 items-center justify-end gap-4">
           <NavigationLinks />
           
-          {user ? (
-            isAnonymous ? (
-              <Button variant="ghost" size="sm" asChild>
-                <Link href="/login" className="flex items-center gap-1">
-                  <LogOut className="h-4 w-4" />
-                  <span>ログイン</span>
-                </Link>
-              </Button>
-            ) : (
-              <UserMenu user={user} />
-            )
+          {isAuthenticated ? (
+            <UserMenu user={user!} />
           ) : (
             !isLoginPage && (
               <Button variant="ghost" size="sm" asChild>

@@ -9,7 +9,7 @@ import { NewsSection } from "@/components/news/news-section"
 import { useReduxAuth } from "@/hooks/useReduxAuth"
 
 export function LoginPageContent() {
-  const { user, loading, signInWithGoogle, registrationPaused } = useReduxAuth()
+  const { user, loading, signInWithGoogle, registrationPaused, isAuthenticated } = useReduxAuth()
 
   if (loading) {
     return (
@@ -29,7 +29,7 @@ export function LoginPageContent() {
     )
   }
 
-  if (user) {
+  if (isAuthenticated) {
     return (
       <Layout>
         <div className="mx-auto max-w-md">

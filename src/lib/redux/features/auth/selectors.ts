@@ -8,10 +8,10 @@ const selectAuthError = (state: RootState) => state.auth.error
 const selectIsAnonymous = (state: RootState) => state.auth.isAnonymous
 
 // メモ化されたセレクター: ユーザーがログインしているかどうか
-// 匿名ユーザーもログイン済みとみなす
+// 匿名ユーザーはログイン済みとみなさない
 export const selectIsAuthenticated = createSelector(
   [selectUser, selectIsAnonymous], 
-  (user, isAnonymous): boolean => user !== null
+  (user, isAnonymous): boolean => user !== null && !isAnonymous
 )
 
 // 実際に認証されているユーザーかどうか（匿名ユーザーは除外）

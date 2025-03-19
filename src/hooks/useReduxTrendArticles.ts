@@ -4,12 +4,13 @@ import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
 import { fetchTrendArticles } from "@/lib/redux/features/trendArticles/trendArticlesSlice"
 import { toast } from "sonner"
+import { selectIsAuthenticated } from "@/lib/redux/features/auth/selectors"
 
 export function useReduxTrendArticles() {
   const dispatch = useAppDispatch()
   const { articles: trendArticles, status: trendStatus, error } = useAppSelector((state) => state.trendArticles)
   const user = useAppSelector((state) => state.auth.user)
-  const isAnonymous = useAppSelector((state) => state.auth.isAnonymous)
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
   // ユーザーIDが利用可能になったらトレンド記事を取得
   useEffect(() => {
@@ -22,9 +23,9 @@ export function useReduxTrendArticles() {
   const refreshTrendArticles = async () => {
     if (!user) return
     
-    // 匿名ユーザーの場合は操作を制限
-    if (isAnonymous) {
-      toast.info("ゲストモードでは一部機能が制限されています")
+    // 認証されていないユーザーの場合は操作を制限
+    if (!isAuthenticated) {
+      toast.info("この機能を使用するにはログインが必要です")
       return
     }
 
