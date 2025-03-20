@@ -6,6 +6,7 @@ import { ChevronDown, ChevronUp, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import type { Article } from "@/types/article"
 import { ArticleCard } from "../card/article-card"
+import { TrendArticleCard } from "../card/trend-article-card"
 
 interface TrendArticlesProps {
   articles: Article[]
@@ -15,7 +16,6 @@ interface TrendArticlesProps {
 interface TrendSectionProps {
   title: string
   articles: Article[]
-  onDelete: (articleId: string) => Promise<void>
 }
 
 // 個別のトレンドセクションコンポーネント
@@ -24,35 +24,36 @@ function TrendSection({ title, articles, onDelete }: TrendSectionProps) {
 
   return (
     <div 
-      className="mb-0 border-2 border-theme-200 dark:border-theme-800 rounded-lg p-4 bg-theme-50 dark:bg-theme-900 cursor-pointer"
-      onClick={() => setIsCollapsed(!isCollapsed)}
+      className="mb-0 border border-theme-200 dark:border-theme-800 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
     >
-      <div className="flex items-center justify-between mb-0">
+      <div 
+        className="flex items-center justify-between p-4 bg-gradient-to-r from-theme-100 to-theme-50 dark:from-theme-900 dark:to-theme-800 cursor-pointer"
+        onClick={() => setIsCollapsed(!isCollapsed)}
+      >
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 text-theme-700 dark:text-theme-300">
-            <TrendingUp className="h-5 w-7" />
-            <h2 className="text-xl font-semibold tracking-tight">トレンド記事</h2>
+            <TrendingUp className="h-5 w-5" />
+            <h2 className="text-l font-semibold tracking-tight">トレンド記事</h2>
           </div>
-          <span className="bg-theme-500 text-white dark:bg-theme-600 dark:text-theme-50 text-xs px-1.5 py-0.7 rounded-full font-medium">
-            trend: {title}
+          <span className="bg-theme-500 text-white dark:bg-theme-600 dark:text-theme-50 text-xs px-2 py-1 rounded-full font-medium">
+            {title}
           </span>
         </div>
         <div className="flex items-center">
           {isCollapsed ? (
-            <ChevronDown className="h-4 w-4" />
+            <ChevronDown className="h-5 w-5 text-theme-500 dark:text-theme-400" />
           ) : (
-            <ChevronUp className="h-4 w-4" />
+            <ChevronUp className="h-5 w-5 text-theme-500 dark:text-theme-400" />
           )}
         </div>
       </div>
 
       {!isCollapsed && (
-        <div className="grid gap-2 mt-4" onClick={(e) => e.stopPropagation()}>
+        <div className="grid gap-3 p-4 bg-white dark:bg-theme-950">
           {articles.map((article) => (
-            <ArticleCard 
+            <TrendArticleCard 
               key={article.article_id} 
               article={article} 
-              onDelete={onDelete} 
             />
           ))}
         </div>

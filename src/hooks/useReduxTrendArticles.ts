@@ -22,7 +22,6 @@ export function useReduxTrendArticles() {
   const refreshTrendArticles = async () => {
     try {
       await dispatch(fetchTrendArticles()).unwrap()
-      toast.success("トレンド記事を更新しました")
     } catch (error) {
       toast.error("トレンド記事の更新に失敗しました")
       console.error("トレンド記事の更新エラー:", error)

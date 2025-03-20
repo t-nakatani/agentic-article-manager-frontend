@@ -9,7 +9,7 @@ const mapTrendArticleToArticle = (trendArticle: TrendArticle): Article => {
     title: trendArticle.title,
     url: trendArticle.url,
     // 一旦すべて同じグループに
-    trendGroup: "トレンド記事",
+    trendGroup: "latest",
     // 他の必須フィールドに適切なデフォルト値を設定
     one_line_summary: "",
     themes: [],
