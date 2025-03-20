@@ -117,8 +117,10 @@ export function ArticleReaderContent() {
               isSticky={true}
             />
             
-            {/* トレンド記事セクション */}
-            <TrendArticlesContainer onDeleteArticle={deleteArticle} />
+            {/* トレンド記事セクション（機能フラグで表示制御） */}
+            {FeatureFlags.TREND_ARTICLES_ENABLED && (
+              <TrendArticlesContainer onDeleteArticle={deleteArticle} />
+            )}
             
             {/* 通常の記事一覧 */}
             <ArticleList

@@ -6,7 +6,8 @@
  */
 
 export const FeatureFlags = {
-  // トレンド記事機能が開発中かどうか
+  // トレンド記事機能を表示するかどうか
+  TREND_ARTICLES_ENABLED: false,
   
   // 新規登録を一時的に停止するフラグ
   REGISTRATION_PAUSED: false,
