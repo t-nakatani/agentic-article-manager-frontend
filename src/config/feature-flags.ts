@@ -8,6 +8,10 @@
 export const FeatureFlags = {
   // トレンド記事機能が開発中かどうか
   
+  // 新規登録を一時的に停止するフラグ
+  REGISTRATION_PAUSED: false,
+  
+  
   // 将来的に追加される機能フラグをここに追加
   // 例: ADVANCED_SEARCH_ENABLED: false,
   // 例: NEW_THEME_TREE_ENABLED: false,

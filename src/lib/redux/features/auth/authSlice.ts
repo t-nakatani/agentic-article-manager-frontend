@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/tool
 import { signInWithPopup, signOut, type User } from "firebase/auth"
 import { auth, googleProvider } from "@/lib/firebase"
 import { toast } from "sonner"
+import { FeatureFlags } from "@/config/feature-flags"
 
 // シリアライズ可能なユーザー情報の型を定義
 interface SerializableUser {
@@ -31,8 +32,8 @@ const initialState: AuthState = {
   user: null,
   loading: true,
   error: null,
-  registrationPaused: true,  // デフォルトで一時停止状態に設定
-  isAnonymous: false  // 初期状態では匿名ではない
+  registrationPaused: FeatureFlags.REGISTRATION_PAUSED,
+  isAnonymous: false,
 }
 
 // Firebaseユーザーオブジェクトからシリアライズ可能なオブジェクトに変換する関数
