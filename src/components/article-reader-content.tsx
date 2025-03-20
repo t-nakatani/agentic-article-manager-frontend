@@ -118,9 +118,7 @@ export function ArticleReaderContent() {
             />
             
             {/* トレンド記事セクション */}
-            {!FeatureFlags.TREND_ARTICLES_IN_DEVELOPMENT && (
-              <TrendArticlesContainer onDeleteArticle={deleteArticle} />
-            )}
+            <TrendArticlesContainer onDeleteArticle={deleteArticle} />
             
             {/* 通常の記事一覧 */}
             <ArticleList

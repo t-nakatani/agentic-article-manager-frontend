@@ -9,28 +9,20 @@ import { selectIsAuthenticated } from "@/lib/redux/features/auth/selectors"
 export function useReduxTrendArticles() {
   const dispatch = useAppDispatch()
   const { articles: trendArticles, status: trendStatus, error } = useAppSelector((state) => state.trendArticles)
-  const user = useAppSelector((state) => state.auth.user)
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
-  // ユーザーIDが利用可能になったらトレンド記事を取得
+  // コンポーネントがマウントされたらトレンド記事を取得
   useEffect(() => {
-    if (user && trendStatus === "idle") {
-      dispatch(fetchTrendArticles(user.uid))
+    if (trendStatus === "idle") {
+      dispatch(fetchTrendArticles())
     }
-  }, [dispatch, user, trendStatus])
+  }, [dispatch, trendStatus])
 
   // 記事を再取得する関数
   const refreshTrendArticles = async () => {
-    if (!user) return
-    
-    // 認証されていないユーザーの場合は操作を制限
-    if (!isAuthenticated) {
-      toast.info("この機能を使用するにはログインが必要です")
-      return
-    }
-
     try {
-      await dispatch(fetchTrendArticles(user.uid)).unwrap()
+      await dispatch(fetchTrendArticles()).unwrap()
+      toast.success("トレンド記事を更新しました")
     } catch (error) {
       toast.error("トレンド記事の更新に失敗しました")
       console.error("トレンド記事の更新エラー:", error)

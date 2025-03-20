@@ -7,7 +7,6 @@
 
 export const FeatureFlags = {
   // トレンド記事機能が開発中かどうか
-  TREND_ARTICLES_IN_DEVELOPMENT: true,
   
   // 将来的に追加される機能フラグをここに追加
   // 例: ADVANCED_SEARCH_ENABLED: false,
