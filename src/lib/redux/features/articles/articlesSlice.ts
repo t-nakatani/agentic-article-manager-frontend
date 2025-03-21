@@ -108,10 +108,49 @@ export const toggleReadLater = createAsyncThunk(
   }
 )
 
+export const saveArticleMemo = createAsyncThunk(
+  "articles/saveArticleMemo",
+  async ({ articleId, memo }: { articleId: string; memo: string }, { rejectWithValue, getState }) => {
+    try {
+      const state = getState() as RootState
+      const userId = state.auth.user?.uid
+      
+      if (!userId) {
+        return rejectWithValue("ユーザーIDが見つかりません")
+      }
+      
+      // APIを呼び出してメモを保存
+      await articlesAPI.saveMemo(articleId, { user_id: userId, memo })
+      
+      return { articleId, memo }
+    } catch (error) {
+      return rejectWithValue("メモの保存に失敗しました")
+    }
+  }
+)
+
 export const articlesSlice = createSlice({
   name: "articles",
   initialState,
-  reducers: {},
+  reducers: {
+    setArticleMemo: (state, action: PayloadAction<{ articleId: string; memo: string }>) => {
+      // メモの状態をローカルで更新（保存前の一時的な状態）
+      const { articleId, memo } = action.payload
+      const article = state.items.find(item => item.article_id === articleId)
+      if (article) {
+        article.memoEdit = memo // memoEditはUI上での編集中の値
+      }
+    },
+    
+    setArticleMemoVisible: (state, action: PayloadAction<{ articleId: string; isVisible: boolean }>) => {
+      // メモの表示/非表示状態を更新
+      const { articleId, isVisible } = action.payload
+      const article = state.items.find(item => item.article_id === articleId)
+      if (article) {
+        article.memoVisible = isVisible
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchArticles.pending, (state) => {
@@ -158,8 +197,33 @@ export const articlesSlice = createSlice({
           article.read_later = isReadLater
         }
       })
+      .addCase(saveArticleMemo.pending, (state, action) => {
+        const { articleId } = action.meta.arg
+        const article = state.items.find(item => item.article_id === articleId)
+        if (article) {
+          article.memoSaving = true
+        }
+      })
+      .addCase(saveArticleMemo.fulfilled, (state, action) => {
+        const { articleId, memo } = action.payload
+        const article = state.items.find(item => item.article_id === articleId)
+        if (article) {
+          article.memo = memo
+          article.memoEdit = memo // 編集中の値も更新
+          article.memoSaving = false
+        }
+      })
+      .addCase(saveArticleMemo.rejected, (state, action) => {
+        const { articleId } = action.meta.arg
+        const article = state.items.find(item => item.article_id === articleId)
+        if (article) {
+          article.memoSaving = false
+        }
+      })
   },
 })
+
+export const { setArticleMemo, setArticleMemoVisible } = articlesSlice.actions
 
 export default articlesSlice.reducer
 

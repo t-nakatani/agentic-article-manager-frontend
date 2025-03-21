@@ -154,3 +154,17 @@ export const selectTotalItems = createSelector([selectSearchedArticles], (articl
 // ローディング状態のセレクター
 export const selectIsArticlesLoading = createSelector([selectArticlesStatus], (status): boolean => status === "loading")
 
+// 特定の記事のメモ関連の状態を取得するセレクター
+export const selectArticleMemoState = createSelector(
+  [selectArticles, (_state: RootState, articleId: string) => articleId],
+  (articles, articleId) => {
+    const article = articles.find(item => item.article_id === articleId)
+    return {
+      memo: article?.memo || "",
+      memoEdit: article?.memoEdit || article?.memo || "",
+      memoVisible: article?.memoVisible || false,
+      memoSaving: article?.memoSaving || false
+    }
+  }
+)
+

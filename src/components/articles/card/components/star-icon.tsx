@@ -13,7 +13,7 @@ export function StarIcon({ isFavorited, isAnimating }: StarIconProps) {
     <Star
       className={cn(
         "h-4 w-4 transition-all duration-300",
-        isFavorited ? "fill-yellow-400 text-yellow-400" : "fill-transparent text-muted-foreground",
+        isFavorited ? "fill-yellow-400 text-yellow-400" : "fill-transparent text-gray-400 ",
         isAnimating && "scale-125"
       )}
     />

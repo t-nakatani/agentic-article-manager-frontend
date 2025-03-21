@@ -2,12 +2,15 @@
 
 import type React from "react"
 import type { Article } from "@/types/article"
-import { Card } from "@/components/ui/card"
 import { ArticleHeader } from "./article-header"
 import { ArticleFooter } from "./article-footer"
 import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
 import { toggleArticleSelection } from "@/lib/redux/features/articleFilters/articleFiltersSlice"
+import { setArticleMemoVisible } from "@/lib/redux/features/articles/articlesSlice"
+import { selectArticleMemoState } from "@/lib/redux/features/articles/selectors"
 import { cn } from "@/lib/utils"
+import { useState } from "react"
+import { ArticleMemo } from "../memo/article-memo"
 
 interface ArticleCardProps {
   article: Article
@@ -21,6 +24,11 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
   const isSelectionMode = useAppSelector(state => state.articleFilters.isSelectionMode)
   const selectedArticleIds = useAppSelector(state => state.articleFilters.selectedArticleIds)
   
+  // メモの表示状態をReduxから取得
+  const { memoVisible } = useAppSelector(state => 
+    selectArticleMemoState(state, article.article_id)
+  )
+
   // この記事が選択されているかどうか
   const isSelected = selectedArticleIds.includes(article.article_id)
 
@@ -32,6 +40,11 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
     if (onFavoriteToggle) {
       onFavoriteToggle(article.article_id, isFavorited)
     }
+  }
+
+  const handleMemoToggle = (show: boolean) => {
+    // 表示状態の変更はMemoButtonコンポーネント内で処理するため、
+    // ここでは何もしない
   }
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -55,23 +68,36 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
   }
 
   return (
-    <Card
-      className={cn(
-        "bg-white dark:bg-theme-900 hover:shadow-lg transition-all duration-200 cursor-pointer shadow-none border border-sky-100 dark:border-sky-900 hover:border-theme-200 dark:hover:border-theme-800 rounded-xl overflow-hidden relative before:content-[''] before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1 before:bg-theme-200/50 dark:before:bg-theme-700/30",
-        isSelectionMode && "hover:border-theme-400 dark:hover:border-theme-600",
-        isSelected && "border-theme-400 dark:border-theme-600 bg-theme-50 dark:bg-theme-950"
-      )}
-      onClick={handleCardClick}
+    <div 
+      className={`flex flex-col rounded-md border ${
+        isSelected ? "border-theme-500 dark:border-theme-400" : "border-theme-200 dark:border-theme-800"
+      } bg-card overflow-hidden hover:border-theme-300 dark:hover:border-theme-700 transition-colors shadow-sm cursor-pointer`}
     >
-      <div className="space-y-0.5">
+      <div onClick={handleCardClick}>
         <ArticleHeader 
-          article={article} 
-          onDelete={handleDelete} 
-          onFavoriteToggle={handleFavoriteToggle}
+          article={article}
+          onDelete={handleDelete}
+          onToggleFavorite={handleFavoriteToggle}
+          onToggleMemo={handleMemoToggle}
         />
+        
+        <div className="px-2.5 py-1">
+          <p className="text-sm text-theme-700 dark:text-theme-300 line-clamp-2">
+            {article.summary}
+          </p>
+        </div>
+        
         <ArticleFooter article={article} />
       </div>
-    </Card>
+      
+      {/* メモセクション - 表示状態はReduxで管理 */}
+      {memoVisible && (
+        <>
+          <div className="border-t border-theme-200 dark:border-theme-800 mx-2.5 my-0"></div>
+          <ArticleMemo articleId={article.article_id} />
+        </>
+      )}
+    </div>
   )
 }
 

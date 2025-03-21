@@ -14,14 +14,16 @@ import { regenerateArticle } from "@/lib/redux/features/articles/articlesSlice"
 import { Favicon } from "./components/favicon"
 import { ReadLaterButton } from "./components/read-later-button"
 import { createTagsMenuItem, createRegenerateMenuItem, createDeleteMenuItem } from "./components/article-menu-items"
+import { MemoButton } from "./components/memo-button"
 
 interface ArticleHeaderProps {
   article: Article
-  onShowTags: () => void
-  onDelete: () => void
-  onRegenerate: () => void
-  onToggleFavorite: (isFavorited: boolean) => void
-  onToggleReadLater: (isReadLater: boolean) => void
+  onShowTags?: () => void
+  onDelete?: () => void
+  onRegenerate?: () => void
+  onToggleFavorite?: (isFavorited: boolean) => void
+  onToggleReadLater?: (isReadLater: boolean) => void
+  onToggleMemo?: (showMemo: boolean) => void
 }
 
 export function ArticleHeader({
@@ -30,7 +32,8 @@ export function ArticleHeader({
   onDelete,
   onRegenerate,
   onToggleFavorite,
-  onToggleReadLater
+  onToggleReadLater,
+  onToggleMemo
 }: ArticleHeaderProps) {
   const { user } = useReduxAuth()
   const dispatch = useAppDispatch()
@@ -92,6 +95,11 @@ export function ArticleHeader({
           articleId={article.article_id}
           initialReadLater={article.is_read_later}
           onToggle={onToggleReadLater}
+        />
+        <MemoButton
+          articleId={article.article_id}
+          initialMemo={article.memo}
+          onToggle={onToggleMemo}
         />
         <ArticleMenu menuItems={menuItems} />
       </div>

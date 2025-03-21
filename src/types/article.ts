@@ -9,5 +9,11 @@ export interface Article {
   url: string
   created_at: string
   last_viewed_at: string | null
+  is_favorite?: boolean
+  read_later?: boolean
+  memo?: string
+  memoEdit?: string
+  memoVisible?: boolean
+  memoSaving?: boolean
 }
 

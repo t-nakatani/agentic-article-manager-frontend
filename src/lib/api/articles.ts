@@ -10,6 +10,7 @@ export interface Article {
   read_later: boolean
   created_at: string
   last_viewed_at: string | null
+  memo?: string
 }
 
 interface RegenerateArticleRequest {
@@ -54,6 +55,23 @@ class ArticlesAPI extends BaseAPIClient {
       method: "PUT",
       body: JSON.stringify(data),
     })
+  }
+
+  // メモを保存するAPIメソッド
+  async saveMemo(articleId: string, data: { user_id: string; memo: string }) {
+    const response = await fetch(`${API_BASE_URL}/articles/${articleId}/memo`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (!response.ok) {
+      throw new Error(`Error saving memo: ${response.statusText}`)
+    }
+
+    return await response.json()
   }
 }
 
