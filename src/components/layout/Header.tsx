@@ -29,8 +29,8 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center">
-        <div className="w-1/3"></div>
-        <div className="w-1/3 flex justify-center">
+        <div className="hidden sm:block sm:w-1/3"></div>
+        <div className="sm:w-1/3 flex sm:justify-center">
           <Link
             href="/"
             className="flex items-center gap-2 transition-colors hover:text-theme-600 dark:hover:text-theme-400"
@@ -39,7 +39,7 @@ export function Header() {
             <AppLogo />
           </Link>
         </div>
-        <nav className="w-1/3 flex items-center justify-end gap-4">
+        <nav className="ml-auto sm:w-1/3 flex items-center justify-end gap-4">
           <NavigationLinks />
           
           {isAuthenticated ? (
