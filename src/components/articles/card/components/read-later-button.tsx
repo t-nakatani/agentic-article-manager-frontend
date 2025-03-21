@@ -95,7 +95,7 @@ export function ReadLaterButton({ articleId, initialReadLater = false, onToggle 
       ) : (
         <BookmarkIcon 
           className={cn(
-            "h-4 w-4 text-gray-400 dark:text-gray-600",
+            "h-4 w-4 text-gray-600 dark:text-gray-600",
             isAnimating && "animate-bookmark-removed"
           )} 
         />

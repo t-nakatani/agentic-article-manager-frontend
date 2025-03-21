@@ -66,7 +66,7 @@ export function MemoButton({ articleId, onToggle }: MemoButtonProps) {
         // メモ表示中は強調色、それ以外はデフォルトの灰色
         memoVisible 
           ? 'text-theme-500 dark:text-theme-400' 
-          : 'text-gray-400 dark:text-gray-600'
+          : 'text-gray-600 dark:text-gray-600'
       } ${isAnimating ? 'scale-125' : ''} transition-all duration-300`}
       onClick={handleToggleMemo}
       aria-label={memoVisible ? "メモを閉じる" : "メモを開く"}
