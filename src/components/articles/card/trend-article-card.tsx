@@ -1,8 +1,5 @@
 import { Article } from "@/types/article"
 import { Favicon } from "./components/favicon"
-import { ArticleMenu } from "./article-menu"
-import { useState } from "react"
-import { getContrastColor } from "@/lib/utils/color-utils"
 
 interface TrendArticleCardProps {
   article: Article

@@ -1,6 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 import type { SortField, SortDirection } from "@/types/article"
-import { createAction } from "@reduxjs/toolkit"
 
 interface ArticleFiltersState {
   sortField: SortField

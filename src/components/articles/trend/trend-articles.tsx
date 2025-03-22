@@ -1,11 +1,8 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { Card } from "@/components/ui/card"
 import { ChevronDown, ChevronUp, TrendingUp } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import type { Article } from "@/types/article"
-import { ArticleCard } from "../card/article-card"
 import { TrendArticleCard } from "../card/trend-article-card"
 
 interface TrendArticlesProps {

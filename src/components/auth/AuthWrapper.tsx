@@ -4,7 +4,7 @@ import type React from "react"
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Skeleton } from "@/components/ui/skeleton"
-import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
+import { useAppDispatch } from "@/lib/redux/hooks"
 import { useReduxAuth } from "@/hooks/useReduxAuth"
 
 export function AuthWrapper({ children }: { children: React.ReactNode }) {

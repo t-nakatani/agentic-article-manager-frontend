@@ -9,7 +9,6 @@ import { selectIsAuthenticated } from "@/lib/redux/features/auth/selectors"
 export function useReduxTrendArticles() {
   const dispatch = useAppDispatch()
   const { articles: trendArticles, status: trendStatus, error } = useAppSelector((state) => state.trendArticles)
-  const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
   // コンポーネントがマウントされたらトレンド記事を取得
   useEffect(() => {

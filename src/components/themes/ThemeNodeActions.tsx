@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { MoreHorizontal, Plus } from "lucide-react"
+import { Plus } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ThemeEditDialog } from "./theme-rename-dialog"
 import { ThemeDeleteDialog } from "./theme-delete-dialog"

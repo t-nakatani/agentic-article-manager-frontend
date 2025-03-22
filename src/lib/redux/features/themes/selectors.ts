@@ -2,7 +2,6 @@ import { createSelector } from "@reduxjs/toolkit"
 import type { RootState } from "@/lib/redux/store"
 import type { TreeNode } from "@/types/theme"
 import { convertFlowNodesToTreeNodes } from "@/lib/theme-utils"
-import type { Node } from "reactflow"
 
 // 基本セレクター
 const selectThemeNodes = (state: RootState) => state.themes.nodes

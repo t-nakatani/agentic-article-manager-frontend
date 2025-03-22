@@ -20,7 +20,7 @@ import { SearchContainer } from "@/components/articles/search/search-container"
 import FeatureFlags from "@/config/feature-flags"
 import { useReduxAuth } from "@/hooks/useReduxAuth"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
 export function ArticleReaderContent() {
   // Reduxの状態とアクション

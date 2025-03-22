@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
 import { Pencil } from "lucide-react"
 import { Button } from "@/components/ui/button"

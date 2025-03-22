@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils"
 import { ArticleSort } from "../article-sort"
 import { ArticleFilter } from "../article-filter"
 import { Button } from "@/components/ui/button"
-import { RefreshCw, Share, ExternalLink } from "lucide-react"
+import { RefreshCw, Share } from "lucide-react"
 import type { SortField, SortDirection } from "@/types/article"
 
 interface MobileSearchControlsProps {

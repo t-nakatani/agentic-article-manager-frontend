@@ -2,17 +2,6 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { LogOut, HelpCircle, Download, Beaker } from "lucide-react"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { UserIdDisplay } from "@/components/dev/user-id-display"
 import { useReduxAuth } from "@/hooks/useReduxAuth"
 import { usePathname } from "next/navigation"
 import { AppLogo } from "@/components/ui/app-logo"

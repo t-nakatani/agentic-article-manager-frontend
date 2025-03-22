@@ -3,7 +3,6 @@
 import * as React from "react"
 import { TreeNodeComponent } from "./TreeNode"
 import { useReduxThemes } from "@/hooks/useReduxThemes"
-import type { TreeNode } from "@/types/theme"
 
 interface ThemeTreeProps {
   onSelectTheme: (id: string) => void

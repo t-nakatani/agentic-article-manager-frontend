@@ -6,10 +6,7 @@ import { ArticleHeader } from "./article-header"
 import { ArticleFooter } from "./article-footer"
 import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
 import { toggleArticleSelection } from "@/lib/redux/features/articleFilters/articleFiltersSlice"
-import { setArticleMemoVisible } from "@/lib/redux/features/articles/articlesSlice"
 import { selectArticleMemoState } from "@/lib/redux/features/articles/selectors"
-import { cn } from "@/lib/utils"
-import { useState } from "react"
 import { ArticleMemo } from "../memo/article-memo"
 
 interface ArticleCardProps {
