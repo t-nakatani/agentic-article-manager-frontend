@@ -1,7 +1,7 @@
 "use client"
 import { Layout } from "@/components/layout/Layout"
 import { ThemeTree } from "@/components/themes/ThemeTree"
-import { ArticleList } from "@/components/articles/list/article-list"
+import { ArticleList } from "@/components/articles/card/list/article-list"
 import { AuthWrapper } from "@/components/auth/AuthWrapper"
 import type { SortField, SortDirection } from "@/types/article"
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"

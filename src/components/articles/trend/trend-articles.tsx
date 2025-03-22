@@ -3,7 +3,8 @@
 import { useState, useMemo } from "react"
 import { ChevronDown, ChevronUp, TrendingUp } from "lucide-react"
 import type { Article } from "@/types/article"
-import { TrendArticleCard } from "../card/trend-article-card"
+import { PublicArticleCard } from "@/components/articles/public-card/public-article-card"
+import { PublicArticleCardList } from "@/components/articles/public-card/public-article-card-list"
 
 interface TrendArticlesProps {
   articles: Article[]
@@ -46,13 +47,8 @@ function TrendSection({ title, articles, onDelete }: TrendSectionProps) {
       </div>
 
       {!isCollapsed && (
-        <div className="grid gap-3 p-4 bg-white dark:bg-theme-950">
-          {articles.map((article) => (
-            <TrendArticleCard 
-              key={article.article_id} 
-              article={article} 
-            />
-          ))}
+        <div className="p-4 bg-white dark:bg-theme-950">
+          <PublicArticleCardList articles={articles} />
         </div>
       )}
     </div>

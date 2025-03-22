@@ -2,13 +2,14 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { X, FileDown, Loader2, HelpCircle } from "lucide-react"
+import { X, FileDown, Loader2, HelpCircle, Share } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
 import { setSelectionMode } from "@/lib/redux/features/articleFilters/articleFiltersSlice"
 import { toast } from "sonner"
 import bulkArticleAPI from "@/lib/api/bulk-article"
 import { ExportHelpModal } from "@/components/articles/selection/export-help-modal"
+import { ShareArticlesModal } from "./share-articles-modal"
 
 interface SelectionToolbarProps {
   className?: string
@@ -17,6 +18,7 @@ interface SelectionToolbarProps {
 export function SelectionToolbar({ className }: SelectionToolbarProps) {
   const [isExporting, setIsExporting] = useState(false)
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false)
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false)
   
   // Reduxから選択モードの状態を取得
   const dispatch = useAppDispatch()
@@ -97,6 +99,16 @@ export function SelectionToolbar({ className }: SelectionToolbarProps) {
             )}
             MDでエクスポート
           </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsShareModalOpen(true)}
+            disabled={selectedArticleIds.length === 0}
+            className="ml-2"
+          >
+            <Share className="mr-2 h-4 w-4" />
+            共有
+          </Button>
           <Button 
             variant="ghost" 
             size="icon" 
@@ -111,6 +123,13 @@ export function SelectionToolbar({ className }: SelectionToolbarProps) {
           <ExportHelpModal 
             isOpen={isHelpModalOpen} 
             onClose={() => setIsHelpModalOpen(false)} 
+          />
+          
+          {/* 共有モーダル */}
+          <ShareArticlesModal
+            isOpen={isShareModalOpen}
+            onClose={() => setIsShareModalOpen(false)}
+            selectedArticleIds={selectedArticleIds}
           />
         </div>
       </div>

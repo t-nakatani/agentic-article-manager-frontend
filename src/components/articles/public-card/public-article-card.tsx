@@ -1,11 +1,11 @@
 import { Article } from "@/types/article"
-import { Favicon } from "./components/favicon"
+import { Favicon } from "../card/components/favicon"
 
-interface TrendArticleCardProps {
+interface PublicArticleCardProps {
   article: Article
 }
 
-export function TrendArticleCard({ article }: TrendArticleCardProps) {
+export function PublicArticleCard({ article }: PublicArticleCardProps) {
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     // メニューボタンなどがクリックされた場合は遷移しない
     if ((e.target as HTMLElement).closest("button")) {
@@ -32,6 +32,7 @@ export function TrendArticleCard({ article }: TrendArticleCardProps) {
       {/* コンテンツ部分 */}
       <div className="px-2.5 py-1">
         <p className="text-sm text-theme-700 dark:text-theme-300 line-clamp-2">
+          {article.one_line_summary}
         </p>
       </div>
     </div>
