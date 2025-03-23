@@ -10,7 +10,7 @@ import { generateSeoMetadata } from '@/lib/metadata'
 
 // 環境変数からURLを取得、未設定の場合はデフォルト値を使用
 const EXTENSION_URL = process.env.NEXT_PUBLIC_EXTENSION_URL || "https://example.com/extension-not-found.zip"
-const IOS_SHORTCUT_URL = "https://vhxqoytfgyfunjxzoqvi.supabase.co/storage/v1/object/public/extension//soi-save-shortcut.shortcut"
+const IOS_SHORTCUT_URL = "https://vhxqoytfgyfunjxzoqvi.supabase.co/storage/v1/object/public/extension//soi-save.shortcut"
 
 // インストール手順のデータ
 const installSteps = [
