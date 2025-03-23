@@ -67,8 +67,10 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
   return (
     <div 
       className={`flex flex-col rounded-md border ${
-        isSelected ? "border-theme-500 dark:border-theme-400" : "border-theme-200 dark:border-theme-800"
-      } bg-card overflow-hidden hover:border-theme-300 dark:hover:border-theme-700 transition-colors shadow-sm cursor-pointer`}
+        isSelected 
+          ? "border-theme-500 dark:border-theme-400 bg-theme-50/60 dark:bg-theme-900/20 shadow-md" 
+          : "border-theme-200 dark:border-theme-800 bg-card"
+      } overflow-hidden hover:border-theme-300 dark:hover:border-theme-700 transition-all duration-200 shadow-sm cursor-pointer`}
     >
       <div onClick={handleCardClick}>
         <ArticleHeader 
