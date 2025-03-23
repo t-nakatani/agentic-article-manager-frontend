@@ -28,7 +28,7 @@ export function UserIdDisplay({ userId }: UserIdDisplayProps) {
 
   return (
     <div className="px-2 py-1.5 space-y-1">
-      <div className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">User ID (開発用)</div>
+      <div className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">User ID</div>
       <div className="flex items-center gap-2">
         <code className="flex-1 text-xs bg-muted px-2 py-1 rounded overflow-hidden text-ellipsis whitespace-nowrap" title={userId}>
           {truncateUserId(userId)}
