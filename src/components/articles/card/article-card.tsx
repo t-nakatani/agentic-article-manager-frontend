@@ -75,14 +75,15 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
           article={article}
           onDelete={handleDelete}
           onToggleFavorite={handleFavoriteToggle}
+          // onToggleReadLater={handleReadLaterToggle}
           onToggleMemo={handleMemoToggle}
         />
         
-        <div className="px-2.5 py-1">
+        {/* <div className="px-2.5 py-1">
           <p className="text-sm text-theme-700 dark:text-theme-300 line-clamp-2">
-            {article.summary}
+            {article.one_line_summary}
           </p>
-        </div>
+        </div> */}
         
         <ArticleFooter article={article} />
       </div>

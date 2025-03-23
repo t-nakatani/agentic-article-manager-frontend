@@ -27,9 +27,7 @@ interface ArticleHeaderProps {
 
 export function ArticleHeader({
   article,
-  onShowTags,
   onDelete,
-  onRegenerate,
   onToggleFavorite,
   onToggleReadLater,
   onToggleMemo
@@ -77,7 +75,7 @@ export function ArticleHeader({
   ]
 
   return (
-    <div className="flex items-center justify-between space-x-2 p-2.5">
+    <div className="flex items-center justify-between space-x-2 px-2.5 py-1">
       <div className="flex items-center space-x-2 min-w-0">
         <Favicon url={article.url} size={16} className="mt-0.5" />
         <h2 className="flex-1 text-sm font-semibold leading-tight hover:text-theme-600 dark:hover:text-theme-400 transition-colors line-clamp-1 sm:line-clamp-1 line-clamp-2">
@@ -92,7 +90,7 @@ export function ArticleHeader({
         />
         <ReadLaterButton
           articleId={article.article_id}
-          initialReadLater={article.is_read_later}
+          initialReadLater={article.read_later}
           onToggle={onToggleReadLater}
         />
         <MemoButton
