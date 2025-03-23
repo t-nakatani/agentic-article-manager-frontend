@@ -117,7 +117,7 @@ export default function ExtensionPage() {
                 </div>
               ) : (
                 <Button asChild size="lg" className="gap-2">
-                  <a href={EXTENSION_URL} download="extension.zip">
+                  <a href={EXTENSION_URL} download="extension.zip" target="_blank" rel="noopener noreferrer">
                     <Download className="h-5 w-5" />
                     拡張機能をダウンロード
                   </a>
