@@ -71,16 +71,6 @@ export function SelectionToolbar({ className }: SelectionToolbarProps) {
     )}>
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleSelectionMode}
-            className="mr-2"
-            aria-label="選択モードを終了"
-            disabled={isExporting}
-          >
-            <X className="h-4 w-4" />
-          </Button>
           <span className="text-sm font-medium">
             {selectedArticleIds.length}件の記事を選択中
           </span>
@@ -117,6 +107,18 @@ export function SelectionToolbar({ className }: SelectionToolbarProps) {
           >
             <HelpCircle className="h-4 w-4" />
             <span className="sr-only">エクスポートについてのヘルプ</span>
+          </Button>
+          
+          {/* 閉じるボタンを右端に移動 */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSelectionMode}
+            className="ml-2"
+            aria-label="選択モードを終了"
+            disabled={isExporting}
+          >
+            <X className="h-4 w-4" />
           </Button>
           
           {/* モーダルコンポーネント */}
