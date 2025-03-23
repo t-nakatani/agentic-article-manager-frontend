@@ -28,15 +28,15 @@ export function ExportHelpModal({ isOpen, onClose }: ExportHelpModalProps) {
           <div>
             <h3 className="font-medium">エクスポートの内容</h3>
             <p className="text-sm text-muted-foreground mt-1">
-              選択した記事のタイトル、URL、メモ、タグ情報がマークダウン形式で出力されます。
+              タイトル/URL/記事のコンテンツが出力されます。
             </p>
           </div>
           
           <div>
             <h3 className="font-medium">エクスポート方法</h3>
             <ol className="text-sm text-muted-foreground mt-1 list-decimal pl-4 space-y-1">
-              <li>エクスポートしたい記事を選択してください</li>
-              <li>「MDでエクスポート」ボタンをクリックします</li>
+              <li>エクスポートしたい記事を選択</li>
+              <li>「mdでExport」ボタンをクリック</li>
               <li>処理が完了すると、ダウンロードが自動的に開始されます</li>
             </ol>
           </div>

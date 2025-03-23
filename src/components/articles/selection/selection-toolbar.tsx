@@ -76,19 +76,32 @@ export function SelectionToolbar({ className }: SelectionToolbarProps) {
           </span>
         </div>
         <div className="flex items-center ml-auto">
-          <Button
-            variant="default"
-            size="sm"
-            onClick={handleExportAsMd}
-            disabled={selectedArticleIds.length === 0 || isExporting}
-          >
-            {isExporting ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <FileDown className="mr-2 h-4 w-4" />
-            )}
-            MDでエクスポート
-          </Button>
+          <div className="relative">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleExportAsMd}
+              disabled={selectedArticleIds.length === 0 || isExporting}
+              className="bg-white pr-8"
+            >
+              {isExporting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <FileDown className="mr-2 h-4 w-4" />
+              )}
+              md で Export
+            </Button>
+            <div 
+              className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsHelpModalOpen(true);
+              }}
+            >
+              <HelpCircle className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground transition-colors" />
+              <span className="sr-only">エクスポートについてのヘルプ</span>
+            </div>
+          </div>
           <Button
             variant="outline"
             size="sm"
@@ -99,17 +112,8 @@ export function SelectionToolbar({ className }: SelectionToolbarProps) {
             <Share className="mr-2 h-4 w-4" />
             共有
           </Button>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="ml-2 h-8 w-8"
-            onClick={() => setIsHelpModalOpen(true)}
-          >
-            <HelpCircle className="h-4 w-4" />
-            <span className="sr-only">エクスポートについてのヘルプ</span>
-          </Button>
           
-          {/* 閉じるボタンを右端に移動 */}
+          {/* 閉じるボタンを右端に維持 */}
           <Button
             variant="ghost"
             size="icon"
