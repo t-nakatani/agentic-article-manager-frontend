@@ -8,6 +8,7 @@ import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
 import { toggleArticleSelection } from "@/lib/redux/features/articleFilters/articleFiltersSlice"
 import { selectArticleMemoState } from "@/lib/redux/features/articles/selectors"
 import { ArticleMemo } from "../memo/article-memo"
+import { setArticleMemoVisible } from "@/lib/redux/features/articles/articlesSlice"
 
 interface ArticleCardProps {
   article: Article
@@ -44,24 +45,42 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
     // ここでは何もしない
   }
 
+  const handleTitleClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // 親要素へのイベントバブリングを停止
+    
+    // 選択モードの場合は記事選択の挙動を優先
+    if (isSelectionMode) {
+      dispatch(toggleArticleSelection(article.article_id));
+      return;
+    }
+    
+    // 通常モードの場合は記事ページを開く
+    window.open(article.url, "_blank");
+  };
+
   const handleCardClick = (e: React.MouseEvent) => {
     // 選択モードの場合
     if (isSelectionMode) {
       // ボタンクリックの場合は何もしない（ボタンの動作を優先）
       if ((e.target as HTMLElement).closest("button")) {
-        return
+        return;
       }
       
       // 記事の選択状態を切り替え
-      dispatch(toggleArticleSelection(article.article_id))
-      return
+      dispatch(toggleArticleSelection(article.article_id));
+      return;
     }
     
-    // 通常モードの場合は従来通りの動作
+    // 通常モードの場合
     if ((e.target as HTMLElement).closest("button")) {
-      return
+      return;
     }
-    window.open(article.url, "_blank")
+    
+    // メモの表示/非表示を切り替え
+    dispatch(setArticleMemoVisible({ 
+      articleId: article.article_id, 
+      isVisible: !memoVisible 
+    }));
   }
 
   return (
@@ -71,14 +90,16 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
           ? "border-theme-500 dark:border-theme-400 bg-theme-50/60 dark:bg-theme-900/20 shadow-md" 
           : "border-theme-200 dark:border-theme-800 bg-card"
       } overflow-hidden hover:border-theme-300 dark:hover:border-theme-700 transition-all duration-200 shadow-sm cursor-pointer`}
+      onClick={handleCardClick}
     >
-      <div onClick={handleCardClick}>
+      <div>
         <ArticleHeader 
           article={article}
           onDelete={handleDelete}
           onToggleFavorite={handleFavoriteToggle}
           // onToggleReadLater={handleReadLaterToggle}
           onToggleMemo={handleMemoToggle}
+          onTitleClick={handleTitleClick}
         />
         
         {/* <div className="px-2.5 py-1">

@@ -23,6 +23,7 @@ interface ArticleHeaderProps {
   onToggleFavorite?: (isFavorited: boolean) => void
   onToggleReadLater?: (isReadLater: boolean) => void
   onToggleMemo?: (showMemo: boolean) => void
+  onTitleClick?: (e: React.MouseEvent) => void
 }
 
 export function ArticleHeader({
@@ -30,7 +31,8 @@ export function ArticleHeader({
   onDelete,
   onToggleFavorite,
   onToggleReadLater,
-  onToggleMemo
+  onToggleMemo,
+  onTitleClick
 }: ArticleHeaderProps) {
   const { user } = useReduxAuth()
   const dispatch = useAppDispatch()
@@ -78,7 +80,10 @@ export function ArticleHeader({
     <div className="flex items-center justify-between space-x-2 px-2.5 py-1.5">
       <div className="flex items-center space-x-2 min-w-0">
         <Favicon url={article.url} size={16} className="mt-0.5" />
-        <h2 className="flex-1 text-sm font-semibold leading-tight hover:text-theme-600 dark:hover:text-theme-400 transition-colors line-clamp-1 sm:line-clamp-1 line-clamp-2">
+        <h2 
+          className="flex-1 text-sm font-semibold leading-tight hover:text-theme-600 dark:hover:text-theme-400 transition-colors line-clamp-1 sm:line-clamp-1 line-clamp-2 cursor-pointer"
+          onClick={onTitleClick}
+        >
           {article.title}
         </h2>
       </div>
