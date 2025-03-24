@@ -50,3 +50,102 @@ APIは外部のものを利用しています
 ## Markdown Formatting
 * If there are code snippets, display the code as plaintext in markdown and do not add any additional formatting such as backticks or indents  
 * DO NOT ADD ANY FORMATTING INCLUDING BACKTICKS WITH THE EXCEPTION OF INDENTS INSIDE THE MARKDOWN
+
+
+## Next
+
+### 技術スタック
+
+このプロジェクトでは、以下の技術スタックとその公式ドキュメントを使用する。
+
+- Next.js App Router（ルーティングとデータ取得）  
+  https://nextjs.org/docs/app
+
+- TailwindCSS（ユーティリティベースのスタイル設計）  
+  https://tailwindcss.com/docs
+
+- shadcn/ui（UI コンポーネントライブラリ）  
+  https://ui.shadcn.com/docs
+
+- Framer Motion（アニメーションとトランジション）  
+  https://www.framer.com/motion/
+
+### コーディングスタイル
+
+#### ファイル構成と責務分離
+
+- 各コンポーネントは単一責任を持つ。
+- ロジックは hooks/ に、共通処理は utils/ に配置する。
+- API 処理や外部連携は lib/ に切り出す。
+- ディレクトリは関数単位・機能単位で整理する。
+
+#### ファイル内の構成順
+
+1. エクスポートされたコンポーネント
+2. サブコンポーネント
+3. ヘルパー関数
+4. 静的データ
+5. 型定義
+
+### 命名規則
+
+- ディレクトリ名はケバブケース（例：components/auth-form）
+- コンポーネント名、型名は PascalCase
+- 関数名、変数名、React フックはキャメルケース
+- カスタムフックには use をプレフィックスとして付ける（例：useUser）
+
+- コンポーネントは名前付きエクスポートを使用し、default export は避ける
+
+### TypeScript の使い方
+
+- オブジェクト構造の定義には interface を使用する
+- プリミティブ型やユニオン型には type を使用する
+- Props の型定義には interface を使用する
+- 再利用可能な処理にはジェネリック型を使用する（例：function useFetch<T>()）
+
+### コメント方針
+
+- 自明なコードに過剰なコメントを付けない
+- 意図が伝わりにくい処理にはコメントを付ける
+- コンポーネントの冒頭などにはブロックコメントを用いる
+
+例：
+// ユーザー情報を表示するコンポーネント
+
+### UI 実装とスタイリング
+
+- UI 実装には TailwindCSS, shadcn/ui, Radix UI を使用する
+- カスタマイズは className と cn() 関数で行う
+- スタイリングは Tailwind のユーティリティクラスを使用し、生の CSS は避ける
+- レスポンシブ対応はモバイルファーストの方針とする
+- Framer Motion は必要最小限の用途に絞って使用する
+
+### パフォーマンス最適化
+
+- React Server Components（RSC）を優先して使用する
+- "use client" の使用は必要最小限とし、状態管理や副作用の用途に限定する
+- クライアントコンポーネントは Suspense でラップし、フォールバックを設ける
+- 不要な再レンダリングを防ぐため、useMemo / useCallback を適切に使用する
+- dynamic() を使用して、モーダルやチャートなど重要でない UI を遅延読み込みする
+- 画像は next/image を使用し、WebP形式、width/height指定、遅延読み込みを行う
+- URL 検索パラメータの管理には nuqs を使用する
+
+### Web Vitals 最適化
+
+- LCP / CLS / FID を意識し、UX の品質を担保する
+- レンダリング戦略は以下から適切に選定する：
+  - SSR（サーバーサイドレンダリング）
+  - ISR（増分静的再生成）
+  - SSG（静的サイト生成）
+
+### アクセシビリティ
+
+- aria-* 属性を適切に設定し、キーボード操作・フォーカス制御を考慮する
+- ラベル・役割・状態などを明示する
+
+### ベストプラクティス
+
+- default export を避け、名前付きエクスポートを徹底する
+- 技術選定の理由を説明できる状態にしておく
+- コンポーネントやロジックの責任を明確に保つ
+- 公式ドキュメントのベストプラクティスに準拠する
