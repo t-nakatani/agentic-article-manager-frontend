@@ -44,13 +44,19 @@ const serializeUser = (user: User): SerializableUser => ({
   photoURL: user.photoURL,
 })
 
-export const signInWithGoogle = createAsyncThunk("auth/signInWithGoogle", async (_, { rejectWithValue }) => {
+export const signInWithGoogle = createAsyncThunk("auth/signInWithGoogle", async (_, { rejectWithValue, dispatch }) => {
   try {
     const result = await signInWithPopup(auth, googleProvider)
+    
+    // ログイン成功時に即座に状態を更新
+    const serializedUser = serializeUser(result.user)
+    dispatch(setUser(serializedUser))
+    dispatch(setIsAnonymous(false))
+    
     toast.success("ログインしました", {
       description: `${result.user.displayName}さん、ようこそ！`,
     })
-    return serializeUser(result.user)
+    return serializedUser
   } catch (error) {
     toast.error("ログインに失敗しました", {
       description: "もう一度お試しください",
