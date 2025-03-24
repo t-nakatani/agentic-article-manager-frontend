@@ -96,7 +96,7 @@ const features = [
 ]
 
 export const metadata = generateSeoMetadata({
-  title: '拡張機能 α版',
+  title: '拡張機能',
   description: 'ブラウザで読んだ記事を簡単に保存・管理できる拡張機能',
   image: 'https://soi-v0.vercel.app/extension-og-image.png'
 })
@@ -109,7 +109,7 @@ export default function ExtensionPage() {
         <div className="container max-w-4xl py-8 space-y-8">
           {/* ヒーローセクション */}
           <Section className="text-center space-y-4">
-            <h1 className="text-4xl font-bold tracking-tight">拡張機能 α版</h1>
+            <h1 className="text-4xl font-bold tracking-tight">拡張機能</h1>
             <p className="text-xl text-muted-foreground">ブラウザで読んだ記事を簡単に保存・管理できます</p>
             <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center">
               {EXTENSION_URL === "https://example.com/extension-not-found.zip" ? (
