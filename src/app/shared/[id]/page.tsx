@@ -4,11 +4,9 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import bulkArticleAPI from "@/lib/api/bulk-article"
 import { Layout } from "@/components/layout/Layout"
-import { PublicArticleCardList } from "@/components/articles/public-card/public-article-card-list"
 import { LoadingState } from "@/app/shared/_components/loading-state"
 import { ErrorState } from "@/app/shared/_components/error-state"
-import { SharedCollectionHeader } from "@/app/shared/_components/collection/shared-collection-header"
-import { CtaSection } from "@/app/shared/_components/collection/cta-section"
+import { SharedCollectionContainer } from "@/app/shared/_components/collection/shared-collection-container"
 
 // 共有された記事の型定義
 interface SharedArticle {
@@ -104,15 +102,12 @@ export default function SharedArticlesPage() {
   return (
     <Layout>
       <div className="container max-w-4xl mx-auto py-8 px-4">
-        <SharedCollectionHeader 
-          title={sharedData.share_title} 
+        <SharedCollectionContainer
+          title={sharedData.share_title}
           articleCount={sharedData.shared_articles.length}
           shareId={shareId}
+          articles={articles}
         />
-        
-        <PublicArticleCardList articles={articles} />
-        
-        <CtaSection />
       </div>
     </Layout>
   )

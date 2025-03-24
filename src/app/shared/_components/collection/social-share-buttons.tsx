@@ -37,15 +37,6 @@ export function SocialShareButtons({ shareId }: SocialShareButtonsProps) {
         variant="outline" 
         size="sm" 
         className="border-blue-200 hover:border-blue-300 hover:bg-blue-50 text-blue-600"
-        onClick={shareToFacebook}
-      >
-        <Facebook className="h-4 w-4 mr-2" />
-        Facebook
-      </Button>
-      <Button 
-        variant="outline" 
-        size="sm" 
-        className="border-blue-200 hover:border-blue-300 hover:bg-blue-50 text-blue-600"
         onClick={shareToTwitter}
       >
         <Twitter className="h-4 w-4 mr-2" />
