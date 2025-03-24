@@ -1,5 +1,3 @@
-"use client"
-
 import Link from "next/link"
 import { Download, HelpCircle, Beaker } from "lucide-react"
 

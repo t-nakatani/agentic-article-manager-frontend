@@ -1,4 +1,4 @@
-import { Share, Eye } from "lucide-react"
+import { Share } from "lucide-react"
 import { SocialShareButtons } from "./social-share-buttons"
 import { Separator } from "@/components/ui/separator"
 import { PublicArticleCardList } from "@/components/articles/public-card/public-article-card-list"

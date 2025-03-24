@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Facebook, Twitter, Link, Check } from "lucide-react"
+import { Twitter, Link, Check } from "lucide-react"
 import { toast } from "sonner"
 
 interface SocialShareButtonsProps {

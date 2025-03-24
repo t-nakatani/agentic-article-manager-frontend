@@ -6,6 +6,7 @@ import { ArticleReaderContent } from "@/components/article-reader-content"
 export default function ArticleReaderPage() {
   return (
     <ClientPageWrapper>
+      <SpeedInsights/>
       <ArticleReaderContent />
     </ClientPageWrapper>
   )
