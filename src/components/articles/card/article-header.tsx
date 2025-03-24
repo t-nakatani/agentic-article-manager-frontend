@@ -1,5 +1,6 @@
 "use client"
 
+import type React from "react"
 import type { Article } from "@/types/article"
 import { ArticleMenu, MenuItem } from "./article-menu"
 import { useState } from "react"
@@ -14,6 +15,7 @@ import { Favicon } from "./components/favicon"
 import { ReadLaterButton } from "./components/read-later-button"
 import { createTagsMenuItem, createRegenerateMenuItem, createDeleteMenuItem } from "./components/article-menu-items"
 import { MemoButton } from "./components/memo-button"
+import articlesAPI from "@/lib/api/articles"
 
 interface ArticleHeaderProps {
   article: Article
@@ -69,6 +71,25 @@ export function ArticleHeader({
     }
   }
 
+  // タイトルクリック時の処理
+  const handleTitleClick = (e: React.MouseEvent) => {
+    // ユーザーが認証済みの場合、閲覧履歴を記録
+    if (user) {
+      try {
+        // デフォルトエクスポートされたインスタンスを使用
+        articlesAPI.recordArticleView(article.article_id, user.uid)
+          .catch((err: any) => console.error("記事閲覧の記録に失敗しました", err));
+      } catch (error) {
+        console.error("記事閲覧の記録中にエラーが発生しました", error);
+      }
+    }
+    
+    // 既存の処理を実行（親コンポーネントから渡された関数）
+    if (onTitleClick) {
+      onTitleClick(e);
+    }
+  };
+
   // メニュー項目を作成
   const menuItems: MenuItem[] = [
     createTagsMenuItem({ onShowTags: handleShowTags }),
@@ -82,7 +103,7 @@ export function ArticleHeader({
         <Favicon url={article.url} size={16} className="mt-0.5" />
         <h2 
           className="flex-1 text-sm font-semibold leading-tight hover:text-theme-600 dark:hover:text-theme-400 transition-colors line-clamp-1 sm:line-clamp-1 line-clamp-2 cursor-pointer"
-          onClick={onTitleClick}
+          onClick={handleTitleClick}
         >
           {article.title}
         </h2>
@@ -101,7 +122,7 @@ export function ArticleHeader({
         <MemoButton
           articleId={article.article_id}
           initialMemo={article.memo}
-          onToggle={onToggleMemo}
+          onToggle={onToggleMemo || (() => {})}
         />
         <ArticleMenu menuItems={menuItems} />
       </div>
@@ -119,8 +140,8 @@ export function ArticleHeader({
         open={showDeleteConfirm}
         onOpenChange={setShowDeleteConfirm}
         onConfirm={() => {
-          onDelete()
-          setShowDeleteConfirm(false)
+          if (onDelete) onDelete();
+          setShowDeleteConfirm(false);
         }}
       />
     </div>

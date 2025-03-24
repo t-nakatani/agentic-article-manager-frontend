@@ -73,6 +73,14 @@ class ArticlesAPI extends BaseAPIClient {
 
     return await response.json()
   }
+
+  // 記事の閲覧を記録する
+  async recordArticleView(articleId: string, userId: string) {
+    return this.fetch(`/articles/${articleId}/view`, {
+      method: 'POST',
+      body: JSON.stringify({ user_id: userId }),
+    })
+  }
 }
 
 const API_BASE_URL = "https://knowledge-pholio.ngrok.dev"
