@@ -50,7 +50,7 @@ export function LoginPageContent() {
         {/* ログインセクション */}
         <section className="space-y-4">
           <div>
-            <h2 className="text-2xl font-semibold tracking-tight">ログイン</h2>
+            <h2 className="text-2xl font-semibold tracking-tight">ログイン / 新規登録</h2>
             <p className="text-sm text-muted-foreground">アカウントにログインして記事を管理しましょう</p>
           </div>
           <Card>

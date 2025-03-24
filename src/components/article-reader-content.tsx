@@ -93,7 +93,7 @@ export function ArticleReaderContent() {
                 </CardDescription>
               </CardHeader>
               <CardFooter>
-                <Button onClick={signInWithGoogle}>ログインする</Button>
+                <Button onClick={signInWithGoogle}>ログイン / 新規登録</Button>
               </CardFooter>
             </Card>
           </div>
