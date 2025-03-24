@@ -7,6 +7,7 @@ import { FeatureCard } from "./components/feature-card"
 import { ChromeTab } from "./components/chrome-tab"
 import { IOSTab } from "./components/ios-tab"
 import { generateSeoMetadata } from '@/lib/metadata'
+import Image from "next/image"
 
 // 環境変数からURLを取得、未設定の場合はデフォルト値を使用
 const EXTENSION_URL = process.env.NEXT_PUBLIC_EXTENSION_URL || "https://example.com/extension-not-found.zip"
@@ -132,14 +133,44 @@ export default function ExtensionPage() {
             </div>
           </Section>
 
+          {/* スクリーンショット画像 */}
+          <Section title="アプリケーションのプレビュー" description="各プラットフォーム向けの拡張機能のスクリーンショットです。">
+            <div className="grid gap-6 sm:grid-cols-2">
+              <div className="space-y-2">
+                <div className="relative aspect-[2/1] overflow-hidden rounded-lg border shadow-sm">
+                  <Image 
+                    src="/chrome-extension.png" 
+                    alt="Chrome拡張機能のスクリーンショット" 
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 600px) 100vw, 50vw"
+                  />
+                </div>
+                <p className="text-sm text-center text-muted-foreground">Chrome拡張機能</p>
+              </div>
+              <div className="space-y-2">
+                <div className="relative aspect-[2/1] overflow-hidden rounded-lg border shadow-sm">
+                  <Image 
+                    src="/ios-shortcut.png" 
+                    alt="iOSショートカットのスクリーンショット" 
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 600px) 100vw, 50vw"
+                  />
+                </div>
+                <p className="text-sm text-center text-muted-foreground">iOSショートカット</p>
+              </div>
+            </div>
+          </Section>
+
           {/* 機能紹介 */}
-          <Section>
+          {/* <Section>
             <div className="grid gap-4 sm:grid-cols-3">
               {features.map((feature, i) => (
                 <FeatureCard key={i} {...feature} />
               ))}
             </div>
-          </Section>
+          </Section> */}
 
           {/* タブ切り替え */}
           <Section title="インストールと使い方" description="お使いの環境に合わせて手順をご確認ください。">
