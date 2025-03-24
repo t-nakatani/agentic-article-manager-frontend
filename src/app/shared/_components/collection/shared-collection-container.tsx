@@ -46,10 +46,6 @@ export function SharedCollectionContainer({
           <p className="text-blue-600">
             {articleCount}件の厳選された記事コレクション
           </p>
-          <div className="flex items-center bg-blue-100 px-3 py-1 rounded-full text-blue-700 text-sm transition-all duration-300 hover:bg-blue-200">
-            <Eye className="h-4 w-4 mr-1" />
-            <span>56回閲覧されています</span>
-          </div>
         </div>
         
         <Separator className="my-4 bg-blue-100" />
