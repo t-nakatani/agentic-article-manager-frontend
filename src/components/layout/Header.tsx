@@ -16,15 +16,10 @@ export function Header() {
   const isLoginPage = pathname === "/login"
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 max-w-screen-2xl items-center">
-        <div className="hidden sm:block sm:w-1/3"></div>
-        <div className="sm:w-1/3 flex sm:justify-center">
-          <Link
-            href="/"
-            className="flex items-center gap-2 transition-colors hover:text-theme-600 dark:hover:text-theme-400"
-            aria-label="Home"
-          >
+    <header className="sticky top-0 z-50 w-full border-b border-theme-100 dark:border-theme-800 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-14 items-center px-4 md:px-6">
+        <div className="mr-4 flex">
+          <Link href="/" className="mr-6 flex items-center space-x-2">
             <AppLogo />
           </Link>
         </div>
