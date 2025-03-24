@@ -1,4 +1,5 @@
 import { CardContent, CardDescription } from "@/components/ui/card"
+import { SharedArticleType } from "./types"
 
 interface PublicArticleBodyProps {
   article: SharedArticleType

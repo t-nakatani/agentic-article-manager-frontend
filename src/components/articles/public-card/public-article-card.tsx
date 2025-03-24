@@ -1,13 +1,9 @@
 import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { ExternalLink, BookmarkPlus, ThumbsUp, Share } from "lucide-react"
-import Link from "next/link"
 import { useState } from "react"
 import { toast } from "sonner"
-import { Favicon } from "../card/components/favicon"
-import { PublicArticleHeader } from "./public-article-header"
-import { PublicArticleBody } from "./public-article-body"
-import { PublicArticleFooter } from "./public-article-footer"
+import { PublicArticleHeader } from "@/components/articles/public-card/public-article-header"
+import { PublicArticleBody } from "@/components/articles/public-card/public-article-body"
+import { PublicArticleFooter } from "@/components/articles/public-card/public-article-footer"
 
 interface SharedArticleType {
   article_id: string;
