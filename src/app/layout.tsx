@@ -3,6 +3,8 @@ import { Toaster } from "sonner"
 import { ReduxProvider } from "@/components/providers/redux-provider"
 import { AuthStateListener } from "@/components/auth/AuthStateListener"
 import { generateSeoMetadata } from "@/lib/metadata"
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react"
 import "./globals.css"
 
 const title = "Soi - あなたが読んだ記事はAIが管理"
@@ -39,6 +41,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AuthStateListener>
             {children}
             <Toaster />
+            <SpeedInsights />
+            <Analytics />
           </AuthStateListener>
         </ReduxProvider>
       </body>
