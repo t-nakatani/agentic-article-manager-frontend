@@ -57,7 +57,7 @@ export function ArticleMemo({ articleId }: ArticleMemoProps) {
         placeholder="この記事についてメモを残しましょう..."
         value={memoEdit}
         onChange={handleMemoChange}
-        className="min-h-[80px] resize-none mb-2"
+        className="min-h-[80px] resize-vertical mb-2"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={handleKeyDown}
       />
