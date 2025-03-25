@@ -1,12 +1,14 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Loader2, Share, ExternalLink } from "lucide-react"
+import { Share, ExternalLink } from "lucide-react"
 import { toast } from "sonner"
 import { useAppSelector } from "@/lib/redux/hooks"
 import bulkArticleAPI from "@/lib/api/bulk-article"
 import { Button } from "@/components/ui/button"
 import { Copy } from "lucide-react"
+import { Layout } from "@/components/layout/Layout"
+import { AuthWrapper } from "@/components/auth/AuthWrapper"
 
 interface ShareItem {
   share_id: string;
@@ -82,78 +84,112 @@ export default function MySharesPage() {
   
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <Loader2 className="h-8 w-8 animate-spin mb-4" />
-        <p className="text-lg font-medium">共有リストを読み込んでいます...</p>
-      </div>
+      <AuthWrapper>
+        <Layout variant="compact" headerVariant="default">
+          <div className="space-y-6">
+            {/* スケルトンUI: ヘッダー */}
+            <div>
+              <div className="h-8 w-2/5 bg-indigo-200/50 dark:bg-indigo-800/30 rounded-lg animate-pulse mb-2"></div>
+              <div className="h-4 w-3/5 bg-indigo-100/70 dark:bg-indigo-800/20 rounded animate-pulse"></div>
+            </div>
+            
+            {/* スケルトンUI: 共有リスト */}
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div 
+                  key={i}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg border border-indigo-200/70 dark:border-indigo-800/50 bg-white dark:bg-indigo-950/20"
+                >
+                  <div className="mb-4 sm:mb-0 w-full sm:w-1/2">
+                    <div className="h-5 w-4/5 bg-indigo-200/60 dark:bg-indigo-800/30 rounded animate-pulse mb-2"></div>
+                    <div className="h-4 w-1/2 bg-indigo-100/50 dark:bg-indigo-800/20 rounded animate-pulse"></div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="h-8 w-24 bg-indigo-100/70 dark:bg-indigo-800/30 rounded animate-pulse"></div>
+                    <div className="h-8 w-16 bg-indigo-300/60 dark:bg-indigo-700/50 rounded animate-pulse"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Layout>
+      </AuthWrapper>
     )
   }
   
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <h1 className="text-2xl font-bold mb-4">エラーが発生しました</h1>
-        <p className="text-lg text-muted-foreground">{error}</p>
-      </div>
+      <AuthWrapper>
+        <Layout variant="compact" headerVariant="default">
+          <div className="flex flex-col items-center justify-center py-16">
+            <div className="bg-red-50/50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 rounded-lg p-6 text-center max-w-md">
+              <h1 className="text-2xl font-bold text-red-700 dark:text-red-300 mb-4">エラーが発生しました</h1>
+              <p className="text-lg text-muted-foreground">{error}</p>
+            </div>
+          </div>
+        </Layout>
+      </AuthWrapper>
     )
   }
   
   return (
-    <div className="container max-w-4xl mx-auto py-8 px-4">
-      <header className="mb-8">
-        <h1 className="text-2xl font-bold mb-2">あなたの共有リスト</h1>
-        <p className="text-muted-foreground">
-          あなたが作成した共有記事コレクションのリストです
-        </p>
-      </header>
-      
-      {shares.length === 0 ? (
-        <div className="text-center py-12">
-          <Share className="h-12 w-12 text-muted-foreground mx-auto mb-4 opacity-50" />
-          <h2 className="text-xl font-medium mb-2">共有コレクションがありません</h2>
-          <p className="text-muted-foreground">
-            記事を選択して共有すると、ここに表示されます
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {shares.map(share => (
-            <div
-              key={share.share_id}
-              className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg border bg-card"
-            >
-              <div className="mb-4 sm:mb-0">
-                <h3 className="font-medium">{share.share_title}</h3>
-                <p className="text-sm text-muted-foreground truncate">
-                  ID: {share.share_id}
-                </p>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => copyShareUrl(share.share_id)}
-                >
-                  {copiedId === share.share_id ? "コピー済み" : "URLをコピー"}
-                  {copiedId === share.share_id ? (
-                    <Copy className="ml-2 h-4 w-4" />
-                  ) : (
-                    <Copy className="ml-2 h-4 w-4" />
-                  )}
-                </Button>
-                <Button
-                  variant="default"
-                  size="sm"
-                  onClick={() => openSharedArticles(share.share_id)}
-                >
-                  開く
-                  <ExternalLink className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
+    <AuthWrapper>
+      <Layout variant="compact" headerVariant="default">
+        <div className="space-y-6 animate-fadeIn">
+          <h1 className="text-2xl font-bold tracking-tight text-indigo-800 dark:text-indigo-300">あなたの共有リスト</h1>
+          <p className="text-muted-foreground">あなたが作成した共有記事コレクションのリストです</p>
+          
+          {shares.length === 0 ? (
+            <div className="text-center py-12 border rounded-lg border-indigo-200 dark:border-indigo-800 bg-indigo-50/50 dark:bg-indigo-950/20">
+              <Share className="h-12 w-12 text-indigo-400 dark:text-indigo-500 mx-auto mb-4 opacity-70" />
+              <h2 className="text-xl font-medium mb-2 text-indigo-700 dark:text-indigo-300">共有コレクションがありません</h2>
+              <p className="text-muted-foreground">
+                記事を選択して共有すると、ここに表示されます
+              </p>
             </div>
-          ))}
+          ) : (
+            <div className="space-y-4">
+              {shares.map(share => (
+                <div
+                  key={share.share_id}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg border border-indigo-200 dark:border-indigo-800 bg-white dark:bg-indigo-950/20"
+                >
+                  <div className="mb-4 sm:mb-0">
+                    <h3 className="font-medium text-indigo-700 dark:text-indigo-300">{share.share_title}</h3>
+                    <p className="text-sm text-muted-foreground truncate">
+                      ID: {share.share_id}
+                    </p>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => copyShareUrl(share.share_id)}
+                      className="border-indigo-200 dark:border-indigo-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30"
+                    >
+                      {copiedId === share.share_id ? "コピー済み" : "URLをコピー"}
+                      {copiedId === share.share_id ? (
+                        <Copy className="ml-2 h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                      ) : (
+                        <Copy className="ml-2 h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                      )}
+                    </Button>
+                    <Button
+                      variant="default"
+                      size="sm"
+                      className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600"
+                      onClick={() => openSharedArticles(share.share_id)}
+                    >
+                      開く
+                      <ExternalLink className="ml-2 h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      )}
-    </div>
+      </Layout>
+    </AuthWrapper>
   )
 } 
