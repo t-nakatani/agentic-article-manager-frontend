@@ -20,14 +20,16 @@ export function TrendArticlesContainer({ onDeleteArticle }: TrendArticlesContain
   if (isTrendLoading) {
     return (
       <div className="mb-6">
-        <div className="border-2 border-theme-200 dark:border-theme-800 rounded-lg p-4 bg-theme-50 dark:bg-theme-900">
-          <div className="flex items-center gap-2 mb-4">
+        <div className="border border-indigo-200 dark:border-indigo-800 rounded-lg p-4 bg-indigo-50 dark:bg-indigo-950 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <Skeleton className="h-5 w-5" />
             <Skeleton className="h-6 w-32" />
-            <Skeleton className="h-5 w-24" />
+            <Skeleton className="h-5 w-20 rounded-full" />
           </div>
-          <div className="space-y-2">
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-24 w-full" />
+          <div className="space-y-3">
+            <Skeleton className="h-20 w-full rounded-md" />
+            <Skeleton className="h-20 w-full rounded-md" />
+            <Skeleton className="h-20 w-full rounded-md" />
           </div>
         </div>
       </div>
@@ -40,7 +42,7 @@ export function TrendArticlesContainer({ onDeleteArticle }: TrendArticlesContain
   }
 
   return (
-    <div className="mb-6">
+    <div className="mb-6 space-y-2.5">
       <TrendArticles articles={trendArticles} onDelete={onDeleteArticle} />
     </div>
   )
