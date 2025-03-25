@@ -1,4 +1,3 @@
-import { CardContent, CardDescription } from "@/components/ui/card"
 import { SharedArticleType } from "./types"
 
 interface PublicArticleBodyProps {
@@ -7,18 +6,16 @@ interface PublicArticleBodyProps {
 
 export function PublicArticleBody({ article }: PublicArticleBodyProps) {
   return (
-    <CardContent>
-      <CardDescription className="text-sm text-gray-600 mb-3 min-h-[5rem]">
-        <p className="line-clamp-3">
-          {article.one_line_summary}
-        </p>
-      </CardDescription>
-      <div className="h-1 w-full bg-gray-100 rounded-full mb-4">
+    <div className="px-2.5 py-1">
+      <p className="text-xs text-theme-700 dark:text-theme-300 line-clamp-2">
+        {article.one_line_summary}
+      </p>
+      <div className="h-1 w-full bg-gray-100 dark:bg-gray-800 rounded-full mt-2">
         <div 
           className="h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full transition-all duration-500" 
           style={{ width: `${Math.floor(Math.random() * 61) + 40}%` }} 
         />
       </div>
-    </CardContent>
+    </div>
   )
 } 
