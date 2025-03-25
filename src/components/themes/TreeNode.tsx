@@ -3,7 +3,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { CollapseButton } from "./CollapseButton"
-import { ThemeNodeActions } from "./ThemeNodeActions"
+import { ThemeActionsMenu } from "./theme-actions-menu"
 import type { TreeNode } from "@/types/theme"
 
 interface TreeNodeProps {
@@ -114,7 +114,7 @@ export function TreeNodeComponent({
           </div>
 
           {!isReadOnly && (
-            <ThemeNodeActions
+            <ThemeActionsMenu
               nodeId={node.id}
               nodeName={node.label}
               isRootNode={isRootNode}

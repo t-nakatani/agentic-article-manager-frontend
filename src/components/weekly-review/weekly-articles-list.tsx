@@ -9,6 +9,7 @@ import Link from "next/link"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ChevronDown, ChevronUp } from "lucide-react"
+import { useReduxArticles } from "@/hooks/useReduxArticles"
 
 interface WeeklyArticlesListProps {
   articles: Article[]
@@ -24,10 +25,10 @@ export function WeeklyArticlesList({
   onDeleteArticle,
 }: WeeklyArticlesListProps) {
   const [expanded, setExpanded] = useState(true)
+  const { toggleFavorite } = useReduxArticles()
 
-  // お気に入りの切り替え用のダミー関数
-  const handleFavoriteToggle = (articleId: string, isFavorited: boolean) => {
-    // 実際の実装ではRedux actionをディスパッチする
+  const handleFavoriteToggle = async (articleId: string, isFavorited: boolean) => {
+    await toggleFavorite(articleId, isFavorited)
   }
 
   if (isLoading) {
