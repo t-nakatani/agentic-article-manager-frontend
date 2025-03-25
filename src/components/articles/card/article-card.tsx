@@ -87,9 +87,9 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
     <div 
       className={`flex flex-col rounded-md border ${
         isSelected 
-          ? "border-theme-500 dark:border-theme-400 bg-theme-50/60 dark:bg-theme-900/20 shadow-md" 
-          : "border-theme-200 dark:border-theme-800 bg-card"
-      } overflow-hidden hover:border-theme-300 dark:hover:border-theme-700 transition-all duration-200 shadow-sm cursor-pointer`}
+          ? "border-indigo-500 dark:border-indigo-400 bg-indigo-50/60 dark:bg-indigo-900/20 shadow-md" 
+          : "border-indigo-200 dark:border-indigo-800 bg-card"
+      } overflow-hidden hover:border-indigo-300 hover:bg-indigo-50/30 dark:hover:border-indigo-700 dark:hover:bg-indigo-900/10 transition-all duration-200 shadow-sm cursor-pointer`}
       onClick={handleCardClick}
     >
       <div>
@@ -114,7 +114,7 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
       {/* メモセクション - 表示状態はReduxで管理 */}
       {memoVisible && (
         <>
-          <div className="border-t border-theme-200 dark:border-theme-800 mx-2.5 my-0"></div>
+          <div className="border-t border-indigo-200 dark:border-indigo-800 mx-2.5 my-0"></div>
           <ArticleMemo articleId={article.article_id} />
         </>
       )}
