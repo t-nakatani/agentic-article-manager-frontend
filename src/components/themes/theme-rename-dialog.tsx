@@ -13,56 +13,77 @@ import { Input } from "@/components/ui/input"
 import { useState, useEffect } from "react"
 
 interface ThemeEditDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
   onConfirm: (newName: string) => void
-  currentName: string
+  currentName?: string
   isNew?: boolean
+  // 新しいインターフェース用
+  title?: string
+  confirmLabel?: string
+  nodeName?: string
+  onCancel?: () => void
+  isOpen?: boolean
 }
 
 export function ThemeEditDialog({ 
   open, 
   onOpenChange, 
   onConfirm, 
-  currentName, 
-  isNew = false 
+  currentName = "", 
+  isNew = false,
+  // 新しいインターフェース
+  title: customTitle,
+  confirmLabel,
+  nodeName,
+  onCancel,
+  isOpen,
 }: ThemeEditDialogProps) {
-  const [name, setName] = useState(currentName)
+  // 古いAPIと新しいAPIの互換性を保つ
+  const isDialogOpen = isOpen !== undefined ? isOpen : open
+  const name = nodeName !== undefined ? nodeName : currentName
+  const [inputValue, setInputValue] = useState(name)
 
-  // ダイアログが開かれたときに現在の名前をセット
+  // ダイアログが開かれたときに名前をセット
   useEffect(() => {
-    if (open) {
-      setName(currentName)
+    if (isDialogOpen) {
+      setInputValue(name)
     }
-  }, [open, currentName])
+  }, [isDialogOpen, name])
 
   const handleConfirm = () => {
-    onConfirm(name)
-    onOpenChange(false)
+    onConfirm(inputValue)
+    if (onOpenChange) onOpenChange(false)
+    if (onCancel) onCancel()
   }
 
-  const title = isNew ? "テーマの作成" : "テーマ名の変更"
+  const handleCancel = () => {
+    if (onOpenChange) onOpenChange(false)
+    if (onCancel) onCancel()
+  }
+
+  const dialogTitle = customTitle || (isNew ? "テーマの作成" : "テーマ名の変更")
   const description = isNew ? "新しいテーマ名を入力してください。" : "新しいテーマ名を入力してください。"
-  const buttonText = isNew ? "作成" : "変更"
+  const buttonText = confirmLabel || (isNew ? "作成" : "変更")
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={isDialogOpen} onOpenChange={onOpenChange || handleCancel}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle>{dialogTitle}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <div className="py-4">
           <Input 
-            value={name} 
-            onChange={(e) => setName(e.target.value)} 
+            value={inputValue} 
+            onChange={(e) => setInputValue(e.target.value)} 
             placeholder="テーマ名" 
             className="w-full" 
             autoFocus
           />
         </div>
         <DialogFooter className="gap-2 sm:gap-0">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button variant="outline" onClick={handleCancel}>
             キャンセル
           </Button>
           <Button onClick={handleConfirm}>{buttonText}</Button>
@@ -71,4 +92,7 @@ export function ThemeEditDialog({
     </Dialog>
   )
 }
+
+// 後方互換性のために旧コンポーネントをエクスポート
+export { ThemeEditDialog as ThemeRenameDialog }
 

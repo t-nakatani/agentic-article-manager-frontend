@@ -9,7 +9,7 @@ interface ThemeTreeProps {
   selectedTheme: string | null
 }
 
-export function ThemeTree({ onSelectTheme, selectedTheme }) {
+export function ThemeTree({ onSelectTheme, selectedTheme }: ThemeTreeProps) {
   const {
     themeTree,
     isLoading,
@@ -52,15 +52,15 @@ export function ThemeTree({ onSelectTheme, selectedTheme }) {
   }
 
   if (isLoading) {
-    return <div>Loading themes...</div>
+    return <div className="text-muted-foreground">テーマを読み込み中...</div>
   }
 
   return (
-    <div className="sticky top-[57px] rounded-lg border bg-white dark:bg-gray-950">
+    <div className="sticky top-[57px] rounded-lg border bg-white dark:bg-gray-950 animate-fadeIn">
       <div className="flex items-center justify-between border-b p-4">
-        <h2 className="text-lg font-semibold">Themes</h2>
+        <h2 className="text-lg font-bold tracking-tight text-indigo-800 dark:text-indigo-300">テーマ</h2>
       </div>
-      <div className="p-4">
+      <div className="p-4 space-y-2">
         {themeTree.map((node) => (
           <TreeNodeComponent
             key={node.id}

@@ -9,27 +9,51 @@ import {
 import { Button } from "@/components/ui/button"
 
 interface ThemeDeleteDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  // 古いインターフェース
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+  themeName?: string
+  // 新しいインターフェース
+  nodeName?: string
+  isOpen?: boolean
+  onCancel?: () => void
   onConfirm: () => void
-  themeName: string
 }
 
-export function ThemeDeleteDialog({ open, onOpenChange, onConfirm, themeName }: ThemeDeleteDialogProps) {
+export function ThemeDeleteDialog({ 
+  open, 
+  onOpenChange, 
+  onConfirm, 
+  themeName,
+  // 新しいインターフェース
+  nodeName,
+  isOpen,
+  onCancel
+}: ThemeDeleteDialogProps) {
+  // 古いAPIと新しいAPIの互換性を保つ
+  const isDialogOpen = isOpen !== undefined ? isOpen : open
+  const displayName = nodeName || themeName || ""
+
   const handleConfirm = () => {
     onConfirm()
-    onOpenChange(false)
+    if (onOpenChange) onOpenChange(false)
+    if (onCancel) onCancel()
+  }
+
+  const handleCancel = () => {
+    if (onOpenChange) onOpenChange(false)
+    if (onCancel) onCancel()
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={isDialogOpen} onOpenChange={onOpenChange || handleCancel}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>テーマを削除しますか？</DialogTitle>
-          <DialogDescription className="line-clamp-2">{themeName}</DialogDescription>
+          <DialogDescription className="line-clamp-2">{displayName}</DialogDescription>
         </DialogHeader>
         <DialogFooter className="gap-2 sm:gap-0">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button variant="outline" onClick={handleCancel}>
             キャンセル
           </Button>
           <Button variant="destructive" onClick={handleConfirm}>

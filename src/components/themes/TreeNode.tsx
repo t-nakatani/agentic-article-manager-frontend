@@ -97,7 +97,7 @@ export function TreeNodeComponent({
             "shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] dark:shadow-[0_1px_2px_0_rgba(0,0,0,0.25)]",
             "transition-all duration-200",
             "hover:shadow-[0_2px_4px_0_rgba(0,0,0,0.1)] dark:hover:shadow-[0_2px_4px_0_rgba(0,0,0,0.3)]",
-            isSelected && "bg-theme-100 dark:bg-theme-800",
+            isSelected && "bg-indigo-100 dark:bg-indigo-900/50",
             isRootNode && !isSelected && "bg-gray-100 dark:bg-gray-800",
             !isRootNode && !isSelected && "bg-white dark:bg-gray-950",
           )}
@@ -106,7 +106,8 @@ export function TreeNodeComponent({
             <span className={cn(
               "text-sm", 
               isRootNode && "font-bold",
-              isRootNode && !isSelected && "text-gray-700 dark:text-gray-300"
+              isRootNode && !isSelected && "text-gray-700 dark:text-gray-300",
+              isSelected && "text-indigo-800 dark:text-indigo-300"
             )}>
               {node.label}
             </span>
@@ -132,11 +133,11 @@ export function TreeNodeComponent({
           className={cn(
             "relative ml-2 pl-2 mt-1",
             "before:absolute before:left-0 before:top-0 before:bottom-4",
-            "before:w-px before:bg-theme-200 dark:before:bg-theme-700",
+            "before:w-px before:bg-indigo-200 dark:before:bg-indigo-700",
             !isExpanded && "hidden",
           )}
         >
-          {node.children.map((child) => (
+          {node.children?.map((child) => (
             <TreeNodeComponent
               key={child.id}
               node={child}
