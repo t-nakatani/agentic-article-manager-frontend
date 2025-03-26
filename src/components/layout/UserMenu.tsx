@@ -26,10 +26,13 @@ export function UserMenu({ user }: UserMenuProps) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <Avatar className="h-8 w-8">
-            <AvatarImage src={user.photoURL || undefined} alt={user.displayName || "User avatar"} />
-            <AvatarFallback>{user.displayName?.[0] || "U"}</AvatarFallback>
-          </Avatar>
+          <div className="relative">
+            <div className="absolute -inset-1 rounded-full border-2 border-gray-400 dark:border-gray-100"></div>
+            <Avatar className="h-8 w-8">
+              <AvatarImage src={user.photoURL || undefined} alt={user.displayName || "User avatar"} />
+              <AvatarFallback>{user.displayName?.[0] || "U"}</AvatarFallback>
+            </Avatar>
+          </div>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
