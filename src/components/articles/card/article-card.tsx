@@ -9,6 +9,8 @@ import { toggleArticleSelection } from "@/lib/redux/features/articleFilters/arti
 import { selectArticleMemoState } from "@/lib/redux/features/articles/selectors"
 import { ArticleMemo } from "../memo/article-memo"
 import { setArticleMemoVisible } from "@/lib/redux/features/articles/articlesSlice"
+import { useReduxAuth } from "@/hooks/useReduxAuth"
+import articlesAPI from "@/lib/api/articles"
 
 interface ArticleCardProps {
   article: Article
@@ -21,6 +23,7 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
   const dispatch = useAppDispatch()
   const isSelectionMode = useAppSelector(state => state.articleFilters.isSelectionMode)
   const selectedArticleIds = useAppSelector(state => state.articleFilters.selectedArticleIds)
+  const { user } = useReduxAuth()
   
   // メモの表示状態をReduxから取得
   const { memoVisible } = useAppSelector(state => 
@@ -45,19 +48,6 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
     // ここでは何もしない
   }
 
-  const handleTitleClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // 親要素へのイベントバブリングを停止
-    
-    // 選択モードの場合は記事選択の挙動を優先
-    if (isSelectionMode) {
-      dispatch(toggleArticleSelection(article.article_id));
-      return;
-    }
-    
-    // 通常モードの場合は記事ページを開く
-    window.open(article.url, "_blank");
-  };
-
   const handleCardClick = (e: React.MouseEvent) => {
     // 選択モードの場合
     if (isSelectionMode) {
@@ -76,11 +66,18 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
       return;
     }
     
-    // メモの表示/非表示を切り替え
-    dispatch(setArticleMemoVisible({ 
-      articleId: article.article_id, 
-      isVisible: !memoVisible 
-    }));
+    // ユーザーが認証済みの場合、閲覧履歴を記録
+    if (user) {
+      try {
+        articlesAPI.recordArticleView(article.article_id, user.uid)
+          .catch((err: any) => console.error("記事閲覧の記録に失敗しました", err));
+      } catch (error) {
+        console.error("記事閲覧の記録中にエラーが発生しました", error);
+      }
+    }
+    
+    // 記事ページを開く（タイトルクリックと同じ挙動）
+    window.open(article.url, "_blank");
   }
 
   return (
@@ -100,7 +97,6 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
           onDelete={handleDelete}
           onToggleFavorite={handleFavoriteToggle}
           onToggleMemo={handleMemoToggle}
-          onTitleClick={handleTitleClick}
         />
         
         <ArticleFooter article={article} />
