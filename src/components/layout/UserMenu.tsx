@@ -28,7 +28,7 @@ export function UserMenu({ user }: UserMenuProps) {
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <div className="relative">
             <div className="absolute -inset-1 rounded-full border-2 border-gray-400 dark:border-gray-100"></div>
-            <Avatar className="h-8 w-8">
+            <Avatar className="h-10 w-10">
               <AvatarImage src={user.photoURL || undefined} alt={user.displayName || "User avatar"} />
               <AvatarFallback>{user.displayName?.[0] || "U"}</AvatarFallback>
             </Avatar>
