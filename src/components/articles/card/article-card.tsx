@@ -85,11 +85,13 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
 
   return (
     <div 
-      className={`flex flex-col rounded-md border ${
-        isSelected 
-          ? "border-indigo-500 dark:border-indigo-400 bg-indigo-50/60 dark:bg-indigo-900/20 shadow-md" 
-          : "border-indigo-200 dark:border-indigo-800 bg-card"
-      } overflow-hidden hover:border-indigo-300 hover:bg-indigo-50/30 dark:hover:border-indigo-700 dark:hover:bg-indigo-900/10 transition-all duration-200 shadow-sm cursor-pointer`}
+      className={`
+        ${isSelected 
+          ? "bg-indigo-50/60 dark:bg-indigo-900/20" 
+          : "bg-transparent"
+        } 
+        hover:bg-indigo-50/30 dark:hover:bg-indigo-900/10 transition-all duration-200 cursor-pointer
+      `}
       onClick={handleCardClick}
     >
       <div>
@@ -97,16 +99,9 @@ export function ArticleCard({ article, onDelete, onFavoriteToggle }: ArticleCard
           article={article}
           onDelete={handleDelete}
           onToggleFavorite={handleFavoriteToggle}
-          // onToggleReadLater={handleReadLaterToggle}
           onToggleMemo={handleMemoToggle}
           onTitleClick={handleTitleClick}
         />
-        
-        {/* <div className="px-2.5 py-1">
-          <p className="text-sm text-theme-700 dark:text-theme-300 line-clamp-2">
-            {article.one_line_summary}
-          </p>
-        </div> */}
         
         <ArticleFooter article={article} />
       </div>

@@ -60,10 +60,16 @@ export function ArticleList({
 
   return (
     <div className="space-y-3">
-      {/* 通常の記事一覧 */}
-      <div className="grid gap-2.5 animate-fadeIn">
-        {articles.map((article) => (
-          <ArticleCard key={article.article_id} article={article} onDelete={onDeleteArticle} />
+      {/* シート形式の記事一覧 */}
+      <div className="rounded-lg border border-indigo-200 dark:border-indigo-800 bg-card shadow-sm animate-fadeIn overflow-hidden">
+        {articles.map((article, index) => (
+          <div key={article.article_id}>
+            <ArticleCard article={article} onDelete={onDeleteArticle} />
+            {/* 最後の項目以外にセパレータを表示 */}
+            {index < articles.length - 1 && (
+              <div className="border-t border-indigo-100 dark:border-indigo-900"></div>
+            )}
+          </div>
         ))}
       </div>
       
