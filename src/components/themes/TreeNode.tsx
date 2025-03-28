@@ -122,7 +122,7 @@ export function TreeNodeComponent({
               onRename={handleRename}
               onDelete={handleDelete}
               onExport={handleExport}
-              className="opacity-0 group-hover:opacity-100 hover:opacity-100"
+              className="opacity-60 group-hover:opacity-100 hover:opacity-100"
             />
           )}
         </div>
