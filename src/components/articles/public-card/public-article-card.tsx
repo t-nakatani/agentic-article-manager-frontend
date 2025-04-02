@@ -1,4 +1,5 @@
-import { Card } from "@/components/ui/card"
+"use client"
+
 import { useState } from "react"
 import { toast } from "sonner"
 import { PublicArticleHeader } from "@/components/articles/public-card/public-article-header"
@@ -28,7 +29,7 @@ export function PublicArticleCard({ article }: PublicArticleCardProps) {
   
   return (
     <div 
-      className="flex flex-col p-1.5 md:flex-row rounded-md border border-indigo-200 dark:border-indigo-800 bg-card overflow-hidden hover:border-indigo-300 hover:bg-indigo-50/30 dark:hover:border-indigo-700 dark:hover:bg-indigo-900/10 transition-all duration-200 shadow-sm cursor-pointer"
+      className="flex flex-col p-1.5 md:flex-row rounded-md bg-card overflow-hidden hover:border-indigo-300 hover:bg-indigo-50/30 dark:hover:border-indigo-700 dark:hover:bg-indigo-900/10 transition-all duration-200 shadow-sm cursor-pointer"
       onClick={handleCardClick}
     >
       <div className="flex-1">
