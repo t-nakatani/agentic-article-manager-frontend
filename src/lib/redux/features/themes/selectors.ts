@@ -1,44 +1,81 @@
 import { createSelector } from "@reduxjs/toolkit"
 import type { RootState } from "@/lib/redux/store"
 import type { TreeNode } from "@/types/theme"
-import { convertFlowNodesToTreeNodes } from "@/lib/theme-utils"
 
 // 基本セレクター
-const selectThemeNodes = (state: RootState) => state.themes.nodes
-const selectThemeEdges = (state: RootState) => state.themes.edges
+const selectThemesState = (state: RootState) => state.themes
 const selectThemesStatus = (state: RootState) => state.themes.status
 const selectThemesError = (state: RootState) => state.themes.error
 const selectSelectedTheme = (state: RootState) => state.themes.selectedTheme
 
-// メモ化されたセレクター: ツリー構造に変換されたテーマ
-export const selectThemeTree = createSelector([selectThemeNodes, selectThemeEdges], (nodes, edges): TreeNode[] => {
-  return convertFlowNodesToTreeNodes(nodes, edges)
-})
+// メモ化されたセレクター: テーマツリー
+export const selectThemeTree = createSelector(
+  [selectThemesState],
+  (themesState): TreeNode[] => themesState.themeTree || []
+)
 
 // ローディング状態のセレクター
 export const selectIsThemesLoading = createSelector([selectThemesStatus], (status): boolean => status === "loading")
 
+// Helper function to find a node by ID in the tree
+const findNodeById = (nodes: TreeNode[], id: string): TreeNode | null => {
+  if (id === "all") {
+      // Assuming the root "all" node is always the first element if present
+      return nodes.length > 0 && nodes[0].id === "all" ? nodes[0] : null;
+  }
+  for (const node of nodes) {
+    if (node.id === id) {
+      return node;
+    }
+    if (node.children) {
+      const found = findNodeById(node.children, id);
+      if (found) {
+        return found;
+      }
+    }
+  }
+  return null;
+};
+
+// Helper function to find a node by label (case-insensitive) in the tree
+const findNodeByLabel = (nodes: TreeNode[], label: string): TreeNode | null => {
+  const normalizedLabel = label.toLowerCase();
+   if (normalizedLabel === "all") {
+     return nodes.length > 0 && nodes[0].id === "all" ? nodes[0] : null;
+   }
+  for (const node of nodes) {
+    if (node.label.toLowerCase() === normalizedLabel) {
+      return node;
+    }
+    if (node.children) {
+      const found = findNodeByLabel(node.children, label);
+      if (found) {
+        return found;
+      }
+    }
+  }
+  return null;
+};
+
 // テーマIDからテーマ名を取得するセレクター
 export const selectThemeNameById = createSelector(
-  [selectThemeNodes, (_, themeId: string) => themeId],
-  (nodes, themeId): string | null => {
-    if (themeId === "all") return "all"
+  [selectThemeTree, (_, themeId: string | null) => themeId],
+  (tree, themeId): string | null => {
+    if (!themeId) return null;
     
-    const node = nodes.find(node => node.id === themeId)
-    return node ? node.data.label : null
+    const node = findNodeById(tree, themeId);
+    return node ? node.label : null;
   }
 )
 
 // テーマ名からテーマIDを取得するセレクター
 export const selectThemeIdByName = createSelector(
-  [selectThemeNodes, (_, themeName: string) => themeName],
-  (nodes, themeName): string | null => {
-    if (themeName === "all") return "all"
+  [selectThemeTree, (_, themeName: string | null) => themeName],
+  (tree, themeName): string | null => {
+    if (!themeName) return null;
     
-    // 大文字小文字を区別せずに比較
-    const normalizedName = themeName.toLowerCase()
-    const node = nodes.find(node => node.data.label.toLowerCase() === normalizedName)
-    return node ? node.id : null
+    const node = findNodeByLabel(tree, themeName);
+    return node ? node.id : null;
   }
 )
 

@@ -15,4 +15,3 @@ export type TreeAction =
 export interface ThemeData {
   [key: string]: ThemeData
 }
-

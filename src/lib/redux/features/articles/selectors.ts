@@ -2,6 +2,7 @@ import { createSelector } from "@reduxjs/toolkit"
 import type { RootState } from "@/lib/redux/store"
 import type { Article } from "@/lib/api/articles"
 import { selectThemeNameById } from "@/lib/redux/features/themes/selectors"
+import type { TreeNode } from "@/types/theme"
 
 // 基本セレクター
 export const selectArticles = (state: RootState) => state.articles.items
@@ -50,20 +51,60 @@ export const selectFilteredArticlesByTheme = createSelector(
 
 // 指定されたテーマIDとその子孫テーマのIDをすべて取得する関数
 const getThemeAndChildrenIds = (state: RootState, themeId: string): string[] => {
-  const result = [themeId]
-  const edges = state.themes.edges
-  
-  // 再帰的に子テーマを探索する関数
-  const findChildren = (parentId: string) => {
-    const childEdges = edges.filter(edge => edge.source === parentId)
-    
-    childEdges.forEach(edge => {
-      result.push(edge.target)
-      findChildren(edge.target)
-    })
+  const result: string[] = []
+  const themeTree = state.themes.themeTree
+
+  // TreeNode を再帰的に探索する関数
+  const findNodeAndChildren = (nodes: TreeNode[], targetId: string): boolean => {
+    for (const node of nodes) {
+      if (node.id === targetId) {
+        // ターゲットノードを見つけたら、そのノードとすべての子孫ノードのIDを収集
+        collectAllIds(node, result)
+        return true // 見つかったことを示す
+      }
+      // 子ノードを再帰的に探索
+      if (node.children && findNodeAndChildren(node.children, targetId)) {
+        return true // 子孫で見つかった場合も true を返す
+      }
+    }
+    return false // 見つからなかった
   }
+
+  // 指定されたノードとそのすべての子孫ノードのIDを収集するヘルパー関数
+  const collectAllIds = (node: TreeNode, idCollector: string[]) => {
+    idCollector.push(node.id)
+    if (node.children) {
+      node.children.forEach((child: TreeNode) => collectAllIds(child, idCollector))
+    }
+  }
+
+  // themeId が 'all' の場合は、すべてのテーマIDを収集（'all' を除く）
+  if (themeId === "all") {
+    const allIds: string[] = []
+    const collectAllThemeIds = (nodes: TreeNode[]) => {
+        nodes.forEach(node => {
+            if (node.id !== "all") { // 'all' 自体は含めない
+                allIds.push(node.id);
+                if (node.children) {
+                    collectAllThemeIds(node.children);
+                }
+            } else if (node.children) { // 'all' ノードの子から探索を開始
+                collectAllThemeIds(node.children);
+            }
+        });
+    };
+    collectAllThemeIds(themeTree);
+    return allIds;
+  }
+
+
+  // ツリー全体から指定された themeId のノードを探し、そのIDと子孫のIDを収集
+  findNodeAndChildren(themeTree, themeId)
   
-  findChildren(themeId)
+  // デバッグ用に結果をログ出力
+  // console.log(`getThemeAndChildrenIds for ${themeId}:`, result);
+
+  // 見つかったIDのリストを返す（見つからない場合は空配列）
   return result
 }
 

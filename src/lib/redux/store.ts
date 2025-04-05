@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit"
 import { articleFiltersReducer } from "./features/articleFilters/articleFiltersSlice"
 import { articlesReducer } from "./features/articles/articlesSlice"
-import { themesReducer } from "./features/themes/themesSlice"
+import { themesSlice } from "./features/themes/themesSlice"
 import { authReducer } from "./features/auth/authSlice"
 import { filesReducer } from "./features/files/filesSlice"
 import { trendArticlesReducer } from "./features/trendArticles/trendArticlesSlice"
@@ -10,7 +10,7 @@ import { trendArticlesReducer } from "./features/trendArticles/trendArticlesSlic
 const rootReducer = {
   articleFilters: articleFiltersReducer,
   articles: articlesReducer,
-  themes: themesReducer,
+  themes: themesSlice.reducer,
   auth: authReducer,
   files: filesReducer,
   trendArticles: trendArticlesReducer,

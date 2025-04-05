@@ -20,10 +20,6 @@ The `hooks` directory contains custom React hooks that encapsulate reusable logi
   - Manages individual theme node state
   - Handles node editing
   - Controls node expansion
-- `useThemeFlow`
-  - Manages ReactFlow state
-  - Handles node/edge updates
-  - Provides save functionality
 
 ### Utilities
 - `useDebounce`

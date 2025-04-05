@@ -8,18 +8,12 @@ import {
   updateTheme,
   deleteTheme,
   exportTheme,
-  saveThemes,
-  setNodes,
-  setEdges,
   setSelectedTheme,
 } from "@/lib/redux/features/themes/themesSlice"
 import { selectThemeTree, selectIsThemesLoading } from "@/lib/redux/features/themes/selectors"
-import type { Node, Edge } from "reactflow"
 
 export function useReduxThemes() {
   const dispatch = useAppDispatch()
-  const nodes = useAppSelector((state) => state.themes.nodes)
-  const edges = useAppSelector((state) => state.themes.edges)
   const themeTree = useAppSelector(selectThemeTree)
   const isLoading = useAppSelector(selectIsThemesLoading)
   const error = useAppSelector((state) => state.themes.error)
@@ -27,10 +21,10 @@ export function useReduxThemes() {
   const user = useAppSelector((state) => state.auth.user)
 
   useEffect(() => {
-    if (user && nodes.length === 0 && !isLoading) {
+    if (user && (!themeTree || themeTree.length === 0) && !isLoading) {
       dispatch(fetchThemes(user.uid))
     }
-  }, [dispatch, user, nodes.length, isLoading])
+  }, [dispatch, user, themeTree, isLoading])
 
   const addTheme = async (parentId: string | null, name: string) => {
     if (!user) return
@@ -67,26 +61,6 @@ export function useReduxThemes() {
     ).unwrap()
   }
 
-  const saveThemesHandler = async () => {
-    if (!user) return
-
-    await dispatch(
-      saveThemes({
-        userId: user.uid,
-        nodes,
-        edges,
-      }),
-    ).unwrap()
-  }
-
-  const setNodesHandler = (newNodes: Node[]) => {
-    dispatch(setNodes(newNodes))
-  }
-
-  const setEdgesHandler = (newEdges: Edge[]) => {
-    dispatch(setEdges(newEdges))
-  }
-
   const setSelectedThemeHandler = (theme: string) => {
     dispatch(setSelectedTheme(theme))
   }
@@ -103,20 +77,15 @@ export function useReduxThemes() {
   }
 
   return {
-    nodes,
-    edges,
     themeTree,
     selectedTheme,
     isLoading,
     error,
-    setNodes: setNodesHandler,
-    setEdges: setEdgesHandler,
     setSelectedTheme: setSelectedThemeHandler,
     addTheme,
     updateTheme: updateThemeHandler,
     deleteTheme: deleteThemeHandler,
     exportTheme: exportThemeHandler,
-    saveThemes: saveThemesHandler,
   }
 }
 
