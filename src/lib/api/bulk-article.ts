@@ -44,4 +44,4 @@ class BulkArticleAPI extends BaseAPIClient {
 const API_BASE_URL = "https://knowledge-pholio.ngrok.dev"
 const bulkArticleAPI = new BulkArticleAPI(API_BASE_URL)
 
-export default bulkArticleAPI
+export { bulkArticleAPI };

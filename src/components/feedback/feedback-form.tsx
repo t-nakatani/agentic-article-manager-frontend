@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 import { useReduxAuth } from "@/hooks/useReduxAuth" // AuthContextの代わりにuseReduxAuthを使用
-import feedbackAPI from "@/lib/api/feedback"
+import { feedbackAPI } from "@/lib/api/feedback"
 import type { FeedbackRating, FeedbackCategory } from "@/types/feedback"
 
 interface FeedbackFormProps {

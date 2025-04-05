@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit"
 import type { Node, Edge } from "reactflow"
-import themesAPI from "@/lib/api/themes"
+import { themesAPI } from "@/lib/api/themes"
 import { handleAPIError } from "@/lib/api/error"
 import { toast } from "sonner"
 
@@ -269,5 +269,5 @@ export const themesSlice = createSlice({
 })
 
 export const { setNodes, setEdges, setSelectedTheme } = themesSlice.actions
-export default themesSlice.reducer
+export const themesReducer = themesSlice.reducer;
 

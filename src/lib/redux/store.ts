@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit"
-import articleFiltersReducer from "./features/articleFilters/articleFiltersSlice"
-import articlesReducer from "./features/articles/articlesSlice"
-import themesReducer from "./features/themes/themesSlice"
-import authReducer from "./features/auth/authSlice"
-import filesReducer from "./features/files/filesSlice"
-import trendArticlesReducer from "./features/trendArticles/trendArticlesSlice"
+import { articleFiltersReducer } from "./features/articleFilters/articleFiltersSlice"
+import { articlesReducer } from "./features/articles/articlesSlice"
+import { themesReducer } from "./features/themes/themesSlice"
+import { authReducer } from "./features/auth/authSlice"
+import { filesReducer } from "./features/files/filesSlice"
+import { trendArticlesReducer } from "./features/trendArticles/trendArticlesSlice"
 
 // 初期状態では空のリデューサー
 const rootReducer = {

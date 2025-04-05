@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
 import { setSelectionMode } from "@/lib/redux/features/articleFilters/articleFiltersSlice"
 import { toast } from "sonner"
-import bulkArticleAPI from "@/lib/api/bulk-article"
+import { bulkArticleAPI } from "@/lib/api/bulk-article"
 import { ExportHelpModal } from "@/components/articles/selection/export-help-modal"
 import { ShareArticlesModal } from "./share-articles-modal"
 

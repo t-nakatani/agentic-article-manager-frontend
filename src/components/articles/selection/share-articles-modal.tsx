@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useAppSelector } from "@/lib/redux/hooks"
-import bulkArticleAPI from "@/lib/api/bulk-article"
+import { bulkArticleAPI } from "@/lib/api/bulk-article"
 
 interface ShareArticlesModalProps {
   isOpen: boolean

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
-import bulkArticleAPI from "@/lib/api/bulk-article"
+import { bulkArticleAPI } from "@/lib/api/bulk-article"
 import { Layout } from "@/components/layout/Layout"
 import { LoadingState } from "@/app/shared/_components/loading-state"
 import { ErrorState } from "@/app/shared/_components/error-state"

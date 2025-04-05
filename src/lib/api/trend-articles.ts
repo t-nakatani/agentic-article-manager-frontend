@@ -15,4 +15,4 @@ export class TrendArticlesAPI extends BaseAPIClient {
 
 // APIインスタンスを作成して export
 const trendArticlesAPI = new TrendArticlesAPI(API_BASE_URL)
-export default trendArticlesAPI 
+export { trendArticlesAPI }; 

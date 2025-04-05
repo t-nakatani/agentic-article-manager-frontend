@@ -15,7 +15,7 @@ import { Favicon } from "./components/favicon"
 import { ReadLaterButton } from "./components/read-later-button"
 import { createTagsMenuItem, createRegenerateMenuItem, createDeleteMenuItem } from "./components/article-menu-items"
 import { MemoButton } from "./components/memo-button"
-import articlesAPI from "@/lib/api/articles"
+import { articlesAPI } from "@/lib/api/articles"
 
 interface ArticleHeaderProps {
   article: Article
@@ -121,7 +121,6 @@ export function ArticleHeader({
         />
         <MemoButton
           articleId={article.article_id}
-          initialMemo={article.memo}
           onToggle={onToggleMemo || (() => {})}
         />
         <ArticleMenu menuItems={menuItems} />

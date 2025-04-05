@@ -164,5 +164,5 @@ if (!API_BASE_URL) {
 }
 
 const themesAPI = new ThemesAPI(API_BASE_URL)
-export default themesAPI
+export { themesAPI };
 

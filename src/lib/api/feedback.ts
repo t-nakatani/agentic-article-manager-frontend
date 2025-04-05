@@ -18,5 +18,6 @@ class FeedbackAPI extends BaseAPIClient {
 
 const API_BASE_URL = "https://knowledge-pholio.ngrok.dev"
 const feedbackAPI = new FeedbackAPI(API_BASE_URL)
-export default feedbackAPI
+// export default feedbackAPI
+export { feedbackAPI };
 

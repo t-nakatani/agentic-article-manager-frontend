@@ -5,6 +5,7 @@
  * 本番環境では基本的にfalseに設定してください。
  */
 
+// 定義：機能フラグを管理するオブジェクト
 export const FeatureFlags = {
   // トレンド記事機能を表示するかどうか
   TREND_ARTICLES_ENABLED: false,
@@ -17,5 +18,3 @@ export const FeatureFlags = {
   // 例: ADVANCED_SEARCH_ENABLED: false,
   // 例: NEW_THEME_TREE_ENABLED: false,
 }
-
-export default FeatureFlags

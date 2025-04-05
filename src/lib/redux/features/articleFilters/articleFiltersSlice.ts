@@ -100,5 +100,5 @@ export const {
   clearSelectedArticles
 } = articleFiltersSlice.actions
 
-export default articleFiltersSlice.reducer
+export const articleFiltersReducer = articleFiltersSlice.reducer;
 

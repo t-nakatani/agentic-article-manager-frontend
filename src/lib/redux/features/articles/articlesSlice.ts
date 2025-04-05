@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
-import articlesAPI from "@/lib/api/articles"
+import { articlesAPI } from "@/lib/api/articles"
 import type { Article } from "@/lib/api/articles"
 import { handleAPIError } from "@/lib/api/error"
 import { RootState } from "@/lib/redux/store"
@@ -225,5 +225,5 @@ export const articlesSlice = createSlice({
 
 export const { setArticleMemo, setArticleMemoVisible } = articlesSlice.actions
 
-export default articlesSlice.reducer
+export const articlesReducer = articlesSlice.reducer;
 

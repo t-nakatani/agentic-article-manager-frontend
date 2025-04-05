@@ -1,6 +1,7 @@
 "use client"
 
-import type React from "react"
+import * as React from "react"
+import { articlesAPI } from "@/lib/api/articles"
 import type { Article } from "@/types/article"
 import { ArticleHeader } from "./article-header"
 import { ArticleFooter } from "./article-footer"
@@ -8,9 +9,7 @@ import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks"
 import { toggleArticleSelection } from "@/lib/redux/features/articleFilters/articleFiltersSlice"
 import { selectArticleMemoState } from "@/lib/redux/features/articles/selectors"
 import { ArticleMemo } from "../memo/article-memo"
-import { setArticleMemoVisible } from "@/lib/redux/features/articles/articlesSlice"
 import { useReduxAuth } from "@/hooks/useReduxAuth"
-import articlesAPI from "@/lib/api/articles"
 
 interface ArticleCardProps {
   article: Article

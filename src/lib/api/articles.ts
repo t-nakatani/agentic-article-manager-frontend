@@ -11,6 +11,9 @@ export interface Article {
   created_at: string
   last_viewed_at: string | null
   memo?: string
+  memoEdit?: string
+  memoVisible?: boolean
+  memoSaving?: boolean
 }
 
 interface RegenerateArticleRequest {
@@ -88,5 +91,5 @@ const articlesAPI = new ArticlesAPI(API_BASE_URL)
 const trendArticlesAPI = new TrendArticlesAPI(API_BASE_URL)
 
 export { trendArticlesAPI }
-export default articlesAPI
+export { articlesAPI }
 

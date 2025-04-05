@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import type { Article } from "@/types/article"
-import trendArticlesAPI, { TrendArticle } from "@/lib/api/trend-articles"
+import { trendArticlesAPI, type TrendArticle } from "@/lib/api/trend-articles"
 
 // APIからのレスポンスをアプリケーションの記事形式に変換する関数
 const mapTrendArticleToArticle = (trendArticle: TrendArticle): Article => {
@@ -65,4 +65,4 @@ const trendArticlesSlice = createSlice({
   }
 })
 
-export default trendArticlesSlice.reducer 
+export const trendArticlesReducer = trendArticlesSlice.reducer; 

@@ -51,4 +51,4 @@ const filesSlice = createSlice({
   }
 })
 
-export default filesSlice.reducer 
+export const filesReducer = filesSlice.reducer; 

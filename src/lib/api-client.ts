@@ -1,6 +1,6 @@
 import { toast } from "sonner"
 import { BaseAPIClient, API_BASE_URL } from "./api/base"
-import filesAPI from "./api/files"
+import { filesAPI } from "./api/files"
 import type { File } from "./api/files"
 
 class APIError extends Error {

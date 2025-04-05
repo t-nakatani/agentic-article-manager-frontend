@@ -39,4 +39,4 @@ class FilesAPI extends BaseAPIClient {
 
 // FilesAPIのインスタンスを作成
 const filesAPI = new FilesAPI(API_BASE_URL)
-export default filesAPI
+export { filesAPI };
